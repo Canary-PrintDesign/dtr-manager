@@ -1,0 +1,117 @@
+{
+  "name": "dtr-manager",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "adr": "node --use-strict ./scripts/architecture-decision-record.js",
+    "dev": "NODE_ENV=development NODE_PATH=./src DEBUG=dtr:* nodemon --inspect ./src/server.js",
+    "fix": "npx eslint --fix ./src",
+    "markdown": "node --use-strict ./scripts/markdown.js",
+    "playground": "NODE_ENV=development NODE_PATH=./src nodemon --inspect ./playground.js",
+    "readme": "npm run markdown docs/templates/README.md README.md",
+    "repl": "NODE_PATH=./src node --inspect --use-strict",
+    "test": "NODE_ENV=test NODE_PATH=./src npx mocha --use-strict --recursive \"./src/**/*.test.js\"",
+    "test:coverage": "nyc npm run test",
+    "test:coverage:watch": "nodemon --exec nyc --reporter=lcov --reporter=text npm run test",
+    "test:integration": "npm run test -- --grep '#integration'",
+    "test:unit": "npm run test -- --grep '#unit'",
+    "test:file": "DEBUG=*:debug* NODE_ENV=test NODE_PATH=./src npx mocha --use-strict --exit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Canary-PrintDesign/dtr-manager.git"
+  },
+  "author": "",
+  "license": "BSD-3-Clause",
+  "bugs": {
+    "url": "https://github.com/Canary-PrintDesign/dtr-manager/issues"
+  },
+  "homepage": "https://github.com/Canary-PrintDesign/dtr-manager#readme",
+  "dependencies": {
+    "date-fns": "^2.16.1",
+    "debug": "^4.1.1",
+    "express": "^4.17.1",
+    "~": "file:."
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "chai-as-promised": "^7.1.1",
+    "chai-spies": "^1.0.0",
+    "eslint": "^7.6.0",
+    "eslint-config-standard": "^14.1.1",
+    "eslint-plugin-chai-expect": "^2.2.0",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-mocha": "^8.0.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-security": "^1.4.0",
+    "eslint-plugin-standard": "^4.0.1",
+    "mkdirp": "^1.0.4",
+    "mocha": "^8.1.0",
+    "nodemon": "^2.0.4",
+    "nyc": "^15.1.0",
+    "sinon": "^9.0.2",
+    "slug": "^3.3.4",
+    "supertest": "^4.0.2"
+  },
+  "mocha": {
+    "diff": true,
+    "reporter": "spec",
+    "slow": 75,
+    "timeout": 2000,
+    "ui": "bdd",
+    "parallel": false,
+    "recursive": true
+  },
+  "nyc": {
+    "reporter": [
+      "html",
+      "text"
+    ]
+  },
+  "adr": {
+    "path": "./docs/architecture_decision_records",
+    "template": "./docs/templates/architecture-decision-record.md"
+  },
+  "eslintConfig": {
+    "env": {
+      "browser": false,
+      "es2020": true,
+      "mocha": true
+    },
+    "extends": [
+      "standard",
+      "plugin:chai-expect/recommended",
+      "plugin:promise/recommended",
+      "plugin:security/recommended",
+      "plugin:mocha/recommended"
+    ],
+    "parserOptions": {
+      "ecmaVersion": 11,
+      "sourceType": "module"
+    },
+    "plugins": [
+      "chai-expect",
+      "promise",
+      "security",
+      "mocha"
+    ],
+    "rules": {},
+    "overrides": [
+      {
+        "files": [
+          "./src/**/*.test.js",
+          "./scripts/**/*.js"
+        ],
+        "rules": {
+          "no-unused-expressions": "off",
+          "security/detect-non-literal-fs-filename": "off"
+        }
+      }
+    ]
+  }
+}
