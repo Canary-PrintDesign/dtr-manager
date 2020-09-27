@@ -1,0 +1,29 @@
+extends layout.pug
+
+mixin record(record)
+  tr
+    td= record.agent.name
+    td= record.workStart
+    td= record.workStop
+    td= record.lunchStart
+    td= record.lunchStop
+
+block content
+  .col-sm-12
+    p= records[0].department.name
+
+    p= records[0].date
+
+    table.table
+      thead
+        tr
+          th Name
+          th Work Start
+          th Work Stop
+          th Lunch Start
+          th Lunch Stop
+
+      tbody
+        each record in records
+          +record(record)
+

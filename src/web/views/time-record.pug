@@ -1,84 +1,60 @@
 extends layout.pug
 
-mixin  agent(name, position)
+mixin agent(index, name, position)
   .row
     .form-group.col
       label Name
-      input.form-control(value= name)
+      input.form-control(value= name, name=`records[${index}][name]`)
       small.form-text.text-muted
     .form-group.col
       label Position
-      input.form-control(value= position)
+      input.form-control(value= position, name=`records[${index}][position]`)
       small.form-text.text-muted
     .form-group.col
       label Work Start
-      input.form-control(placeholder="700")
+      input.form-control(placeholder="0700", name=`records[${index}][workStart]`)
       small.form-text.text-muted
     .form-group.col
       label Work Stop
-      input.form-control(placeholder="2100")
+      input.form-control(placeholder="2100", name=`records[${index}][workStop]`)
       small.form-text.text-muted
     .form-group.col
       label Lunch Start
-      input.form-control(placeholder="1300")
+      input.form-control(placeholder="1300", name=`records[${index}][lunchStart]`)
       small.form-text.text-muted
     .form-group.col
       label Lunch Stop
-      input.form-control(placeholder="1400")
+      input.form-control(placeholder="1400", name=`records[${index}][lunchStop]`)
       small.form-text.text-muted
     .form-group
       button.btn.btn-link &times;
 
 block content
-  form
+  form(method="post", action="/dtr")
     .row
       .form-group.col
-        select.form-control
+        select.form-control(name="department")
           each department in departments
             option(value= department.key)= department.value
 
     .row
       .form-group.col
         label Date
-        input.form-control(type="date")
+        input.form-control(type="date", name="date")
         small.form-text.text-muted
 
-    each agent in agents
-      +agent(agent.name, agent.position)
+    each agent, i in agents
+      +agent(i, agent.name, agent.position)
 
-    .row
-      .form-group.col
-        label Name
-        input.form-control
-        small.form-text.text-muted
-      .form-group.col
-        label Position
-        input.form-control
-        small.form-text.text-muted
-      .form-group.col
-        label Work Start
-        input.form-control(placeholder="700")
-        small.form-text.text-muted
-      .form-group.col
-        label Work Stop
-        input.form-control(placeholder="2100")
-        small.form-text.text-muted
-      .form-group.col
-        label Lunch Start
-        input.form-control(placeholder="1300")
-        small.form-text.text-muted
-      .form-group.col
-        label Lunch Stop
-        input.form-control(placeholder="1400")
-        small.form-text.text-muted
-      .form-group
-        button.btn.btn-link &times;
+    +agent()
 
     .row
       .form-group.col
         label Notes
-        textarea.form-control
+        textarea.form-control(name="notes")
         small.form-text.text-muted
 
-    button.btn.btn-outline-danger(type="clear") Clear
-    button.btn.btn-primary(type="submit") Submit
+    input.btn.btn-outline-warning(type="reset", value="Reset")
+    |
+    |
+    input.btn.btn-primary(type="submit", value="Submit")

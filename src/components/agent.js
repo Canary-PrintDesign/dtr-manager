@@ -14,6 +14,11 @@ module.exports = class Agent {
 
     return new this.constructor(foundAgent)
   }
+
+  async getBy (props) {
+    const foundAgent = await repo.findByProp(props)
+
+    return new this.constructor(foundAgent)
   }
 
   async save () {
