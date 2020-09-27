@@ -7,12 +7,14 @@ const errorHandler = require('./middleware/error-handler')
 const notFound = require('./middleware/not-found')
 
 const { index: home } = require('./controllers/home')
+const { index: dtr } = require('./controllers/dtr')
 
 module.exports = app
 
 app.use(logRequest())
 
 app.get('/', controller(home))
+app.get('/dtr', controller(dtr))
 
 app.use(notFound())
 app.use(respond())
