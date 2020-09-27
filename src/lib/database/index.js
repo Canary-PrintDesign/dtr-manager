@@ -40,6 +40,8 @@ async function create (table, data) {
   debug('create', table, data)
 
   data.id = uuid()
+  data.created_at = new Date()
+  data.updated_at = new Date()
 
   return await Knex(table)
     .insert({ ...data })
@@ -49,6 +51,8 @@ async function create (table, data) {
 
 async function update (table, data) {
   debug('update', table, data)
+
+  data.updated_at = new Date()
 
   return await Knex(table)
     .where('id', data.id)
