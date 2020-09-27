@@ -2,6 +2,8 @@ const { store } = require('lib/database')
 const Project = require('components/project')
 const Department = require('components/department')
 const Agent = require('components/agent')
+const TimeRecord = require('components/time-record')
+const RecordNote = require('components/record-note')
 
 const project = new Project({
   name: 'Test Project',
@@ -41,16 +43,52 @@ const agent4 = new Agent({
   position: 'Red Shirt'
 })
 
+const timeRecord1 = new TimeRecord({
+  workStart: '0800',
+  lunchStart: '1400',
+  lunchStop: '1500',
+  workStop: '2100'
+})
+
+const timeRecord2 = new TimeRecord({
+  workStart: '0700',
+  lunchStart: '1300',
+  lunchStop: '1400',
+  workStop: '2800'
+})
+
+const timeRecord3 = new TimeRecord({
+  workStart: '0400',
+  lunchStart: '1300',
+  lunchStop: '1400',
+  workStop: '3300'
+})
+
+const timeRecord4 = new TimeRecord({
+  workStart: '0900',
+  lunchStart: '1300',
+  lunchStop: '1400',
+  workStop: '1700'
+})
+
+const recordNote = new RecordNote({
+  note: 'This is a test note'
+})
+
 exports.seed = function (knex) {
   return Promise.resolve()
     .then(() => Promise.all([
       knex('projects').del(),
       knex('departments').del(),
-      knex('agents').del()
+      knex('agents').del(),
+      knex('time_records').del(),
+      knex('record_notes').del()
     ]))
     .then(() => store('projects')(project))
     .then(departmentFactory)
     .then(agentFactory)
+    .then(timeRecordFactory)
+    .then(recordNoteFactory)
 }
 
 function departmentFactory (project) {
@@ -58,7 +96,7 @@ function departmentFactory (project) {
 
   const departments = [departmentA, departmentB, departmentC]
     .map(department => Object.assign(department, { project: projectId }))
-    .map(department => store('departments')(department))
+    .map(department => department.save())
 
   return Promise.all(departments)
 }
@@ -72,7 +110,26 @@ function agentFactory (departments) {
     Object.assign(agent3, { project, department: departments[2].id }),
     Object.assign(agent4, { project, department: departments[0].id })
   ]
-    .map(agent => store('agents')(agent))
+    .map(agent => agent.save())
 
   return Promise.all(agents)
+}
+
+function timeRecordFactory (agents) {
+  const project = agents[0].project
+
+  const timeRecords = [
+    Object.assign(timeRecord1, { project, department: agents[0].department, agent: agents[0].id }),
+    Object.assign(timeRecord2, { project, department: agents[1].department, agent: agents[1].id }),
+    Object.assign(timeRecord3, { project, department: agents[2].department, agent: agents[2].id }),
+    Object.assign(timeRecord4, { project, department: agents[3].department, agent: agents[3].id })
+  ]
+    .map(timeRecord => timeRecord.save())
+
+  return Promise.all(timeRecords)
+}
+
+function recordNoteFactory (timeRecords) {
+  const { project, department, id: record } = timeRecords[0]
+  return Object.assign(recordNote, { project, department, record }).save()
 }
