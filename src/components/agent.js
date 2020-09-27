@@ -10,9 +10,10 @@ module.exports = class Agent {
   }
 
   async get (id) {
-    const foundProject = await repo.findById(id)
+    const foundAgent = await repo.findById(id)
 
-    return new this.constructor(foundProject)
+    return new this.constructor(foundAgent)
+  }
   }
 
   async save () {
