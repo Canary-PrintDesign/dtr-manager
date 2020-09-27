@@ -1,0 +1,84 @@
+extends layout.pug
+
+mixin  agent(name, position)
+  .row
+    .form-group.col
+      label Name
+      input.form-control(value= name)
+      small.form-text.text-muted
+    .form-group.col
+      label Position
+      input.form-control(value= position)
+      small.form-text.text-muted
+    .form-group.col
+      label Work Start
+      input.form-control(placeholder="700")
+      small.form-text.text-muted
+    .form-group.col
+      label Work Stop
+      input.form-control(placeholder="2100")
+      small.form-text.text-muted
+    .form-group.col
+      label Lunch Start
+      input.form-control(placeholder="1300")
+      small.form-text.text-muted
+    .form-group.col
+      label Lunch Stop
+      input.form-control(placeholder="1400")
+      small.form-text.text-muted
+    .form-group
+      button.btn.btn-link &times;
+
+block content
+  form
+    .row
+      .form-group.col
+        select.form-control
+          each department in departments
+            option(value= department.key)= department.value
+
+    .row
+      .form-group.col
+        label Date
+        input.form-control(type="date")
+        small.form-text.text-muted
+
+    each agent in agents
+      +agent(agent.name, agent.position)
+
+    .row
+      .form-group.col
+        label Name
+        input.form-control
+        small.form-text.text-muted
+      .form-group.col
+        label Position
+        input.form-control
+        small.form-text.text-muted
+      .form-group.col
+        label Work Start
+        input.form-control(placeholder="700")
+        small.form-text.text-muted
+      .form-group.col
+        label Work Stop
+        input.form-control(placeholder="2100")
+        small.form-text.text-muted
+      .form-group.col
+        label Lunch Start
+        input.form-control(placeholder="1300")
+        small.form-text.text-muted
+      .form-group.col
+        label Lunch Stop
+        input.form-control(placeholder="1400")
+        small.form-text.text-muted
+      .form-group
+        button.btn.btn-link &times;
+
+    .row
+      .form-group.col
+        label Notes
+        textarea.form-control
+        small.form-text.text-muted
+
+    button.btn.btn-outline-danger(type="clear") Clear
+    button.btn.btn-primary(type="submit") Submit
