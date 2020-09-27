@@ -5,6 +5,7 @@ exports.up = function (knex) {
     table.uuid('department')
     table.uuid('agent')
 
+    table.datetime('date')
     table.string('work_start')
     table.string('work_stop')
     table.string('lunch_start')

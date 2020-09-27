@@ -7,10 +7,11 @@ module.exports = class TimeRecord {
     this.department = props.department || undefined
     this.agent = props.agent || undefined
 
-    this.workStart = props.workStart || undefined
-    this.workStop = props.workStop || undefined
-    this.lunchStart = props.lunchStart || undefined
-    this.lunchStop = props.lunchStop || undefined
+    this.date = props.date || new Date()
+    this.workStart = props.workStart || props.work_start || undefined
+    this.workStop = props.workStop || props.work_stop || undefined
+    this.lunchStart = props.lunchStart || props.lunch_start || undefined
+    this.lunchStop = props.lunchStop || props.lunch_stop || undefined
   }
 
   async get (id) {
