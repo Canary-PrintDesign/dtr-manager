@@ -1,0 +1,15 @@
+doctype html
+
+html(lang="en")
+  include includes/head.pug
+
+  body.bg-light
+    include includes/header.pug
+
+    .container
+      .row
+        main
+          block content
+
+    include includes/footer.pug
+
