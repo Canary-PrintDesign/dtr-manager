@@ -7,15 +7,15 @@ function notFoundInit () {
 }
 
 function notFound (req, res, next) {
-  debug({
-    method: req.method,
-    path: req.path,
-    params: req.params,
-    query: req.query,
-    body: req.body
-  })
-
   if (!res.view) {
+    debug({
+      method: req.method,
+      path: req.path,
+      params: req.params,
+      query: req.query,
+      body: req.body
+    })
+
     res.status(404)
     res.view = '404.pug'
   }

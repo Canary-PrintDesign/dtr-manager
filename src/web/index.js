@@ -1,6 +1,6 @@
 const app = require('express').Router()
 
-const logRequest = require('./middleware/log-request')
+// const logRequest = require('./middleware/log-request')
 const respond = require('./middleware/respond')
 const controller = require('./middleware/controller')
 const errorHandler = require('./middleware/error-handler')
@@ -11,7 +11,7 @@ const { index: dtr } = require('./controllers/dtr')
 
 module.exports = app
 
-app.use(logRequest())
+// app.use(logRequest())
 
 app.get('/', controller(home))
 app.get('/dtr', controller(dtr))

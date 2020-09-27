@@ -6,7 +6,7 @@ function logRequestInit () {
   return logRequest
 }
 
-function logRequest (req, res, next) {
+function logRequest (req, _res, next) {
   const data = {
     method: req.method,
     path: req.path,
