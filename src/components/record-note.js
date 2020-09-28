@@ -5,8 +5,8 @@ module.exports = class RecordNote {
     this.id = props.id || undefined
     this.project = props.project || undefined
     this.department = props.department || undefined
-    this.record = props.timeRecord || undefined
     this.note = props.note || ''
+    this.date = props.date || undefined
   }
 
   async get (id) {

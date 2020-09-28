@@ -3,9 +3,9 @@ exports.up = function (knex) {
     table.uuid('id')
     table.uuid('project')
     table.uuid('department')
-    table.uuid('record')
 
     table.string('note')
+    table.datetime('date')
 
     table.timestamps()
   })

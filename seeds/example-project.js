@@ -72,7 +72,8 @@ const timeRecord4 = new TimeRecord({
 })
 
 const recordNote = new RecordNote({
-  note: 'This is a test note'
+  note: 'This is a test note',
+  date: new Date()
 })
 
 exports.seed = function (knex) {
@@ -130,6 +131,6 @@ function timeRecordFactory (agents) {
 }
 
 function recordNoteFactory (timeRecords) {
-  const { project, department, id: record } = timeRecords[0]
-  return Object.assign(recordNote, { project, department, record }).save()
+  const { project, department } = timeRecords[0]
+  return Object.assign(recordNote, { project, department }).save()
 }
