@@ -4,6 +4,7 @@ const Departments = require('components/departments')
 const Project = require('components/project')
 const Agent = require('components/agent')
 const Agents = require('components/agents')
+const RecordNote = require('components/record-note')
 const TimeRecord = require('components/time-record')
 
 module.exports = {
@@ -34,7 +35,7 @@ async function create (req, res) {
   const projectId = '019538af-fc8b-4427-a84d-a4ae9cce9bf2'
   const project = await getProject(projectId)
 
-  const { department, date, records } = Object.entries(req.body)
+  const { department, date, records, notes } = Object.entries(req.body)
     .flatMap(([key, value]) => ({ key, value }))
     .reduce((acc, item) => Object.assign(acc, { [item.key]: item.value }), {})
 
@@ -50,8 +51,13 @@ async function create (req, res) {
     }))
     .then(res => Promise.all(res))
 
+  const savedRecordNote = await new RecordNote({
+    note: notes,
+    project: project.id,
+    department,
+    date
+  }).save()
 
-  console.log(savedRecords)
   const departments = await getDepartments({ project })
   const agents = await getAgents({ project })
 
@@ -61,6 +67,7 @@ async function create (req, res) {
     departments,
     project,
     records: savedRecords,
+    recordNote: savedRecordNote,
 
     title: 'receipt'
   }
