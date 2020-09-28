@@ -1,60 +1,85 @@
 extends layout.pug
 
-mixin agent(index, name, position)
-  .row
+mixin agent(index='{{recordIndex}}', name, position)
+  - var isNew = index == '{{recordIndex}}'
+
+  .row.js-agent
     .form-group.col
-      label Name
-      input.form-control(value= name, name=`records[${index}][name]`)
+      if isNew
+        label.form-text.text-muted Name
+      input.form-control(required, value= name, name=`records[${index}][name]`)
       small.form-text.text-muted
     .form-group.col
-      label Position
-      input.form-control(value= position, name=`records[${index}][position]`)
+      if isNew
+        label.form-text.text-muted Position
+      input.form-control(required, value= position, name=`records[${index}][position]`)
       small.form-text.text-muted
     .form-group.col
-      label Work Start
-      input.form-control(placeholder="0700", name=`records[${index}][workStart]`)
+      if isNew
+        label.form-text.text-muted Work Start
+      input.form-control(required, placeholder="0700", name=`records[${index}][workStart]`)
       small.form-text.text-muted
     .form-group.col
-      label Work Stop
-      input.form-control(placeholder="2100", name=`records[${index}][workStop]`)
+      if isNew
+        label.form-text.text-muted Work Stop
+      input.form-control(required, placeholder="2100", name=`records[${index}][workStop]`)
       small.form-text.text-muted
     .form-group.col
-      label Lunch Start
+      if isNew
+        label.form-text.text-muted Lunch Start
       input.form-control(placeholder="1300", name=`records[${index}][lunchStart]`)
       small.form-text.text-muted
     .form-group.col
-      label Lunch Stop
+      if isNew
+        label.form-text.text-muted Lunch Stop
       input.form-control(placeholder="1400", name=`records[${index}][lunchStop]`)
       small.form-text.text-muted
-    .form-group
-      button.btn.btn-link &times;
+    .form-group.col
+      if isNew
+        label.form-text.text-muted Delete
+      button.btn.btn-danger.js-delete-record &times;
+      small.form-text.text-muted
 
 block content
   form(method="post", action="/dtr")
     .row
       .form-group.col
-        select.form-control(name="department")
+        label.form-text.text-muted Department
+        select.form-control(name="department", required)
+          option(disabled="disabled", selected="true") -- Select Department --
           each department in departments
             option(value= department.key)= department.value
 
     .row
       .form-group.col
-        label Date
-        input.form-control(type="date", name="date")
-        small.form-text.text-muted
+        label.form-text.text-muted Date
+          input.form-control(type="date", name="date", required)
+          small.form-text.text-muted
 
-    each agent, i in agents
-      +agent(i, agent.name, agent.position)
-
-    +agent()
+    .js-agents
+      each agent, i in agents
+        +agent(i, agent.name, agent.position)
 
     .row
       .form-group.col
-        label Notes
+        input.btn.btn-success.js-new-record(type="button", value="Add New Record")
+
+    .row
+      .form-group.col
+        label.form-text.text-muted Notes
         textarea.form-control(name="notes")
         small.form-text.text-muted
+
+    input(type="hidden", value= project.id)
 
     input.btn.btn-outline-warning(type="reset", value="Reset")
     |
     |
     input.btn.btn-primary(type="submit", value="Submit")
+
+block scripts
+  template.js-agent-template
+    +agent
+
+  script
+    include time-record-script.js
