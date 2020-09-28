@@ -14,7 +14,7 @@ module.exports = {
 async function index (req, res) {
   debug('index', req.params)
 
-  const projectId = '72e9cce0-7e87-4b6e-bdaa-3a5a09006e72'
+  const projectId = '019538af-fc8b-4427-a84d-a4ae9cce9bf2'
   const project = await getProject(projectId)
   const departments = await getDepartments({ project })
   const agents = await getAgents({ project })
@@ -31,7 +31,7 @@ async function index (req, res) {
 async function create (req, res) {
   debug('create', req.params, req.body)
 
-  const projectId = '72e9cce0-7e87-4b6e-bdaa-3a5a09006e72'
+  const projectId = '019538af-fc8b-4427-a84d-a4ae9cce9bf2'
   const project = await getProject(projectId)
 
   const { department, date, records } = Object.entries(req.body)
@@ -54,7 +54,6 @@ async function create (req, res) {
   console.log(savedRecords)
   const departments = await getDepartments({ project })
   const agents = await getAgents({ project })
-
 
   res.view = 'time-record-receipt.pug'
   res.locals = {
@@ -96,7 +95,16 @@ function buildRecords (records, { department, date, project }) {
     .map(record => Object.assign(record, { workStart: Number.parseInt(record.workStart) }))
     .map(record => Object.assign(record, { project: project.id }))
     .map(async (record) => {
-      const agent = await new Agent().getBy({ name: record.name })
+      let agent = await new Agent().getBy({ name: record.name })
+
+      if (!agent.id) {
+        agent.name = record.name
+        agent.position = record.position
+        agent.department = department
+        agent.project = project.id
+
+        agent = await agent.save()
+      }
 
       return Object.assign(record, { agent: agent.id })
     })
