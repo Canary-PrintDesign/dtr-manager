@@ -4,6 +4,7 @@ exports.up = function (knex) {
 
     table.string('logo')
     table.string('name')
+    table.string('hostname')
     table.datetime('startDate')
     table.enum('status', ['published', 'unpublished'])
     table.timestamps()

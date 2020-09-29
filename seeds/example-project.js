@@ -7,7 +7,8 @@ const RecordNote = require('components/record-note')
 
 const project = new Project({
   name: 'Test Project',
-  logo: 'https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png'
+  logo: 'https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png',
+  hostname: 'evil.local'
 })
 
 const departmentA = new Department({

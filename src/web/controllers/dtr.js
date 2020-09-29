@@ -13,12 +13,10 @@ module.exports = {
   api
 }
 
-const projectId = '019538af-fc8b-4427-a84d-a4ae9cce9bf2'
-
 async function index (req, res) {
   debug('index', req.params)
 
-  const project = await getProject(projectId)
+  const project = await getProject(req.hostname)
   const departments = await getDepartments({ project })
 
   res.view = 'time-record.pug'
@@ -32,7 +30,7 @@ async function index (req, res) {
 async function create (req, res) {
   debug('create', req.params, req.body)
 
-  const project = await getProject(projectId)
+  const project = await getProject(req.hostname)
 
   const { department, date, records, notes } = Object.entries(req.body)
     .flatMap(([key, value]) => ({ key, value }))
@@ -70,15 +68,16 @@ async function create (req, res) {
 async function api (req, res) {
   debug('api', req.params, req.body, req.query)
 
-  const agents = await getAgents({ projectId, departmentId: req.query.department })
+  const project = await getProject(req.hostname)
+  const agents = await getAgents({ projectId: project.id, departmentId: req.query.department })
 
   res.data = { agents }
 }
 
 // Private
 
-async function getProject (id) {
-  return await new Project().get(id)
+async function getProject (hostname) {
+  return await new Project().getBy({ hostname })
 }
 
 async function getDepartments ({ project }) {

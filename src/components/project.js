@@ -5,6 +5,7 @@ module.exports = class Project {
     this.id = props.id || undefined
     this.logo = props.logo || ''
     this.name = props.name || ''
+    this.hostname = props.hostname || ''
     this.startDate = props.startDate || new Date()
     this.status = props.status || 'unpublished'
   }
@@ -13,6 +14,12 @@ module.exports = class Project {
     const foundProject = await projectRepo.findById(id)
 
     return new Project(foundProject)
+  }
+
+  async getBy (props) {
+    const foundProject = await projectRepo.findByProp(props)
+
+    return new this.constructor(foundProject)
   }
 
   async save () {
