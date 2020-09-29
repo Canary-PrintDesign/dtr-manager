@@ -1,11 +1,14 @@
 /* globals $, fetch */
 
 $(document).ready(() => {
-  function createNewAgent (template, { name = '', position = '' }) {
+  function createNewAgent (template, { index, name = '', position = '' }) {
     const agentsList = $('.js-agents')
     const agents = $('.js-agent')
+
+    const i = index || agents.length
+
     const templ = template.html()
-      .replace(/{{recordIndex}}/g, agents.length + 1)
+      .replace(/{{recordIndex}}/g, i + 1)
       .replace(/{{recordName}}/g, name)
       .replace(/{{recordPosition}}/g, position)
 
@@ -29,8 +32,8 @@ $(document).ready(() => {
     const results = await fetch(`/dtr/api?department=${departmentId}`)
     const data = await results.json()
 
-    data.agents.forEach(agent => {
-      createNewAgent(template, agent)
+    data.agents.forEach((agent, i) => {
+      createNewAgent(template, { ...agent, index: i })
     })
   })
 })

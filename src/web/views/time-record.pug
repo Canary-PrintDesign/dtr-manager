@@ -1,49 +1,42 @@
 extends layout.pug
 
 mixin agent(index='{{recordIndex}}', name='{{recordName}}', position='{{recordPosition}}')
-  - var isNew = index == '{{recordIndex}}'
-
   .row.js-agent
-    .form-group.col
-      if isNew
-        label.form-text.text-muted Name
-      input.form-control(required, value= name, name=`records[${index}][name]`)
-      small.form-text.text-muted
-    .form-group.col
-      if isNew
-        label.form-text.text-muted Position
-      input.form-control(required, value= position, name=`records[${index}][position]`)
-      small.form-text.text-muted
-    .form-group.col
-      if isNew
-        label.form-text.text-muted Work Start
-      input.form-control(required, placeholder="0700", name=`records[${index}][workStart]`)
-      small.form-text.text-muted
-    .form-group.col
-      if isNew
-        label.form-text.text-muted Work Stop
-      input.form-control(required, placeholder="2100", name=`records[${index}][workStop]`)
-      small.form-text.text-muted
-    .form-group.col
-      if isNew
-        label.form-text.text-muted Lunch Start
-      input.form-control(placeholder="1300", name=`records[${index}][lunchStart]`)
-      small.form-text.text-muted
-    .form-group.col
-      if isNew
-        label.form-text.text-muted Lunch Stop
-      input.form-control(placeholder="1400", name=`records[${index}][lunchStop]`)
-      small.form-text.text-muted
-    .form-group.col
-      if isNew
-        label.form-text.text-muted Delete
+    .col-md-11
+      .row
+        .col-md-2
+          label.form-text.text-muted Name
+          input.form-control(required, value= name, name=`records[${index}][name]`)
+          small.form-text.text-muted
+        .col-md-2
+          label.form-text.text-muted Position
+          input.form-control(required, value= position, name=`records[${index}][position]`)
+          small.form-text.text-muted
+        .col-md-2
+          label.form-text.text-muted Work Start
+          input.form-control(required, placeholder="0700", name=`records[${index}][workStart]`)
+          small.form-text.text-muted
+        .col-md-2
+          label.form-text.text-muted Work Stop
+          input.form-control(required, placeholder="2100", name=`records[${index}][workStop]`)
+          small.form-text.text-muted
+        .col-md-2
+          label.form-text.text-muted Lunch Start
+          input.form-control(placeholder="1300", name=`records[${index}][lunchStart]`)
+          small.form-text.text-muted
+        .col-md-2
+          label.form-text.text-muted Lunch Stop
+          input.form-control(placeholder="1400", name=`records[${index}][lunchStop]`)
+          small.form-text.text-muted
+    .col-md-1
+      label.form-text.text-muted &nbsp;
       button.btn.btn-danger.js-delete-record &times;
       small.form-text.text-muted
 
 block content
-  form(method="post", action="/dtr")
+  form(method="post", action="/dtr").container
     .row
-      .form-group.col
+      .col-sm-12
         label.form-text.text-muted Department
         select.form-control.js-department-select(name="department", required)
           option(disabled="disabled", selected="true") -- Select Department --
@@ -51,10 +44,12 @@ block content
             option(value= department.key)= department.value
 
     .row
-      .form-group.col
+      .col-sm-12
         label.form-text.text-muted Date
           input.form-control(type="date", name="date", required)
           small.form-text.text-muted
+        hr
+
 
     .js-agents
 
