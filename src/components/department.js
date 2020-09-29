@@ -9,15 +9,15 @@ module.exports = class Department {
   }
 
   async get (id) {
-    const foundProject = await repo.findById(id)
+    const foundDepartment = await repo.findById(id)
 
-    return new this.constructor(foundProject)
+    return new this.constructor(foundDepartment)
   }
 
   async save () {
-    const storedProject = await repo.store(this.serialize())
+    const storedDepartment = await repo.store(this.serialize())
 
-    return new this.constructor(storedProject)
+    return new this.constructor(storedDepartment)
   }
 
   serialize () {

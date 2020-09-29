@@ -8,7 +8,11 @@ const errorHandler = require('./middleware/error-handler')
 const notFound = require('./middleware/not-found')
 
 const { index: home } = require('./controllers/home')
-const { index: dtr, create: dtrPost } = require('./controllers/dtr')
+const {
+  index: dtr,
+  create: dtrPost,
+  api: dtrAPI
+} = require('./controllers/dtr')
 
 module.exports = app
 
@@ -17,6 +21,7 @@ app.use(express.urlencoded({ extended: true }))
 
 app.get('/favicon.ico', (_, res) => res.end())
 app.get('/', controller(home))
+app.get('/dtr/api', controller(dtrAPI))
 app.get('/dtr', controller(dtr))
 app.post('/dtr', controller(dtrPost))
 

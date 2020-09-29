@@ -10,11 +10,14 @@ module.exports = {
 }
 
 function findAll (table) {
-  return async function findAll ({ projectId }) {
+  return async function findAll (props) {
     return await db
       .select()
       .table(table)
-      .where('project', '=', projectId)
+      .where(builder =>
+        Object.entries(props)
+        .forEach(([key, value]) => builder.where(key, value))
+      )
   }
 }
 

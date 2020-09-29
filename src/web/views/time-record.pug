@@ -1,6 +1,6 @@
 extends layout.pug
 
-mixin agent(index='{{recordIndex}}', name, position)
+mixin agent(index='{{recordIndex}}', name='{{recordName}}', position='{{recordPosition}}')
   - var isNew = index == '{{recordIndex}}'
 
   .row.js-agent
@@ -45,7 +45,7 @@ block content
     .row
       .form-group.col
         label.form-text.text-muted Department
-        select.form-control(name="department", required)
+        select.form-control.js-department-select(name="department", required)
           option(disabled="disabled", selected="true") -- Select Department --
           each department in departments
             option(value= department.key)= department.value
@@ -57,8 +57,6 @@ block content
           small.form-text.text-muted
 
     .js-agents
-      each agent, i in agents
-        +agent(i, agent.name, agent.position)
 
     .row
       .form-group.col

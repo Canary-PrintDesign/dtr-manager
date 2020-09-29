@@ -6,8 +6,8 @@ module.exports = class Agents {
     this.departments = props.agents || []
   }
 
-  async all ({ projectId }) {
-    return await repo.findAll({ projectId })
+  async all ({ project, department }) {
+    return await repo.findAll({ project, department })
       .then(res => res.map(agent => new Agent(agent)))
   }
 

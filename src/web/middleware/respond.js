@@ -16,7 +16,9 @@ async function respond (req, res, next) {
 
   try {
     const locals = await res.locals
+    const data = await res.data
 
+    if (data) return res.json(data)
     res.render(res.view, locals)
   } catch (err) {
     next(err)

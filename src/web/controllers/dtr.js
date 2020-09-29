@@ -9,20 +9,20 @@ const TimeRecord = require('components/time-record')
 
 module.exports = {
   index,
-  create
+  create,
+  api
 }
+
+const projectId = '019538af-fc8b-4427-a84d-a4ae9cce9bf2'
 
 async function index (req, res) {
   debug('index', req.params)
 
-  const projectId = '019538af-fc8b-4427-a84d-a4ae9cce9bf2'
   const project = await getProject(projectId)
   const departments = await getDepartments({ project })
-  const agents = await getAgents({ project })
 
   res.view = 'time-record.pug'
   res.locals = {
-    agents,
     departments,
     project,
     title: 'new'
@@ -32,7 +32,6 @@ async function index (req, res) {
 async function create (req, res) {
   debug('create', req.params, req.body)
 
-  const projectId = '019538af-fc8b-4427-a84d-a4ae9cce9bf2'
   const project = await getProject(projectId)
 
   const { department, date, records, notes } = Object.entries(req.body)
@@ -58,19 +57,22 @@ async function create (req, res) {
     date
   }).save()
 
-  const departments = await getDepartments({ project })
-  const agents = await getAgents({ project })
-
   res.view = 'time-record-receipt.pug'
   res.locals = {
-    agents,
-    departments,
     project,
     records: savedRecords,
     recordNote: savedRecordNote,
 
     title: 'receipt'
   }
+}
+
+async function api (req, res) {
+  debug('api', req.params, req.body, req.query)
+
+  const agents = await getAgents({ projectId, departmentId: req.query.department })
+
+  res.data = { agents }
 }
 
 // Private
@@ -85,9 +87,9 @@ async function getDepartments ({ project }) {
     .then(res => res.map(department => ({ key: department.id, value: department.name })))
 }
 
-async function getAgents ({ project }) {
+async function getAgents ({ projectId, departmentId }) {
   return await new Agents()
-    .all({ projectId: project.id })
+    .all({ project: projectId, department: departmentId })
     .then(res => res.map(agent => ({
       name: agent.name,
       position: agent.position,
