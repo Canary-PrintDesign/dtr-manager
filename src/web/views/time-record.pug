@@ -30,7 +30,7 @@ mixin agent(index='{{recordIndex}}', name='{{recordName}}', position='{{recordPo
           small.form-text.text-muted
     .col-md-1
       label.form-text.text-muted &nbsp;
-      button.btn.btn-danger.js-delete-record &times;
+      button(type=button, value=Cancel, formnovalidate).btn.btn-danger.js-delete-record &times;
       small.form-text.text-muted
 
 block content

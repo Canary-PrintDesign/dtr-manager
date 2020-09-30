@@ -21,10 +21,6 @@ $(document).ready(() => {
     createNewAgent(template, {})
   })
 
-  $('.js-delete-record').click((event) => {
-    $(event.target).closest('.row').remove()
-  })
-
   $('.js-department-select').change(async (event) => {
     $('.js-agents').children().remove()
 
@@ -34,6 +30,11 @@ $(document).ready(() => {
 
     data.agents.forEach((agent, i) => {
       createNewAgent(template, { ...agent, index: i })
+    })
+
+    $('.js-delete-record').click((event) => {
+      event.preventDefault()
+      $(event.target).closest('.row').remove()
     })
   })
 })
