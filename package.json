@@ -14,6 +14,7 @@
     "playground": "NODE_ENV=development NODE_PATH=./src nodemon --inspect ./playground.js",
     "readme": "npm run markdown docs/templates/README.md README.md",
     "repl": "NODE_PATH=./src node --inspect --use-strict",
+    "start": "NODE_ENV=production NODE_PATH=./src pm2 start ./src/server.js -- --name dtr-manager --log /var/log",
     "test": "NODE_ENV=test NODE_PATH=./src npx mocha --use-strict --recursive \"./src/**/*.test.js\"",
     "test:coverage": "nyc npm run test",
     "test:coverage:watch": "nodemon --exec nyc --reporter=lcov --reporter=text npm run test",
@@ -37,6 +38,7 @@
     "express": "^4.17.1",
     "knex": "^0.21.5",
     "pg": "^8.3.3",
+    "pm2": "^4.5.0",
     "pug": "^3.0.0",
     "uuid": "^8.3.0",
     "~": "file:."
