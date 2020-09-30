@@ -10,9 +10,9 @@ mixin record(record)
 
 block content
   .col-sm-12
-    p= records[0].department.name
+    p= department.name
 
-    p= records[0].date
+    p= date
 
     p= recordNote.note
 
@@ -26,5 +26,6 @@ block content
           th Lunch Stop
 
       tbody
-        each record in records
-          +record(record)
+        if records
+          each record in records
+            +record(record)

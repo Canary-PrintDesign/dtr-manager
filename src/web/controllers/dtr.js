@@ -32,11 +32,13 @@ async function create (req, res) {
 
   const project = await getProject(req.hostname)
 
-  const { department, date, records, notes } = Object.entries(req.body)
+  const { department: departmentId, date, records = [], notes = '' } = Object.entries(req.body)
     .flatMap(([key, value]) => ({ key, value }))
     .reduce((acc, item) => Object.assign(acc, { [item.key]: item.value }), {})
 
-  const savedRecords = await buildRecords(records, { department, date, project })
+  const department = await getDepartment(departmentId)
+
+  const savedRecords = await buildRecords(records, { department: departmentId, date, project })
     .then(res => res.map(record => new TimeRecord(record)))
     .then(res => res.map(async record => await record.save()))
     .then(res => Promise.all(res))
@@ -51,13 +53,15 @@ async function create (req, res) {
   const savedRecordNote = await new RecordNote({
     note: notes,
     project: project.id,
-    department,
+    department: department.id,
     date
   }).save()
 
   res.view = 'time-record-receipt.pug'
   res.locals = {
     project,
+    date,
+    department,
     records: savedRecords,
     recordNote: savedRecordNote,
 
@@ -78,6 +82,10 @@ async function api (req, res) {
 
 async function getProject (hostname) {
   return await new Project().getBy({ hostname })
+}
+
+async function getDepartment (departmentId) {
+  return await new Department().get(departmentId)
 }
 
 async function getDepartments ({ project }) {
