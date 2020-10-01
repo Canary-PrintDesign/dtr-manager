@@ -3,9 +3,11 @@ const Project = require('components/project')
 const TimeReport = require('components/time-report')
 const format = require('date-fns/format')
 const parseISO = require('date-fns/parseISO')
+const addDays = require('date-fns/addDays')
 
 module.exports = {
-  index
+  index,
+  get
 }
 
 async function index (req, res) {
@@ -46,10 +48,25 @@ async function index (req, res) {
   }
 }
 
+async function get (req, res) {
+  debug('index', req.params)
+
+  const project = await getProject(req.hostname)
+  const date = addDays(project.startDate, req.params.dayNumber - 1)
+  const TimeReport = await getTimeReport(project.id, date)
+
+  res.view = 'report'
+  res.locals = {
+    project,
+    reports: TimeReport,
+    title: project.name
+  }
+}
+
 async function getProject (hostname) {
   return await new Project().getBy({ hostname })
 }
 
-async function getTimeReport (projectId) {
-  return await new TimeReport().all({ projectId })
+async function getTimeReport (project, date) {
+  return await new TimeReport().all({ project, date })
 }

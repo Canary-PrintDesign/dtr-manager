@@ -7,7 +7,7 @@ module.exports = {
 }
 
 function findAll (table) {
-  return async function findAll ({ projectId }) {
+  return async function findAll (props) {
     return await db
       .column([
         'time_records.date',
@@ -23,7 +23,12 @@ function findAll (table) {
       .table(table)
       .join('departments', 'time_records.department', '=', 'departments.id')
       .join('agents', 'time_records.agent', '=', 'agents.id')
-      .where('time_records.project', '=', projectId)
+      .where(builder => {
+        Object.entries(props)
+          .forEach(([key, value]) => {
+            if (value) builder.where(`time_records.${key}`, value)
+          })
+      })
       .orderBy([{ column: 'date', order: 'asc' }, { column: 'department', order: 'asc' }])
   }
 }

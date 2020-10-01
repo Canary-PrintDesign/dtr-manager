@@ -1,9 +1,7 @@
 const repo = require('./time-report-repo')
-const { parseISO } = require('date-fns')
 
 module.exports = class TimeReport {
   constructor (props = {}) {
-
     this.date = props.date
     this.department = props.department
     this.agent = props.name
@@ -14,8 +12,8 @@ module.exports = class TimeReport {
     this.lunchStop = props.lunchStop
   }
 
-  async all ({ projectId }) {
-    return await repo.findAll({ projectId })
+  async all ({ project, date }) {
+    return await repo.findAll({ project, date })
       .then(res => res.map(report => new TimeReport(report)))
   }
 
