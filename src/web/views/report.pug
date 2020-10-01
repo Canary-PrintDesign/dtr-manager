@@ -1,0 +1,29 @@
+extends layout.pug
+
+block content
+
+  .container
+    .row
+    table.table.stripe.table-striped.border
+      thead
+        th Date
+        th Department
+        th Name
+        th Position
+        th Work Start
+        th Work End
+        th Lunch Start
+        th Lunch End
+
+      tbody
+        each report of reports
+          tr
+            td= report.date
+            td= report.department
+            td= report.agent
+            td= report.position
+            td= report.workStart
+            td= report.workStop
+            td= report.lunchStart
+            td= report.lunchStop
+

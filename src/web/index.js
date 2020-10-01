@@ -14,6 +14,8 @@ const {
   api: dtrAPI
 } = require('./controllers/dtr')
 
+const { index: report } = require('./controllers/report')
+
 module.exports = app
 
 // app.use(logRequest())
@@ -24,6 +26,7 @@ app.get('/', controller(home))
 app.get('/dtr/api', controller(dtrAPI))
 app.get('/dtr', controller(dtr))
 app.post('/dtr', controller(dtrPost))
+app.get('/dtr/report', controller(report))
 
 app.use(notFound())
 app.use(respond())
