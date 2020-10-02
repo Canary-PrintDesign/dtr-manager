@@ -15,10 +15,19 @@ $(document).ready(() => {
     agentsList.append(templ)
   }
 
+  function bindDeleteRecordButton () {
+    $('.js-delete-record').click((event) => {
+      event.preventDefault()
+      $(event.target).closest('.row').remove()
+    })
+  }
+
   const template = $('.js-agent-template')
 
   $('.js-new-record').click(() => {
     createNewAgent(template, {})
+
+    bindDeleteRecordButton()
   })
 
   $('.js-department-select').change(async (event) => {
@@ -32,9 +41,6 @@ $(document).ready(() => {
       createNewAgent(template, { ...agent, index: i })
     })
 
-    $('.js-delete-record').click((event) => {
-      event.preventDefault()
-      $(event.target).closest('.row').remove()
-    })
+    bindDeleteRecordButton()
   })
 })
