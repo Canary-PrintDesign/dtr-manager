@@ -9,23 +9,27 @@ mixin record(record)
     td= record.lunchStop
 
 block content
-  .col-sm-12
-    p= department.name
+  .container
+    .row
+      h3= department.name
 
-    p= date
+    .row
+      p= date
 
-    p= recordNote.note
+    .row
+      p= recordNote.note
 
-    table.table
-      thead
-        tr
-          th Name
-          th Work Start
-          th Work Stop
-          th Lunch Start
-          th Lunch Stop
+    .row
+      table.table.stripe.table-striped.border
+        thead
+          tr
+            th Name
+            th Work Start
+            th Work Stop
+            th Lunch Start
+            th Lunch Stop
 
-      tbody
-        if records
-          each record in records
-            +record(record)
+        tbody
+          if records
+            each record in records
+              +record(record)
