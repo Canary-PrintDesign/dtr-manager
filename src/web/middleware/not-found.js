@@ -18,6 +18,10 @@ function notFound (req, res, next) {
 
     res.status(404)
     res.view = '404.pug'
+    res.locals = {
+      ...req.context,
+      title: `Page Not Found - ${req.context.project.name}`
+    }
   }
 
   next()
