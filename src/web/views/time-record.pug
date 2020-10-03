@@ -14,19 +14,19 @@ mixin agent(index='{{recordIndex}}', name='{{recordName}}', position='{{recordPo
           small.form-text.text-muted
         .col-md-2
           label.form-text.text-muted Work Start
-          input.form-control(required, placeholder="0700", name=`records[${index}][workStart]`)
+          input.form-control(required, minlength="4", maxlength="4", pattern="[0-9]{4}", placeholder="0700", name=`records[${index}][workStart]`)
           small.form-text.text-muted
         .col-md-2
           label.form-text.text-muted Work Stop
-          input.form-control(required, placeholder="2100", name=`records[${index}][workStop]`)
+          input.form-control(required, minlength="4", maxlength="4", pattern="[0-9]{4}", placeholder="2100", name=`records[${index}][workStop]`)
           small.form-text.text-muted
         .col-md-2
           label.form-text.text-muted Lunch Start
-          input.form-control(placeholder="1300", name=`records[${index}][lunchStart]`)
+          input.form-control(minlength="4", maxlength="4", pattern="[0-9]{4}", placeholder="1300", name=`records[${index}][lunchStart]`)
           small.form-text.text-muted
         .col-md-2
           label.form-text.text-muted Lunch Stop
-          input.form-control(placeholder="1400", name=`records[${index}][lunchStop]`)
+          input.form-control(minlength="4", maxlength="4", pattern="[0-9]{4}", placeholder="1400", name=`records[${index}][lunchStop]`)
           small.form-text.text-muted
     .col-md-1
       label.form-text.text-muted &nbsp;
