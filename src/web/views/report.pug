@@ -13,17 +13,18 @@ block content
               .input-group-prepend
                 .input-group-text Date
               select.form-control.js-date-filter#dateFilter
-                option(default) -- By Date --
+                option(default, value='') -- By Date --
                 each date in dates
                   option(value=date)= date
-
           .col-auto
-            label.sr-only(for="inlineFormInputGroupUsername") Department
+            label.sr-only(for="departmentFilter") Department
             .input-group
               .input-group-prepend
                 .input-group-text Department
-              select.form-control
-                option(default) -- By Department --
+              select.form-control.js-department-filter#departmentFilter
+                option(default, value='') -- By Department --
+                each department in departments
+                  option(value=department)= department
 
     .row
       table.table.stripe.table-striped.border
@@ -39,9 +40,9 @@ block content
 
         tbody
           each report of reports
-            tr(data-report-row, data-report-date= report.date)
+            tr(data-report-row, data-report-date= report.date, data-report-department= report.department)
               td= report.presentmentDate
-              td= report.department
+              td= report.presentmentDepartment
               td= report.agent
               td= report.position
               td= report.workStart
