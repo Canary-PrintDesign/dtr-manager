@@ -21,6 +21,11 @@ module.exports = class RecordNote {
     return new this.constructor(storedProject)
   }
 
+  async all ({ project }) {
+    return await repo.findAll({ project })
+      .then(res => res.map(report => new RecordNote(report)))
+  }
+
   serialize () {
     return JSON.parse(JSON.stringify(this))
   }
