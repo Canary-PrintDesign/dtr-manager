@@ -44,7 +44,7 @@ async function index (req, res) {
   res.locals = {
     project,
     reports: TimeReport,
-    title: project.name
+    title: `Project Report - ${project.name}`
   }
 }
 
@@ -59,7 +59,7 @@ async function get (req, res) {
   res.locals = {
     project,
     reports: TimeReport,
-    title: project.name
+    title: `Project Report - ${project.name}`
   }
 }
 
