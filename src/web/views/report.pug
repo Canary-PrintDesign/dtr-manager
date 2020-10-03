@@ -41,8 +41,8 @@ block content
         tbody
           each report of reports
             tr(data-report-row, data-report-date= report.date, data-report-department= report.department)
-              td= report.presentmentDate
-              td= report.presentmentDepartment
+              td= report.date
+              td= report.department
               td= report.agent
               td= report.position
               td= report.workStart

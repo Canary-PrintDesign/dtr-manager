@@ -8,14 +8,13 @@ $(document).ready(() => {
       const rowDate = $(el).data('report-date')
       const rowDepartment = $(el).data('report-department')
 
-      $(el).addClass('sr-only')
+      $(el).addClass('d-none')
 
-      if (filterDate === rowDate && filterDepartment === rowDepartment) {
-        $(el).removeClass('sr-only')
-      } else if (filterDate === rowDate && filterDepartment === '') {
-        $(el).removeClass('sr-only')
-      } else if (filterDate === '' && filterDepartment === rowDepartment) {
-        $(el).removeClass('sr-only')
+      if (
+        (filterDate === '' || filterDate === rowDate) &&
+        (filterDepartment === '' || filterDepartment === rowDepartment)
+      ) {
+        $(el).removeClass('d-none')
       }
     })
   })
