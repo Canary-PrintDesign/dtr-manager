@@ -7,7 +7,7 @@ function postProcessLocalsInit () {
 }
 
 async function postProcessLocals (req, res, next) {
-  debug(res.locals)
+  // debug(res.locals)
 
   try {
     const locals = res.locals

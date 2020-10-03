@@ -1,5 +1,7 @@
 const debug = require('lib/debug')('http:web:controller:report')
+const groupBy = require('lodash.groupby')
 const TimeReport = require('components/time-report')
+const RecordNote = require('components/record-note')
 const format = require('date-fns/format')
 const addDays = require('date-fns/addDays')
 
@@ -12,19 +14,47 @@ async function index (req, res) {
   debug('index', req.params)
 
   const { project } = req.context
+
+  const RecordNotes = await getRecordNotes(project.id)
+    .then(res => res.filter(note => note.date))
+    .then(res => res.filter(note => note.note !== ''))
+    .then(res => res.map(note =>
+      Object.assign(note, { date: format(note.date, 'yyyy-MM-dd') }))
+    )
+
   const TimeReport = await getTimeReport(project.id)
     .then(res => res.map(report =>
       Object.assign(report, { date: format(report.date, 'yyyy-MM-dd') }))
     )
+    .then(res => groupBy(res, 'date'))
+    .then(res => {
+      Object.keys(res)
+        .forEach(dateKey => {
+          const entries = res[`${dateKey}`]
+          const departments = groupBy(entries, 'department')
 
-  const dates = TimeReport
-    .map(report => report.date)
+          Object.entries(departments)
+            .forEach(([deptName, deptEntries]) => {
+              const notes = RecordNotes
+                .filter(note => note.date === dateKey)
+                .filter(note => note.department === deptName)
 
-  const filteredDates = [...new Set(dates)]
-    .sort((a, b) => a < b)
+              departments[`${deptName}`] = {
+                notes,
+                entries: deptEntries
+              }
+            })
 
-  const departments = TimeReport
-    .map(report => report.department)
+          res[`${dateKey}`] = { departments }
+        })
+
+      return res
+    })
+
+  const filteredDates = Object.keys(TimeReport)
+
+  const departments = Object.values(TimeReport)
+    .flatMap(report => Object.keys(report.departments))
 
   const filteredDepartments = [...new Set(departments)]
     .sort((a, b) => a < b)
@@ -34,7 +64,7 @@ async function index (req, res) {
     ...req.context,
     dates: filteredDates,
     departments: filteredDepartments,
-    reports: TimeReport,
+    report: TimeReport,
     title: 'Project Report'
   }
 }
@@ -56,4 +86,8 @@ async function get (req, res) {
 
 async function getTimeReport (project, date) {
   return await new TimeReport().all({ project, date })
+}
+
+async function getRecordNotes (project) {
+  return await new RecordNote().all({ project })
 }
