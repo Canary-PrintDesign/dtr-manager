@@ -16,42 +16,17 @@ async function index (req, res) {
     .then(res => res.map(report =>
       Object.assign(report, { date: format(report.date, 'yyyy-MM-dd') }))
     )
-    // replace repeat dates / department names
-    .then(res => {
-      let date
-      let department
-
-      return res.map(report => {
-        if (report.date === date) {
-          report.presentmentDate = '-'
-        } else {
-          report.presentmentDate = report.date
-          date = report.date
-        }
-
-        if (report.department === department) {
-          report.presentmentDepartment = '-'
-        } else {
-          report.presentmentDepartment = report.department
-          department = report.department
-        }
-
-        return report
-      })
-    })
 
   const dates = TimeReport
     .map(report => report.date)
 
   const filteredDates = [...new Set(dates)]
-    .filter(date => date !== '-')
     .sort((a, b) => a < b)
 
   const departments = TimeReport
     .map(report => report.department)
 
   const filteredDepartments = [...new Set(departments)]
-    .filter(department => department !== '-')
     .sort((a, b) => a < b)
 
   res.view = 'report'
