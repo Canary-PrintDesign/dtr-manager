@@ -1,29 +1,54 @@
 extends layout.pug
 
 block content
-
   .container
     .row
-    table.table.stripe.table-striped.border
-      thead
-        th Date
-        th Department
-        th Name
-        th Position
-        th Work Start
-        th Work End
-        th Lunch Start
-        th Lunch End
+      .form
+        .form-row.align-items-center
+          .col-auto
+            label Filter
+          .col-auto
+            label.sr-only(for="dateFilter") Date
+            .input-group
+              .input-group-prepend
+                .input-group-text Date
+              select.form-control.js-date-filter#dateFilter
+                option(default) -- By Date --
+                each date in dates
+                  option(value=date)= date
 
-      tbody
-        each report of reports
-          tr
-            td= report.date
-            td= report.department
-            td= report.agent
-            td= report.position
-            td= report.workStart
-            td= report.workStop
-            td= report.lunchStart
-            td= report.lunchStop
+          .col-auto
+            label.sr-only(for="inlineFormInputGroupUsername") Department
+            .input-group
+              .input-group-prepend
+                .input-group-text Department
+              select.form-control
+                option(default) -- By Department --
 
+    .row
+      table.table.stripe.table-striped.border
+        thead
+          th Date
+          th Department
+          th Name
+          th Position
+          th Work Start
+          th Work End
+          th Lunch Start
+          th Lunch End
+
+        tbody
+          each report of reports
+            tr(data-report-row, data-report-date= report.date)
+              td= report.presentmentDate
+              td= report.department
+              td= report.agent
+              td= report.position
+              td= report.workStart
+              td= report.workStop
+              td= report.lunchStart
+              td= report.lunchStop
+
+block scripts
+  script
+    include report-script.js
