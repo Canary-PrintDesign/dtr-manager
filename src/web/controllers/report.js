@@ -30,8 +30,9 @@ async function index (req, res) {
         }
 
         if (report.department === department) {
-          report.department = '-'
+          report.presentmentDepartment = '-'
         } else {
+          report.presentmentDepartment = report.department
           department = report.department
         }
 
@@ -46,10 +47,18 @@ async function index (req, res) {
     .filter(date => date !== '-')
     .sort((a, b) => a < b)
 
+  const departments = TimeReport
+    .map(report => report.department)
+
+  const filteredDepartments = [...new Set(departments)]
+    .filter(department => department !== '-')
+    .sort((a, b) => a < b)
+
   res.view = 'report'
   res.locals = {
     ...req.context,
     dates: filteredDates,
+    departments: filteredDepartments,
     reports: TimeReport,
     title: 'Project Report'
   }
