@@ -13,7 +13,7 @@ async function index (req, res) {
   res.view = 'home'
   res.locals = {
     project,
-    title: project.name
+    title: `Welcome - ${project.name}`
   }
 }
 

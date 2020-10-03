@@ -23,7 +23,7 @@ async function index (req, res) {
   res.locals = {
     departments,
     project,
-    title: 'new'
+    title: `New Time Sheet - ${project.name}`
   }
 }
 
@@ -65,7 +65,7 @@ async function create (req, res) {
     records: savedRecords,
     recordNote: savedRecordNote,
 
-    title: 'receipt'
+    title: `Receipt of Time Sheet | ${project.name}`
   }
 }
 
