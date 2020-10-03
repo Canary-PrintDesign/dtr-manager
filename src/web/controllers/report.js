@@ -1,7 +1,6 @@
 const debug = require('lib/debug')('http:web:controller:report')
 const TimeReport = require('components/time-report')
 const format = require('date-fns/format')
-const parseISO = require('date-fns/parseISO')
 const addDays = require('date-fns/addDays')
 
 module.exports = {
