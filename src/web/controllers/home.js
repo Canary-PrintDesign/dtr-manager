@@ -1,5 +1,4 @@
 const debug = require('lib/debug')('http:web:controller:home')
-const Project = require('components/project')
 
 module.exports = {
   index
@@ -8,15 +7,11 @@ module.exports = {
 async function index (req, res) {
   debug('index', req.params)
 
-  const project = await getProject(req.hostname)
+  const { project } = req.context
 
   res.view = 'home'
   res.locals = {
-    project,
+    ...req.context,
     title: `Welcome - ${project.name}`
   }
-}
-
-async function getProject (hostname) {
-  return await new Project().getBy({ hostname })
 }

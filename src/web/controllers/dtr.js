@@ -1,7 +1,6 @@
 const debug = require('lib/debug')('http:web:controller:dtr')
 const Department = require('components/department')
 const Departments = require('components/departments')
-const Project = require('components/project')
 const Agent = require('components/agent')
 const Agents = require('components/agents')
 const RecordNote = require('components/record-note')
@@ -16,13 +15,13 @@ module.exports = {
 async function index (req, res) {
   debug('index', req.params)
 
-  const project = await getProject(req.hostname)
+  const { project } = req.context
   const departments = await getDepartments({ project })
 
   res.view = 'time-record.pug'
   res.locals = {
+    ...req.context,
     departments,
-    project,
     title: `New Time Sheet - ${project.name}`
   }
 }
@@ -30,7 +29,7 @@ async function index (req, res) {
 async function create (req, res) {
   debug('create', req.params, req.body)
 
-  const project = await getProject(req.hostname)
+  const { project } = req.context
 
   const { department: departmentId, date, records = [], notes = '' } = Object.entries(req.body)
     .flatMap(([key, value]) => ({ key, value }))
@@ -72,17 +71,13 @@ async function create (req, res) {
 async function api (req, res) {
   debug('api', req.params, req.body, req.query)
 
-  const project = await getProject(req.hostname)
+  const { project } = req.context
   const agents = await getAgents({ projectId: project.id, departmentId: req.query.department })
 
   res.data = { agents }
 }
 
 // Private
-
-async function getProject (hostname) {
-  return await new Project().getBy({ hostname })
-}
 
 async function getDepartment (departmentId) {
   return await new Department().get(departmentId)
