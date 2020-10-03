@@ -23,8 +23,9 @@ async function index (req, res) {
 
       return res.map(report => {
         if (report.date === date) {
-          report.date = '-'
+          report.presentmentDate = '-'
         } else {
+          report.presentmentDate = report.date
           date = report.date
         }
 
@@ -38,9 +39,17 @@ async function index (req, res) {
       })
     })
 
+  const dates = TimeReport
+    .map(report => report.date)
+
+  const filteredDates = [...new Set(dates)]
+    .filter(date => date !== '-')
+    .sort((a, b) => a < b)
+
   res.view = 'report'
   res.locals = {
     ...req.context,
+    dates: filteredDates,
     reports: TimeReport,
     title: 'Project Report'
   }
