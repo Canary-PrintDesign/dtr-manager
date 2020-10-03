@@ -43,7 +43,7 @@ async function index (req, res) {
   res.locals = {
     ...req.context,
     reports: TimeReport,
-    title: `Project Report - ${project.name}`
+    title: 'Project Report'
   }
 }
 
@@ -58,7 +58,7 @@ async function get (req, res) {
   res.locals = {
     ...req.context,
     reports: TimeReport,
-    title: `Project Report - ${project.name}`
+    title: 'Project Report'
   }
 }
 

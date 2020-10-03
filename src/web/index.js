@@ -7,6 +7,7 @@ const controller = require('./middleware/controller')
 const errorHandler = require('./middleware/error-handler')
 const notFound = require('./middleware/not-found')
 const project = require('./middleware/project')
+const postProcessLocals = require('./middleware/post-process-locals')
 
 const { index: home } = require('./controllers/home')
 const {
@@ -31,6 +32,7 @@ app.post('/dtr', controller(dtrPost))
 app.get('/dtr/report/day/:dayNumber', controller(reportGet))
 app.get('/dtr/report', controller(reportIndex))
 
+app.use(postProcessLocals())
 app.use(notFound())
 app.use(respond())
 

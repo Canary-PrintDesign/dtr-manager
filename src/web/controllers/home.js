@@ -7,11 +7,9 @@ module.exports = {
 async function index (req, res) {
   debug('index', req.params)
 
-  const { project } = req.context
-
   res.view = 'home'
   res.locals = {
     ...req.context,
-    title: `Welcome - ${project.name}`
+    title: 'Welcome'
   }
 }
