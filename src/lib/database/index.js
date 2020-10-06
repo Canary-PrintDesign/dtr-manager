@@ -11,6 +11,7 @@ module.exports = {
 
   findAll,
   findById,
+  findByProp,
   store
 }
 
@@ -36,6 +37,20 @@ function findById (table) {
       .select()
       .table(table)
       .where({ id })
+      .limit(1)
+      .then(results => results[0])
+  }
+}
+
+function findByProp (table) {
+  return async function findByProp (props) {
+    return await Knex
+      .select()
+      .table(table)
+      .where(builder =>
+        Object.entries(props)
+          .forEach(([key, value]) => builder.where(key, value))
+      )
       .limit(1)
       .then(results => results[0])
   }
