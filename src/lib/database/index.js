@@ -1,4 +1,4 @@
-const debug = require('lib/debug')('database', { enable: 'dtr:*' })
+const debug = require('lib/debug')('database')
 const knex = require('knex')
 const connection = require('../../../knexfile')
 const { v4: uuid } = require('uuid')
@@ -35,6 +35,8 @@ function store (table) {
       : await create(table, data)
   }
 }
+
+// Private
 
 async function create (table, data) {
   debug('create', table, data)
