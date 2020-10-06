@@ -9,8 +9,23 @@ module.exports = {
   db: Knex,
   uuid: uuid,
 
+  findAll,
   findById,
   store
+}
+
+function findAll (table) {
+  return async function findAll (props) {
+    debug('findAll', table, props)
+
+    return await Knex
+      .select()
+      .table(table)
+      .where(builder =>
+        Object.entries(props)
+          .forEach(([key, value]) => builder.where(key, value))
+      )
+  }
 }
 
 function findById (table) {

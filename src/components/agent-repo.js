@@ -1,4 +1,4 @@
-const { db, findById, store } = require('lib/database')
+const { db, findAll, findById, store } = require('lib/database')
 
 const table = 'agents'
 
@@ -7,18 +7,6 @@ module.exports = {
   findById: findById(table),
   findByProp: findByProp(table),
   store: store(table)
-}
-
-function findAll (table) {
-  return async function findAll (props) {
-    return await db
-      .select()
-      .table(table)
-      .where(builder =>
-        Object.entries(props)
-        .forEach(([key, value]) => builder.where(key, value))
-      )
-  }
 }
 
 function findByProp (table) {

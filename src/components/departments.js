@@ -6,8 +6,8 @@ module.exports = class Departments {
     this.constructor = props.departments || []
   }
 
-  async all ({ projectId }) {
-    return await repo.findAll({ projectId })
+  async all ({ projectId: project }) {
+    return await repo.findAll({ project })
       .then(res => res.map(department => new Department(department)))
   }
 
