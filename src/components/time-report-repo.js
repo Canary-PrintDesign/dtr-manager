@@ -29,7 +29,18 @@ function findAll (table) {
             if (value) builder.where(`time_records.${key}`, value)
           })
       })
-      .groupBy('date', 'departments.name', 'work_start', 'work_stop', 'lunch_start', 'lunch_stop', 'agents.name', 'position')
-      .orderBy([{ column: 'date', order: 'desc' }, { column: 'department', order: 'asc' }, { column: 'name', order: 'asc' }])
+      .groupBy('date')
+      .groupBy('departments.name')
+      .groupBy('work_start')
+      .groupBy('work_stop')
+      .groupBy('lunch_start')
+      .groupBy('lunch_stop')
+      .groupBy('agents.name')
+      .groupBy('position')
+      .orderBy([
+        { column: 'date', order: 'desc' },
+        { column: 'department', order: 'asc' },
+        { column: 'name', order: 'asc' }
+      ])
   }
 }

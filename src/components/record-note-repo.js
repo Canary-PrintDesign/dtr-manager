@@ -28,6 +28,9 @@ function findAll (table) {
       .groupBy('record_notes.date')
       .groupBy('departments.name')
       .groupBy('record_notes.note')
-      .orderBy([{ column: 'date', order: 'asc' }, { column: 'department', order: 'asc' }])
+      .orderBy([
+        { column: 'date', order: 'asc' },
+        { column: 'department', order: 'asc' }
+      ])
   }
 }
