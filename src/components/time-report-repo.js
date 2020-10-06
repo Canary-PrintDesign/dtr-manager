@@ -29,6 +29,7 @@ function findAll (table) {
             if (value) builder.where(`time_records.${key}`, value)
           })
       })
+      .groupBy('date', 'departments.name', 'work_start', 'work_stop', 'lunch_start', 'lunch_stop', 'agents.name', 'position')
       .orderBy([{ column: 'date', order: 'desc' }, { column: 'department', order: 'asc' }])
   }
 }
