@@ -30,6 +30,6 @@ function findAll (table) {
           })
       })
       .groupBy('date', 'departments.name', 'work_start', 'work_stop', 'lunch_start', 'lunch_stop', 'agents.name', 'position')
-      .orderBy([{ column: 'date', order: 'desc' }, { column: 'department', order: 'asc' }])
+      .orderBy([{ column: 'date', order: 'desc' }, { column: 'department', order: 'asc' }, { column: 'name', order: 'asc' }])
   }
 }
