@@ -13,7 +13,7 @@ module.exports = class Project {
   async get (id) {
     const foundProject = await projectRepo.findById(id)
 
-    return new Project(foundProject)
+    return new this.constructor(foundProject)
   }
 
   async getBy (props) {
@@ -25,7 +25,7 @@ module.exports = class Project {
   async save () {
     const storedProject = await projectRepo.store(this.serialize())
 
-    return new Project(storedProject)
+    return new this.constructor(storedProject)
   }
 
   serialize () {

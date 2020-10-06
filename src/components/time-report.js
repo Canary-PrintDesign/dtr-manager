@@ -14,7 +14,7 @@ module.exports = class TimeReport {
 
   async all ({ project, date }) {
     return await repo.findAll({ project, date })
-      .then(res => res.map(report => new TimeReport(report)))
+      .then(res => res.map(report => new this.constructor(report)))
   }
 
   serialize () {
