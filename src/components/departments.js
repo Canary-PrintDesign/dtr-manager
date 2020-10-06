@@ -3,7 +3,7 @@ const Department = require('./department')
 
 module.exports = class Departments {
   constructor (props = {}) {
-    this.departments = props.departments || []
+    this.constructor = props.departments || []
   }
 
   async all ({ projectId }) {

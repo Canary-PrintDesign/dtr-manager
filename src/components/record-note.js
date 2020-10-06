@@ -23,7 +23,7 @@ module.exports = class RecordNote {
 
   async all ({ project }) {
     return await repo.findAll({ project })
-      .then(res => res.map(report => new RecordNote(report)))
+      .then(res => res.map(report => new this.constructor(report)))
   }
 
   serialize () {
