@@ -1,7 +1,7 @@
 extends layout.pug
 
 block content
-  .container
+  .container-fluid
     .row
       .form.m-3
         .form-row.align-items-center
@@ -27,7 +27,7 @@ block content
                   option(value=department)= department
 
     .row
-      table.table.table-bordered
+      table.table.table-bordered.report
         thead.thead-dark
           tr
             th Date
@@ -39,19 +39,21 @@ block content
             th Lunch Start
             th Lunch End
 
-        tbody
-          each val, key in report
-            -var date = key
-            -var departments = val.departments
+        each val, key in report
+          -var date = key
+          -var departments = val.departments
 
-            each department, departmentName in departments
-              -var entries = department.entries
-              -var notes = department.notes
+          each department, departmentName in departments
+            -var entries = department.entries
+            -var notes = department.notes
 
+            tbody
               each entry in entries
                 tr(data-report-row, data-report-date=date, data-report-department=departmentName).table-light
-                  td= date
-                  td= departmentName
+                  td
+                    span= date
+                  td
+                    span= departmentName
                   td= entry.agent
                   td= entry.position
                   td= entry.workStart
@@ -61,10 +63,13 @@ block content
 
               each note in notes
                 tr(data-report-row, data-report-date=date, data-report-department=departmentName).table-warning
-                  td= date
-                  td= departmentName
+                  td
+                    span= date
+                  td
+                    span= departmentName
                   td Note
                   td(colspan=5)= note.note
+
               tr(data-report-row, data-report-date=date, data-report-department=departmentName).table-secondary.table-sm
                 td(colspan=8)
 block scripts
