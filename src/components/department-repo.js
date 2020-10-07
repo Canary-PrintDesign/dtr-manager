@@ -1,9 +1,9 @@
-const { findAll, findById, store } = require('lib/database')
+const { findAll, findByProp, store } = require('lib/database')
 
 const table = 'departments'
 
 module.exports = {
   findAll: findAll(table),
-  findById: findById(table),
+  findByProp: findByProp(table),
   store: store(table)
 }

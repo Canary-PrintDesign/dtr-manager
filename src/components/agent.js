@@ -10,13 +10,13 @@ module.exports = class Agent {
   }
 
   async get (id) {
-    const foundAgent = await repo.findById(id)
+    const foundAgent = await repo.findByProp({ id })
 
     return new this.constructor(foundAgent)
   }
 
   async getBy (props) {
-    const foundAgent = await repo.findByProp(props)
+    const foundAgent = await repo.findByProp({ ...props })
 
     return new this.constructor(foundAgent)
   }
