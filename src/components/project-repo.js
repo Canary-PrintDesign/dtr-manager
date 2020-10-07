@@ -1,4 +1,4 @@
-const { findById, findByProp, store } = require('lib/database')
+const { findByProp, store } = require('lib/database')
 
 const table = 'projects'
 
