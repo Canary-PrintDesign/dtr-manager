@@ -11,13 +11,13 @@ module.exports = class Project {
   }
 
   async get (id) {
-    const foundProject = await projectRepo.findById(id)
+    const foundProject = await projectRepo.findByProp({ id })
 
     return new this.constructor(foundProject)
   }
 
   async getBy (props) {
-    const foundProject = await projectRepo.findByProp(props)
+    const foundProject = await projectRepo.findByProp({ ...props })
 
     return new this.constructor(foundProject)
   }

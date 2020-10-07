@@ -9,7 +9,7 @@ module.exports = class Department {
   }
 
   async get (id) {
-    const foundDepartment = await repo.findById(id)
+    const foundDepartment = await repo.findByProp({ id })
 
     return new this.constructor(foundDepartment)
   }

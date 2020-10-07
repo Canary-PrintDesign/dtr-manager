@@ -15,7 +15,7 @@ module.exports = class TimeRecord {
   }
 
   async get (id) {
-    const foundProject = await repo.findById(id)
+    const foundProject = await repo.findByProp({ id })
 
     return new this.constructor(foundProject)
   }

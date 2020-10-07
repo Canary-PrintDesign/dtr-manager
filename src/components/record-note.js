@@ -10,20 +10,20 @@ module.exports = class RecordNote {
   }
 
   async get (id) {
-    const foundProject = await repo.findById(id)
+    const foundProject = await repo.findByProp({ id })
 
     return new this.constructor(foundProject)
+  }
+
+  async all (props) {
+    return await repo.findAll({ ...props })
+      .then(res => res.map(report => new this.constructor(report)))
   }
 
   async save () {
     const storedProject = await repo.store(this.serialize())
 
     return new this.constructor(storedProject)
-  }
-
-  async all ({ project }) {
-    return await repo.findAll({ project })
-      .then(res => res.map(report => new this.constructor(report)))
   }
 
   serialize () {
