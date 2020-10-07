@@ -35,7 +35,7 @@ async function create (req, res) {
     .flatMap(([key, value]) => ({ key, value }))
     .reduce((acc, item) => Object.assign(acc, { [item.key]: item.value }), {})
 
-  const department = await getDepartment(departmentId)
+  const department = await getDepartment({ department: departmentId })
 
   const savedRecords = await buildRecords(records, { department: departmentId, date, project })
     .then(res => res.map(record => new TimeRecord(record)))
@@ -79,8 +79,8 @@ async function api (req, res) {
 
 // Private
 
-async function getDepartment (departmentId) {
-  return await new Department().get(departmentId)
+async function getDepartment ({ department }) {
+  return await new Department().get({ department })
 }
 
 async function getDepartments ({ project }) {
