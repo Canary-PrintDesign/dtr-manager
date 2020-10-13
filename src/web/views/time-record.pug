@@ -7,8 +7,8 @@ mixin agent(index='{{recordIndex}}', name='{{recordName}}', position='{{recordPo
         .card-body
           .row
             .col-6.col-md-2
-              label.form-text.text-muted Name
-              input.form-control(required, value= name, name=`records[${index}][name]`)
+              label.form-text.text-muted Full Name
+              input.form-control(required, value= name , name=`records[${index}][name]`)
               small.form-text.text-muted
             .col-6.col-md-2
               label.form-text.text-muted Position
