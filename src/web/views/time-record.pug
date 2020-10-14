@@ -16,21 +16,23 @@ mixin agent(index='{{recordIndex}}', name='{{recordName}}', position='{{recordPo
               small.form-text.text-muted
             .col-6.col-md-2
               label.form-text.text-muted Work Start
-              input.form-control(required, minlength="4", maxlength="4", pattern="[0-9]{4}", placeholder="0700", name=`records[${index}][workStart]`)
+              input.form-control.js-work-start(required, minlength="4", maxlength="4", pattern="[0-3][0-9][0-5][0-9]", placeholder="0700", name=`records[${index}][workStart]`)
               small.form-text.text-muted
             .col-6.col-md-2
               label.form-text.text-muted Work Stop
-              input.form-control(required, minlength="4", maxlength="4", pattern="[0-9]{4}", placeholder="2100", name=`records[${index}][workStop]`)
+              input.form-control.js-work-stop(required, minlength="4", maxlength="4", pattern="[0-3][0-9][0-5][0-9]", placeholder="2100", name=`records[${index}][workStop]`)
               small.form-text.text-muted
             .col-6.col-md-2
               label.form-text.text-muted Lunch Start
-              input.form-control(minlength="4", maxlength="4", pattern="[0-9]{4}", placeholder="1300", name=`records[${index}][lunchStart]`)
+              input.form-control.js-lunch-start(minlength="4", maxlength="4", pattern="[0-3][0-9][0-5][0-9]", placeholder="1300", name=`records[${index}][lunchStart]`)
               small.form-text.text-muted
             .col-6.col-md-2
               label.form-text.text-muted Lunch Stop
-              input.form-control(minlength="4", maxlength="4", pattern="[0-9]{4}", placeholder="1400", name=`records[${index}][lunchStop]`)
+              input.form-control.js-lunch-stop(minlength="4", maxlength="4", pattern="[0-3][0-9][0-5][0-9]", placeholder="1400", name=`records[${index}][lunchStop]`)
               small.form-text.text-muted
         .card-footer
+          p.form-text.text-muted.text-bold.text-center
+            span.js-calculated-time
           button(type=button, value=Cancel, formnovalidate).btn.btn-block.btn-secondary.js-delete-record Remove Crew Member
 
 block content
