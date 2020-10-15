@@ -1,37 +1,20 @@
 /* globals $, fetch */
 
 $(document).ready(() => {
-  function timeToBase10 (time) {
-    const t = String(time).padStart(4, '0')
-    const hours = String(t.slice(0, 2)).padStart(2, '0')
-    const minutes = String(t.slice(2, 4) / 60 * 100).padEnd(2, '0')
+  function workedTime (start = '0000', stop = '0000', lStart, lStop) {
+    const timeDiff = moment(stop, 'HHmm') - moment(start, 'HHmm')
 
-    return `${hours}${minutes}`
-  }
-
-  function base10ToTime (time) {
-    const t = String(time).padStart(4, '0')
-    const hours = String(t.slice(0, 2)).padStart(2, '0')
-    const minutes = String(t.slice(2, -1) / 100 * 60).padEnd(2, '0')
-
-    return { hours: String(hours), minutes: String(minutes) }
-  }
-
-  function workedTime (start = '0', stop = '0', lStart, lStop) {
-    const workStart = timeToBase10(start)
-    const workStop = timeToBase10(stop)
-    const timeDiff = String(workStop - workStart).padStart(4, '0')
-
-    let lTimeDiff = '0000'
+    let lTimeDiff = 0
     if (lStart && lStop) {
-      const lunchStart = timeToBase10(lStart)
-      const lunchStop = timeToBase10(lStop)
-      lTimeDiff = String(lunchStop - lunchStart).padStart(4, '0')
+      lTimeDiff = moment(lStop, 'HHmm') - moment(lStart, 'HHmm')
     }
 
-    const calculatedTime = String(timeDiff - lTimeDiff).padStart(4, '0')
-
-    return base10ToTime(calculatedTime)
+    const ms = timeDiff - lTimeDiff
+    return moment()
+      .startOf('day')
+      .milliseconds(ms)
+      .format('H:mm')
+      .split(':')
   }
 
   function createNewAgent (template, { index, name = '', position = '' }) {
@@ -64,8 +47,6 @@ $(document).ready(() => {
     const lunchStart = $(agent).find('.js-lunch-start')[0]
     const lunchStop = $(agent).find('.js-lunch-stop')[0]
 
-    console.log(lunchStart.value, lunchStop.value)
-
     // clear custom validations
     workStart.setCustomValidity('')
     workStop.setCustomValidity('')
@@ -83,7 +64,7 @@ $(document).ready(() => {
       lunchStop.setCustomValidity('Stop must be later than Start')
     }
 
-    const { hours, minutes } = workedTime(workStart.value, workStop.value, lunchStart.value, lunchStop.value)
+    const [hours, minutes] = workedTime(workStart.value, workStop.value, lunchStart.value, lunchStop.value)
 
     $(agent)
       .parent()

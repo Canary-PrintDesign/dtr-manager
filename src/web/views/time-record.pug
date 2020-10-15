@@ -67,7 +67,7 @@ block content
             small.form-text.text-muted
 
     input(type="hidden", value= project.id)
-    
+
     .row.my-3
       .col-12.col-sm-6.mb-3
         input.btn.btn-block.btn-success(type="submit", value="Submit")
@@ -77,6 +77,8 @@ block content
 block scripts
   template.js-agent-template
     +agent
+
+  script(src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js")
 
   script
     include time-record-script.js
