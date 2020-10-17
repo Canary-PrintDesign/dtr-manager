@@ -1,0 +1,21 @@
+extends ../layout.pug
+
+block content
+  h2= flash
+
+  if (departments)
+    form#request-auth-token
+      label.form-text.text-muted Department
+      select.form-control.js-department-select(name="department", required)
+        option(disabled="disabled", selected="true") -- Select Department --
+        each department in departments
+          option(value= department.key)= department.value
+
+      button(type=submit) Request new token
+
+  if (link)
+    a(href=link)= link
+
+block scripts
+  script
+    include index.js
