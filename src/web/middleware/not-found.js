@@ -7,7 +7,7 @@ function notFoundInit () {
 }
 
 function notFound (req, res, next) {
-  if (!res.view) {
+  if (!res.view && !res.data) {
     debug({
       method: req.method,
       path: req.path,
