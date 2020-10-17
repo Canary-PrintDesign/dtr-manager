@@ -14,6 +14,12 @@ module.exports = class Department {
     return new this.constructor(foundDepartment)
   }
 
+  async getBy (props) {
+    const foundDepartment = await repo.findByProp({ ...props })
+
+    return new this.constructor(foundDepartment)
+  }
+
   async save () {
     const storedDepartment = await repo.store(this.serialize())
 
