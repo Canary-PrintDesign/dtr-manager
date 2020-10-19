@@ -1,38 +1,30 @@
 const router = require('express').Router()
 
-const { controller, validateAuthToken } = require('./middleware')
-
-const { index: home } = require('./controllers/home')
+const {
+  controller,
+  validateAuthToken
+} = require('./middleware')
 
 const {
-  index: dtr,
-  create: dtrPost,
-  api: dtrAPI
-} = require('./controllers/dtr')
-
-const {
-  index: reportIndex,
-  get: reportGet
-} = require('./controllers/report')
-
-const {
-  index: loginIndex
-} = require('./controllers/login')
-
-const {
-  requestAuthToken
-} = require('./controllers/api')
+  home,
+  report,
+  login,
+  newEntry,
+  createEntry,
+  apiAuthToken,
+  apiAgents
+} = require('./controllers')
 
 module.exports = router
 
 router.get('/', controller(home))
-router.get('/dtr/api', controller(dtrAPI))
-router.get('/dtr', controller(dtr))
-router.post('/dtr', controller(dtrPost))
-router.get('/dtr/report/day/:dayNumber', controller(reportGet))
-router.get('/dtr/report', controller(reportIndex))
 
-router.get('/login/:token', validateAuthToken(), controller(loginIndex))
-router.get('/login', validateAuthToken(), controller(loginIndex))
+router.get('/dtr/report', controller(report))
+router.get('/dtr', controller(newEntry))
+router.post('/dtr', controller(createEntry))
 
-router.get('/api/auth-token', controller(requestAuthToken))
+router.get('/login/:token', validateAuthToken(), controller(login))
+router.get('/login', validateAuthToken(), controller(login))
+
+router.get('/api/auth-token', controller(apiAuthToken))
+router.get('/api/agents', controller(apiAgents))
