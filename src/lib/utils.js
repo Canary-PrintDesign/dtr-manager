@@ -19,3 +19,11 @@ exports.pipe = (...fns) =>
 // passes it down, this is equivalent to pipe(...fns)(data)
 exports.pipeWith = (x, ...fns) =>
   exports.pipe(...fns)(x)
+
+// inspect
+// log data received to stdout and forward data
+exports.inspect = (indicator = '>>>') =>
+  (args) => {
+    console.info(indicator, { ...args })
+    return args
+  }
