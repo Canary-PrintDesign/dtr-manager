@@ -1,29 +1,15 @@
 const debug = require('lib/debug')('http:api:middleware:project')
 const Project = require('components/project')
 
-module.exports = projectInit
+module.exports = () =>
+  async (req, _res, next) => {
+    debug({ hostname: req.hostname })
 
-function projectInit () {
-  return project
-}
-
-async function project (req, _res, next) {
-  const requestData = {
-    method: req.method,
-    path: req.path
+    try {
+      const project = await Project.findWith({ hostname: req.hostname })
+      req.context = { ...req.context, project }
+      next()
+    } catch (err) {
+      next(err)
+    }
   }
-
-  debug(requestData)
-
-  try {
-    const project = await getProject(req.hostname)
-    req.context = { ...req.context, project }
-    next()
-  } catch (err) {
-    next(err)
-  }
-}
-
-async function getProject (hostname) {
-  return await new Project().getBy({ hostname })
-}
