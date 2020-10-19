@@ -5,17 +5,12 @@ const { v4: uuid } = require('uuid')
 
 const Knex = knex(connection)
 
-module.exports = {
-  db: Knex,
-  uuid: uuid,
+exports.db = Knex
 
-  findAll,
-  findByProp,
-  store
-}
+exports.uuid = uuid
 
-function findAll (table) {
-  return async function findAll (props) {
+exports.findAll = (table) =>
+  async (props) => {
     debug('findAll', table, props)
 
     return await Knex
@@ -26,31 +21,26 @@ function findAll (table) {
           .forEach(([key, value]) => builder.where(key, value))
       )
   }
-}
 
-function findByProp (table) {
-  return async function findByProp (props) {
-    return await Knex
+exports.findByProp = (table) =>
+  async (props) =>
+    await Knex
       .select()
       .table(table)
       .where(builder =>
-        Object.entries(props)
-          .forEach(([key, value]) => builder.where(key, value))
+        Object.entries(props).forEach(([key, value]) => builder.where(key, value))
       )
       .limit(1)
       .then(results => results[0])
-  }
-}
 
-function store (table) {
-  return async function store (data) {
+exports.store = (table) =>
+  async (data) => {
     debug('store', table, data)
 
     return (data.id)
       ? await update(table, data)
       : await create(table, data)
   }
-}
 
 // Private
 
