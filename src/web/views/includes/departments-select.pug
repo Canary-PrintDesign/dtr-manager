@@ -1,0 +1,6 @@
+if (departments)
+  label.form-text.text-muted Department
+  select.form-control.js-department-select(name="department", required)
+    option(disabled="disabled", selected="true") -- Select Department --
+    each department in departments
+      option(value= department.key)= department.value
