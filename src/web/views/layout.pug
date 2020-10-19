@@ -6,7 +6,10 @@ html(lang="en")
   body.bg-light
     include includes/header.pug
 
-    block content
+    .container
+      include includes/flash.pug
+
+      block content
 
     include includes/footer.pug
 

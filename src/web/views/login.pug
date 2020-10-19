@@ -1,17 +1,14 @@
 extends layout.pug
 
 block content
-  .container
-    include includes/flash.pug
+  if (departments)
+    form#request-auth-token
+      include includes/departments-select.pug
 
-    if (departments)
-      form#request-auth-token
-        include includes/departments-select.pug
+      button(type=submit) Request new token
 
-        button(type=submit) Request new token
-
-    if (link)
-      a(href=link)= link
+  if (link)
+    a(href=link)= link
 
 block scripts
   script
