@@ -1,6 +1,6 @@
 extends layout.pug
 
-mixin agent(index='{{recordIndex}}', name='{{recordName}}', position='{{recordPosition}}')
+mixin agent(index='{{entryIndex}}', name='{{entryName}}', position='{{entryPosition}}')
   .row.js-agent.my-3
     .col-12
       .card
@@ -8,27 +8,27 @@ mixin agent(index='{{recordIndex}}', name='{{recordName}}', position='{{recordPo
           .row
             .col-6.col-md-2
               label.form-text.text-muted Full Name
-              input.form-control(required, value= name , name=`records[${index}][name]`)
+              input.form-control(required, value= name , name=`entries[${index}][name]`)
               small.form-text.text-muted
             .col-6.col-md-2
               label.form-text.text-muted Position
-              input.form-control(required, value= position, name=`records[${index}][position]`)
+              input.form-control(required, value= position, name=`entries[${index}][position]`)
               small.form-text.text-muted
             .col-6.col-md-2
               label.form-text.text-muted Work Start
-              input.form-control.js-work-start(required, minlength="4", maxlength="4", pattern="[0-3][0-9][0-5][0-9]", placeholder="0700", name=`records[${index}][workStart]`)
+              input.form-control.js-work-start(required, minlength="4", maxlength="4", pattern="[0-3][0-9][0-5][0-9]", placeholder="0700", name=`entries[${index}][workStart]`)
               small.form-text.text-muted
             .col-6.col-md-2
               label.form-text.text-muted Work Stop
-              input.form-control.js-work-stop(required, minlength="4", maxlength="4", pattern="[0-3][0-9][0-5][0-9]", placeholder="2100", name=`records[${index}][workStop]`)
+              input.form-control.js-work-stop(required, minlength="4", maxlength="4", pattern="[0-3][0-9][0-5][0-9]", placeholder="2100", name=`entries[${index}][workStop]`)
               small.form-text.text-muted
             .col-6.col-md-2
               label.form-text.text-muted Lunch Start
-              input.form-control.js-lunch-start(minlength="4", maxlength="4", pattern="[0-3][0-9][0-5][0-9]", placeholder="1300", name=`records[${index}][lunchStart]`)
+              input.form-control.js-lunch-start(minlength="4", maxlength="4", pattern="[0-3][0-9][0-5][0-9]", placeholder="1300", name=`entries[${index}][lunchStart]`)
               small.form-text.text-muted
             .col-6.col-md-2
               label.form-text.text-muted Lunch Stop
-              input.form-control.js-lunch-stop(minlength="4", maxlength="4", pattern="[0-3][0-9][0-5][0-9]", placeholder="1400", name=`records[${index}][lunchStop]`)
+              input.form-control.js-lunch-stop(minlength="4", maxlength="4", pattern="[0-3][0-9][0-5][0-9]", placeholder="1400", name=`entries[${index}][lunchStop]`)
               small.form-text.text-muted
         .card-footer
           p.form-text.text-muted.text-bold.text-center
@@ -36,16 +36,12 @@ mixin agent(index='{{recordIndex}}', name='{{recordName}}', position='{{recordPo
           button(type=button, value=Cancel, formnovalidate).btn.btn-block.btn-secondary.js-delete-record Remove Crew Member
 
 block content
-  form(method="post", action="/dtr").container
+  form(method="post", action="/dtr")
     .row
       .col-12
         .card
           .card-body
-            label.form-text.text-muted Department
-            select.form-control.js-department-select(name="department", required)
-              option(disabled="disabled", selected="true") -- Select Department --
-              each department in departments
-                option(value= department.key)= department.value
+            include includes/departments-select.pug
 
           .card-body
             label.form-text.text-muted Date Worked
