@@ -3,33 +3,34 @@ extends layout.pug
 mixin record(record)
   tr
     td= record.agent.name
+    td= record.agent.position
     td= record.workStart
     td= record.workStop
     td= record.lunchStart
     td= record.lunchStop
 
 block content
-  .container
-    .row
-      h3= department.name
+  .row
+    h3= department.name
 
-    .row
-      p= date
+  .row
+    p= date
 
-    .row
-      p= recordNote.note
+  .row
+    p= recordNote.note
 
-    .row
-      table.table.stripe.table-striped.border
-        thead
-          tr
-            th Name
-            th Work Start
-            th Work Stop
-            th Lunch Start
-            th Lunch Stop
+  .row
+    table.table.stripe.table-striped.border
+      thead
+        tr
+          th Name
+          th Position
+          th Work Start
+          th Work Stop
+          th Lunch Start
+          th Lunch Stop
 
-        tbody
-          if records
-            each record in records
-              +record(record)
+      tbody
+        if records
+          each record in records
+            +record(record)
