@@ -1,9 +1,7 @@
 const debug = require('lib/debug')('http:api:middleware:controller')
 
-module.exports = controllerInit
-
-function controllerInit (fn) {
-  return async function controller (req, res, next) {
+module.exports = (fn) =>
+  async (req, res, next) => {
     let caughtError
 
     try {
@@ -15,4 +13,3 @@ function controllerInit (fn) {
       next(caughtError)
     }
   }
-}

@@ -1,22 +1,17 @@
 const debug = require('lib/debug')('http:api:middleware:logRequest')
 
-module.exports = logRequestInit
+module.exports = () =>
+  (req, _res, next) => {
+    const data = {
+      method: req.method,
+      path: req.path,
+      params: req.params,
+      headers: req.headers,
+      query: req.query,
+      body: req.body
+    }
 
-function logRequestInit () {
-  return logRequest
-}
+    debug(data)
 
-function logRequest (req, _res, next) {
-  const data = {
-    method: req.method,
-    path: req.path,
-    params: req.params,
-    headers: req.headers,
-    query: req.query,
-    body: req.body
+    next()
   }
-
-  debug(data)
-
-  next()
-}

@@ -3,11 +3,9 @@ const groupBy = require('lodash.groupby')
 const TimeReport = require('components/time-report')
 const RecordNote = require('components/record-note')
 const format = require('date-fns/format')
-const addDays = require('date-fns/addDays')
 
 module.exports = {
-  index,
-  get
+  index
 }
 
 async function index (req, res) {
@@ -15,45 +13,19 @@ async function index (req, res) {
 
   const { project } = req.context
 
-  const RecordNotes = await getRecordNotes(project.id)
+  const recordNotes = await getRecordNotes(project.id)
     .then(res => res.filter(note => note.date))
     .then(res => res.filter(note => note.note !== ''))
-    .then(res => res.map(note =>
-      Object.assign(note, { date: format(note.date, 'yyyy-MM-dd') }))
-    )
+    .then(res => res.map(note => ({ ...note, date: formatDate(note.date) })))
 
-  const TimeReport = await getTimeReport(project.id)
-    .then(res => res.map(report =>
-      Object.assign(report, { date: format(report.date, 'yyyy-MM-dd') }))
-    )
+  const timeReportByDate = await getTimeReport(project.id)
+    .then(res => res.map(report => ({ ...report, date: formatDate(report.date) })))
     .then(res => groupBy(res, 'date'))
-    .then(res => {
-      Object.keys(res)
-        .forEach(dateKey => {
-          const entries = res[`${dateKey}`]
-          const departments = groupBy(entries, 'department')
+    .then(res => attachNotes(res, recordNotes))
 
-          Object.entries(departments)
-            .forEach(([deptName, deptEntries]) => {
-              const notes = RecordNotes
-                .filter(note => note.date === dateKey)
-                .filter(note => note.department === deptName)
+  const filteredDates = Object.keys(timeReportByDate)
 
-              departments[`${deptName}`] = {
-                notes,
-                entries: deptEntries
-              }
-            })
-
-          res[`${dateKey}`] = { departments }
-        })
-
-      return res
-    })
-
-  const filteredDates = Object.keys(TimeReport)
-
-  const departments = Object.values(TimeReport)
+  const departments = Object.values(timeReportByDate)
     .flatMap(report => Object.keys(report.departments))
 
   const filteredDepartments = [...new Set(departments)]
@@ -64,30 +36,45 @@ async function index (req, res) {
     ...req.context,
     dates: filteredDates,
     departments: filteredDepartments,
-    report: TimeReport,
-    title: 'Project Report'
-  }
-}
-
-async function get (req, res) {
-  debug('index', req.params)
-
-  const { project } = req.context
-  const date = addDays(project.startDate, req.params.dayNumber - 1)
-  const TimeReport = await getTimeReport(project.id, date)
-
-  res.view = 'report'
-  res.locals = {
-    ...req.context,
-    reports: TimeReport,
+    report: timeReportByDate,
     title: 'Project Report'
   }
 }
 
 async function getTimeReport (project, date) {
-  return await new TimeReport().all({ project, date })
+  return await TimeReport.findAll({ project, date })
 }
 
-async function getRecordNotes (project) {
-  return await new RecordNote().all({ project })
+async function getRecordNotes (projectId) {
+  const notes = await RecordNote.findAll(projectId)
+  return Promise.all(notes)
+}
+
+function formatDate (date, style = 'yyyy-MM-dd') {
+  return format(date, style)
+}
+
+// Here be mutation demons
+function attachNotes (timeRecordGroups, recordNotes) {
+  Object.keys(timeRecordGroups)
+    .forEach(date => {
+      const entries = timeRecordGroups[`${date}`]
+      const departments = groupBy(entries, 'department')
+
+      Object.entries(departments)
+        .forEach(([deptName, deptEntries]) => {
+          const notes = recordNotes
+            .filter(note => note.date === date)
+            .filter(note => note.department === deptName)
+
+          departments[`${deptName}`] = {
+            notes,
+            entries: deptEntries
+          }
+        })
+
+      timeRecordGroups[`${date}`] = { departments }
+    })
+
+  return timeRecordGroups
 }

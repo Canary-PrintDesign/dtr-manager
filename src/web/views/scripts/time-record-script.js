@@ -1,4 +1,4 @@
-/* globals $, fetch */
+/* globals $, fetch, moment */
 
 $(document).ready(() => {
   function workedTime (start = '0000', stop = '0000', lStart, lStop) {
@@ -24,9 +24,9 @@ $(document).ready(() => {
     const i = index || agents.length
 
     const tmpl = template.html()
-      .replace(/{{recordIndex}}/g, i + 1)
-      .replace(/{{recordName}}/g, name)
-      .replace(/{{recordPosition}}/g, position)
+      .replace(/{{entryIndex}}/g, i + 1)
+      .replace(/{{entryName}}/g, name)
+      .replace(/{{entryPosition}}/g, position)
 
     agentsList.append(tmpl)
   }
@@ -85,7 +85,7 @@ $(document).ready(() => {
     $('.js-agents').children().remove()
 
     const departmentId = event.target.value
-    const results = await fetch(`/dtr/api?department=${departmentId}`)
+    const results = await fetch(`/api/agents?department=${departmentId}`)
     const data = await results.json()
 
     data.agents.forEach((agent, i) => {

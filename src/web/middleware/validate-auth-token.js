@@ -1,27 +1,24 @@
 const debug = require('lib/debug')('http:api:middleware:validateAuthToken')
 const AuthToken = require('components/auth-token')
 
-module.exports = validateAuthTokenInit
+module.exports = () =>
+  async (req, res, next) => {
+    debug(req.params)
 
-function validateAuthTokenInit () {
-  return validateAuthToken
-}
+    const token = req.params.token
 
-async function validateAuthToken (req, res, next) {
-  debug(req.params)
+    if (token) {
+      const authToken = await AuthToken.findWith({ token })
+      const department = authToken.department
+      const authorization = check(authToken)
 
-  const token = req.params.token
+      console.log(authToken, department, authorization)
 
-  if (token) {
-    const authToken = await new AuthToken().getBy({ token })
-    const department = authToken.department
-    const authorization = check(authToken)
+      req.context = { ...req.context, department, authorization }
+    }
 
-    req.context = { ...req.context, department, authorization }
+    next()
   }
-
-  next()
-}
 
 function check (authToken) {
   if (!authToken.id) return undefined

@@ -1,5 +1,4 @@
 const { findByProp, store } = require('lib/database')
-
 const table = 'session_tokens'
 
 module.exports = {

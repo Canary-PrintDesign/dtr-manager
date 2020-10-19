@@ -1,16 +1,11 @@
 const debug = require('lib/debug')('http:api:middleware:errorHandler')
 
-module.exports = errorHandlerInit
+module.exports = () =>
+  (err, req, res, next) => {
+    debug('error', err, req.body, res.data)
 
-function errorHandlerInit () {
-  return errorHandler
-}
+    if (res.headersSent) return next(err)
 
-function errorHandler (err, req, res, next) {
-  debug('error', err, req.body, res.data)
-
-  if (res.headersSent) return next(err)
-
-  res.status(500)
-  res.render('error', { error: err })
-}
+    res.status(500)
+    res.render('error', { error: err })
+  }

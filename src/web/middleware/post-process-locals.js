@@ -1,25 +1,20 @@
 const debug = require('lib/debug')('http:api:middleware:postProcessLocals')
 
-module.exports = postProcessLocalsInit
+module.exports = () =>
+  async (req, res, next) => {
+    // debug(res.locals)
 
-function postProcessLocalsInit () {
-  return postProcessLocals
-}
+    try {
+      const locals = res.locals
+      const { project } = req.context
 
-async function postProcessLocals (req, res, next) {
-  // debug(res.locals)
+      res.locals = {
+        ...locals,
+        title: `${locals.title} - ${project.name}`
+      }
 
-  try {
-    const locals = res.locals
-    const { project } = req.context
-
-    res.locals = {
-      ...locals,
-      title: `${locals.title} - ${project.name}`
+      next()
+    } catch (err) {
+      next(err)
     }
-
-    next()
-  } catch (err) {
-    next(err)
   }
-}
