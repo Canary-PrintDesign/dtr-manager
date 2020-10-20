@@ -1,7 +1,7 @@
 const Component = require('lib/component')
 const Repo = require('./agent-repo')
 
-exports.create = create()
+exports.create = create
 function create () {
   return async (props = {}) => ({
     id: props.id,

@@ -1,7 +1,7 @@
 const Repo = require('./department-repo')
 const Component = require('lib/component')
 
-exports.create = create()
+exports.create = create
 function create () {
   return async (props = {}) => ({
     id: props.id,

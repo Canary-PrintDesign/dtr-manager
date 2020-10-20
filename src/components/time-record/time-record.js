@@ -8,7 +8,7 @@ function create () {
     project: props.project,
     department: props.department,
     agent: props.agent,
-    date: props.date || Date.now(),
+    date: props.date || new Date(),
     workStart: props.workStart || props.work_start,
     workStop: props.workStop || props.work_stop,
     lunchStart: props.lunchStart || props.lunch_start,
