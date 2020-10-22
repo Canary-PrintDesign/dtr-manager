@@ -26,6 +26,8 @@ exports.schema = (schema) =>
   Joi.object(schema)
 
 exports.types = {
+  bool: Joi.bool(),
+  date: Joi.date().iso(),
   guid: Joi.string().guid(),
   string: Joi.string()
 }
