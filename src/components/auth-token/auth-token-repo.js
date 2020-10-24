@@ -1,7 +1,7 @@
-const { findByProp, store } = require('lib/database')
+const { findWith, store } = require('lib/database')
 const table = 'session_tokens'
 
 module.exports = {
-  findByProp: findByProp(table),
+  findWith: findWith(table),
   store: store(table)
 }
