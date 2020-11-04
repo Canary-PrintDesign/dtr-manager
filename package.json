@@ -10,6 +10,7 @@
     "adr": "node --use-strict ./scripts/architecture-decision-record.js",
     "db:migrate:make": "knex migrate:make --",
     "db:migrate:latest": "knex migrate:latest",
+    "test:db:migrate:latest": "NODE_ENV=test knex migrate:latest",
     "db:seed:run": "knex seed:run",
     "dev": "DEBUG=dtr:* nodemon --inspect ./src/server.js",
     "fix": "npx eslint --fix ./src",
@@ -18,7 +19,7 @@
     "readme": "npm run markdown docs/templates/README.md README.md",
     "repl": "node --inspect --use-strict",
     "start": "export $(cat .env | xargs) && pm2 start ./src/server.js --name dtr-manager",
-    "test": "yarn jest src/**/*.test.js"
+    "test": "NODE_ENV=test tape tests/**/*.test.js"
   },
   "repository": {
     "type": "git",
@@ -34,13 +35,14 @@
     "date-fns": "^2.16.1",
     "debug": "^4.1.1",
     "express": "^4.17.1",
-    "jest": "^26.6.0",
+    "faucet": "^0.0.1",
     "joi": "^17.2.1",
     "knex": "^0.21.5",
     "lodash.groupby": "^4.6.0",
     "pg": "^8.3.3",
     "pm2": "^4.5.0",
     "pug": "^3.0.0",
+    "tap-spec": "^5.0.0",
     "uuid": "^8.3.0",
     "~": "file:."
   },
@@ -54,7 +56,8 @@
     "eslint-plugin-standard": "^4.0.1",
     "mkdirp": "^1.0.4",
     "nodemon": "^2.0.4",
-    "slug": "^3.3.4"
+    "slug": "^3.3.4",
+    "tape": "^5.0.1"
   },
   "adr": {
     "path": "./docs/architecture_decision_records",
@@ -64,7 +67,7 @@
     "env": {
       "browser": false,
       "es2020": true,
-      "jest": true
+      "mocha": true
     },
     "extends": [
       "standard",

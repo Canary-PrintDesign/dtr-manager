@@ -100,7 +100,7 @@ async function departmentFactory (project) {
     await departmentC
   ]
     .map(department => ({ ...department, project: projectId }))
-    .map(Department.save)
+    .map(department => Department.save(department))
 
   return Promise.all(departments)
 }
@@ -114,7 +114,7 @@ async function agentFactory (departments) {
     await agent3
   ]
     .map((agent, i) => ({ ...agent, project, department: departments[`${i}`].id }))
-    .map(Agent.save)
+    .map(agent => Agent.save(agent))
 
   return Promise.all(agents)
 }

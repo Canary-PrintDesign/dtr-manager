@@ -7,7 +7,6 @@ const Schema = schema({
   name: t.string,
   hostname: t.string,
   project: t.guid.optional(),
-  custom: t.bool.default(false),
   startdate: t.date,
   status: t.string.default('unpublished')
 })
