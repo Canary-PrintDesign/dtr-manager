@@ -1,6 +1,6 @@
 /* globals $ */
 $(document).ready(() => {
-  $('.js-date-filter, .js-department-filter').change(event => {
+  $('.js-date-filter, .js-department-filter').change((event) => {
     const filterDate = $('.js-date-filter')[0].value
     const filterDepartment = $('.js-department-filter')[0].value
 

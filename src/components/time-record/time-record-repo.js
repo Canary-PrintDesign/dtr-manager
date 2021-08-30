@@ -4,5 +4,5 @@ const table = 'time_records'
 
 module.exports = {
   findWith: findWith(table),
-  store: store(table)
+  store: store(table),
 }

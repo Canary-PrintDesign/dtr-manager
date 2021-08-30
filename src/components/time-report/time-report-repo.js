@@ -3,11 +3,11 @@ const { db } = require('../../lib/database')
 const table = 'time_records'
 
 module.exports = {
-  findAll: findAll(table)
+  findAll: findAll(table),
 }
 
-function findAll (table) {
-  return async function findAll (props) {
+function findAll(table) {
+  return async function findAll(props) {
     return await db
       .column([
         'time_records.date',
@@ -17,7 +17,7 @@ function findAll (table) {
         { lunchStart: 'time_records.lunch_start' },
         { lunchStop: 'time_records.lunch_stop' },
         { name: 'agents.name' },
-        { position: 'agents.position' }
+        { position: 'agents.position' },
       ])
       .select()
       .table(table)
@@ -39,7 +39,7 @@ function findAll (table) {
       .orderBy([
         { column: 'date', order: 'desc' },
         { column: 'department', order: 'asc' },
-        { column: 'name', order: 'asc' }
+        { column: 'name', order: 'asc' },
       ])
   }
 }

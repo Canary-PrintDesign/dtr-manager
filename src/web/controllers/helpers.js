@@ -8,13 +8,13 @@ exports.getDepartmentsForSelect = async (projectId) => {
 }
 
 exports.toKeyValue = toKeyValue
-function toKeyValue (keyKey, valueKey) {
+function toKeyValue(keyKey, valueKey) {
   return async (dataPromise) => {
     const data = await dataPromise
 
     return {
       key: data[`${keyKey}`],
-      value: data[`${valueKey}`]
+      value: data[`${valueKey}`],
     }
   }
 }

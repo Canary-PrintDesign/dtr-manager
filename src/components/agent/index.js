@@ -5,7 +5,7 @@ const {
   save,
   schema,
   serialize,
-  types: t
+  types: t,
 } = require('../../lib/component')
 const Repo = require('./agent-repo')
 
@@ -14,7 +14,7 @@ const Schema = schema({
   project: t.guid.optional(),
   department: t.guid.optional(),
   name: t.string.default(''),
-  position: t.string.default('')
+  position: t.string.default(''),
 })
 
 exports.create = async (props = {}) => await create(Schema, props)

@@ -2,8 +2,8 @@ html {
   overflow-y: scroll;
 }
 
-.report tbody tr:nth-child(1n+2) td:nth-child(1) span,
-.report tbody tr:nth-child(1n+2) td:nth-child(2) span {
+.report tbody tr:nth-child(1n + 2) td:nth-child(1) span,
+.report tbody tr:nth-child(1n + 2) td:nth-child(2) span {
   visibility: hidden;
 }
 

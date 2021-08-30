@@ -1,7 +1,7 @@
 /* globals $, fetch, moment */
 
 $(document).ready(() => {
-  function workedTime (start = '0000', stop = '0000', lStart, lStop) {
+  function workedTime(start = '0000', stop = '0000', lStart, lStop) {
     const timeDiff = moment(stop, 'HHmm') - moment(start, 'HHmm')
 
     let lTimeDiff = 0
@@ -10,20 +10,17 @@ $(document).ready(() => {
     }
 
     const ms = timeDiff - lTimeDiff
-    return moment()
-      .startOf('day')
-      .milliseconds(ms)
-      .format('H:mm')
-      .split(':')
+    return moment().startOf('day').milliseconds(ms).format('H:mm').split(':')
   }
 
-  function createNewAgent (template, { index, name = '', position = '' }) {
+  function createNewAgent(template, { index, name = '', position = '' }) {
     const agentsList = $('.js-agents')
     const agents = $('.js-agent')
 
     const i = index || agents.length
 
-    const tmpl = template.html()
+    const tmpl = template
+      .html()
       .replace(/{{entryIndex}}/g, i + 1)
       .replace(/{{entryName}}/g, name)
       .replace(/{{entryPosition}}/g, position)
@@ -31,14 +28,14 @@ $(document).ready(() => {
     agentsList.append(tmpl)
   }
 
-  function bindDeleteRecordButton () {
+  function bindDeleteRecordButton() {
     $('.js-delete-record').click((event) => {
       event.preventDefault()
       $(event.target).closest('.row').remove()
     })
   }
 
-  function calculateWorkTime (event) {
+  function calculateWorkTime(event) {
     const target = event.target
     // TODO why doesn't .parent('.js-agent') retrieve the js-agent dom object?
     const agent = $(target).parent().parent()
@@ -64,7 +61,12 @@ $(document).ready(() => {
       lunchStop.setCustomValidity('Stop must be later than Start')
     }
 
-    const [hours, minutes] = workedTime(workStart.value, workStop.value, lunchStart.value, lunchStop.value)
+    const [hours, minutes] = workedTime(
+      workStart.value,
+      workStop.value,
+      lunchStart.value,
+      lunchStop.value
+    )
 
     $(agent)
       .parent()

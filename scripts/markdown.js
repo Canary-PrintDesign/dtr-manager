@@ -1,4 +1,4 @@
-(async () => {
+;(async () => {
   const fs = require('fs')
   const Path = require('path')
   const Util = require('util')
@@ -10,7 +10,8 @@
 
   const filePath = (path) => Path.join(__dirname, `../${path}`)
 
-  const getContents = async (path, encoding = 'utf-8') => await readFile(path, encoding)
+  const getContents = async (path, encoding = 'utf-8') =>
+    await readFile(path, encoding)
 
   const markdownLink = (path) => `- [${Path.basename(path, '.md')}](${path})`
 
@@ -20,9 +21,9 @@
     const addDirectoryToFilename = (name) => Path.join(dirPath, name)
 
     return await readdir(filePath(dirPath))
-      .then(filenames => filenames.map(addDirectoryToFilename))
-      .then(paths => paths.map(markdownLink))
-      .then(links => links.join('\n'))
+      .then((filenames) => filenames.map(addDirectoryToFilename))
+      .then((paths) => paths.map(markdownLink))
+      .then((links) => links.join('\n'))
   }
 
   const isDirectoryGlob = (path) => path.substr(-1) === '*'
@@ -39,7 +40,7 @@
 
     for (const match of includes) {
       const matchPath = match[0].substr(1)
-      const includeContent = (isDirectoryGlob(matchPath))
+      const includeContent = isDirectoryGlob(matchPath)
         ? await directoryLinkList(matchPath)
         : await getContents(filePath(matchPath))
 

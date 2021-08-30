@@ -5,16 +5,16 @@ const table = 'record_notes'
 module.exports = {
   findAll: findAll(table),
   findWith: findWith(table),
-  store: store(table)
+  store: store(table),
 }
 
-function findAll (table) {
-  return async function findAll (props) {
+function findAll(table) {
+  return async function findAll(props) {
     return await db
       .column([
         'record_notes.date',
         { note: db.raw("CONCAT_WS('\n', record_notes.note)") },
-        { department: 'departments.name' }
+        { department: 'departments.name' },
       ])
       .select()
       .table(table)
@@ -29,7 +29,7 @@ function findAll (table) {
       .groupBy('record_notes.note')
       .orderBy([
         { column: 'date', order: 'asc' },
-        { column: 'department', order: 'asc' }
+        { column: 'department', order: 'asc' },
       ])
   }
 }

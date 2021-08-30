@@ -5,7 +5,7 @@ const {
   save,
   schema,
   serialize,
-  types: t
+  types: t,
 } = require('../../lib/component')
 const Repo = require('./department-repo')
 
@@ -13,7 +13,7 @@ const Schema = schema({
   id: t.guid.optional(),
   project: t.guid.optional(),
   name: t.string.default(''),
-  custom: t.bool.default(false)
+  custom: t.bool.default(false),
 })
 
 exports.create = async (props = {}) => await create(Schema, props)

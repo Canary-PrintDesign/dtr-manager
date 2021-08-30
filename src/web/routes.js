@@ -1,6 +1,6 @@
-const router = require("express").Router()
+const router = require('express').Router()
 
-const { controller } = require("./middleware")
+const { controller } = require('./middleware')
 
 const {
   home,
@@ -8,14 +8,14 @@ const {
   newEntry,
   createEntry,
   apiAgents,
-} = require("./controllers")
+} = require('./controllers')
 
 module.exports = router
 
-router.get("/", controller(home))
+router.get('/', controller(home))
 
-router.get("/dtr/report", controller(report))
-router.get("/dtr", controller(newEntry))
-router.post("/dtr", controller(createEntry))
+router.get('/dtr/report', controller(report))
+router.get('/dtr', controller(newEntry))
+router.post('/dtr', controller(createEntry))
 
-router.get("/api/agents", controller(apiAgents))
+router.get('/api/agents', controller(apiAgents))

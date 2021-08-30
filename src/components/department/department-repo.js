@@ -5,5 +5,5 @@ const table = 'departments'
 module.exports = {
   findAll: findAll(table),
   findWith: findWith(table),
-  store: store(table)
+  store: store(table),
 }

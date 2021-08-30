@@ -2,12 +2,11 @@ const Joi = require('joi')
 
 exports.findAll = async (repo, fn, props) => {
   const data = await repo.findAll({ ...props })
-  return data.map(async item => await fn(item))
+  return data.map(async (item) => await fn(item))
 }
 
 exports.findWith = async (repo, fn, props) => {
-  const data = await repo.findWith({ ...props })
-    .catch(() => {})
+  const data = await repo.findWith({ ...props }).catch(() => {})
 
   return await fn({ ...data })
 }
@@ -22,12 +21,11 @@ exports.serialize = (props = {}) => ({ ...props })
 exports.create = async (schema, props = {}) =>
   await schema.validateAsync(props, { stripUnknown: true })
 
-exports.schema = (schema) =>
-  Joi.object(schema)
+exports.schema = (schema) => Joi.object(schema)
 
 exports.types = {
   bool: Joi.bool(),
   date: Joi.date().iso(),
   guid: Joi.string().guid(),
-  string: Joi.string()
+  string: Joi.string(),
 }

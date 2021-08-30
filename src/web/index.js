@@ -7,7 +7,7 @@ const {
   notFound,
   postProcessLocals,
   project,
-  respond
+  respond,
 } = require('./middleware')
 
 module.exports = app
