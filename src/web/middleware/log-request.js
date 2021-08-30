@@ -1,4 +1,4 @@
-const debug = require("../../lib/debug")("http:api:middleware:logRequest");
+const debug = require('../../lib/debug')('http:api:middleware:logRequest')
 
 module.exports = () => (req, _res, next) => {
   const data = {
@@ -7,10 +7,10 @@ module.exports = () => (req, _res, next) => {
     params: req.params,
     headers: req.headers,
     query: req.query,
-    body: req.body,
-  };
+    body: req.body
+  }
 
-  debug(data);
+  debug(data)
 
-  next();
-};
+  next()
+}

@@ -1,45 +1,45 @@
-const { db } = require("../../lib/database");
+const { db } = require('../../lib/database')
 
-const table = "time_records";
+const table = 'time_records'
 
 module.exports = {
-  findAll: findAll(table),
-};
+  findAll: findAll(table)
+}
 
-function findAll(table) {
-  return async function findAll(props) {
+function findAll (table) {
+  return async function findAll (props) {
     return await db
       .column([
-        "time_records.date",
-        { department: "departments.name" },
-        { workStart: "time_records.work_start" },
-        { workStop: "time_records.work_stop" },
-        { lunchStart: "time_records.lunch_start" },
-        { lunchStop: "time_records.lunch_stop" },
-        { name: "agents.name" },
-        { position: "agents.position" },
+        'time_records.date',
+        { department: 'departments.name' },
+        { workStart: 'time_records.work_start' },
+        { workStop: 'time_records.work_stop' },
+        { lunchStart: 'time_records.lunch_start' },
+        { lunchStop: 'time_records.lunch_stop' },
+        { name: 'agents.name' },
+        { position: 'agents.position' }
       ])
       .select()
       .table(table)
-      .join("departments", "time_records.department", "=", "departments.id")
-      .join("agents", "time_records.agent", "=", "agents.id")
+      .join('departments', 'time_records.department', '=', 'departments.id')
+      .join('agents', 'time_records.agent', '=', 'agents.id')
       .where((builder) => {
         Object.entries(props).forEach(([key, value]) => {
-          if (value) builder.where(`time_records.${key}`, value);
-        });
+          if (value) builder.where(`time_records.${key}`, value)
+        })
       })
-      .groupBy("date")
-      .groupBy("departments.name")
-      .groupBy("work_start")
-      .groupBy("work_stop")
-      .groupBy("lunch_start")
-      .groupBy("lunch_stop")
-      .groupBy("agents.name")
-      .groupBy("position")
+      .groupBy('date')
+      .groupBy('departments.name')
+      .groupBy('work_start')
+      .groupBy('work_stop')
+      .groupBy('lunch_start')
+      .groupBy('lunch_stop')
+      .groupBy('agents.name')
+      .groupBy('position')
       .orderBy([
-        { column: "date", order: "desc" },
-        { column: "department", order: "asc" },
-        { column: "name", order: "asc" },
-      ]);
-  };
+        { column: 'date', order: 'desc' },
+        { column: 'department', order: 'asc' },
+        { column: 'name', order: 'asc' }
+      ])
+  }
 }

@@ -1,8 +1,8 @@
-const { findWith, store } = require("../../lib/database");
+const { findWith, store } = require('../../lib/database')
 
-const table = "time_records";
+const table = 'time_records'
 
 module.exports = {
   findWith: findWith(table),
-  store: store(table),
-};
+  store: store(table)
+}
