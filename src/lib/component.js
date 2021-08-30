@@ -6,7 +6,7 @@ exports.findAll = async (repo, fn, props) => {
 }
 
 exports.findWith = async (repo, fn, props) => {
-  const data = await repo.findByProp({ ...props })
+  const data = await repo.findWith({ ...props })
     .catch(() => {})
 
   return await fn({ ...data })

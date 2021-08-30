@@ -1,16 +1,23 @@
-const { dbName, dbHost, dbUsername, dbPassword, dbPort, dbSSL } = require('lib/env')
+const {
+  dbName,
+  dbHost,
+  dbUsername,
+  dbPassword,
+  dbPort,
+  dbSSL,
+} = require("./src/lib/env");
 
 const config = {
-  client: 'postgres',
+  client: "postgres",
   connection: {
     host: dbHost,
     port: dbPort,
     user: dbUsername,
     password: dbPassword,
     database: dbName,
-    charset: 'utf8',
-    ssl: dbSSL
-  }
-}
+    charset: "utf8",
+    ssl: dbSSL,
+  },
+};
 
-module.exports = config
+module.exports = config;

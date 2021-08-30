@@ -9,11 +9,11 @@ exports.db = Knex
 
 exports.uuid = uuid
 
-exports.findAll = (table) =>
+exports.findAll = (table, db = Knex) =>
   async (props) => {
     debug('findAll', table, props)
 
-    return await Knex
+    return await db
       .select()
       .table(table)
       .where(builder =>
@@ -22,9 +22,9 @@ exports.findAll = (table) =>
       )
   }
 
-exports.findByProp = (table) =>
+exports.findWith = (table, db = Knex) =>
   async (props) =>
-    await Knex
+    await db
       .select()
       .table(table)
       .where(builder =>
@@ -33,36 +33,36 @@ exports.findByProp = (table) =>
       .limit(1)
       .then(results => results[0])
 
-exports.store = (table) =>
+exports.store = (table, db = Knex) =>
   async (data) => {
     debug('store', table, data)
 
     return (data.id)
-      ? await update(table, data)
-      : await create(table, data)
+      ? await update(table, data, db)
+      : await create(table, data, db)
   }
 
 // Private
 
-async function create (table, data) {
+async function create (table, data, db) {
   debug('create', table, data)
 
   data.id = uuid()
   data.created_at = new Date()
   data.updated_at = new Date()
 
-  return await Knex(table)
+  return await db(table)
     .insert({ ...data })
     .returning('*')
     .then(results => results[0])
 }
 
-async function update (table, data) {
+async function update (table, data, db) {
   debug('update', table, data)
 
   data.updated_at = new Date()
 
-  return await Knex(table)
+  return await db(table)
     .where('id', data.id)
     .update({ ...data })
     .returning('*')

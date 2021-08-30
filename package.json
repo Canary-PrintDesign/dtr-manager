@@ -10,6 +10,7 @@
     "adr": "node --use-strict ./scripts/architecture-decision-record.js",
     "db:migrate:make": "knex migrate:make --",
     "db:migrate:latest": "knex migrate:latest",
+    "test:db:migrate:latest": "NODE_ENV=test knex migrate:latest",
     "db:seed:run": "knex seed:run",
     "dev": "DEBUG=dtr:* nodemon --inspect ./src/server.js",
     "fix": "npx eslint --fix ./src",
@@ -18,12 +19,7 @@
     "readme": "npm run markdown docs/templates/README.md README.md",
     "repl": "node --inspect --use-strict",
     "start": "export $(cat .env | xargs) && pm2 start ./src/server.js --name dtr-manager",
-    "test": "NODE_ENV=test npx mocha --use-strict --recursive \"./src/**/*.test.js\"",
-    "test:coverage": "nyc npm run test",
-    "test:coverage:watch": "nodemon --exec nyc --reporter=lcov --reporter=text npm run test",
-    "test:integration": "npm run test -- --grep '#integration'",
-    "test:unit": "npm run test -- --grep '#unit'",
-    "test:file": "DEBUG=*:debug* NODE_ENV=test npx mocha --use-strict --exit"
+    "test": "NODE_ENV=test tape tests/**/*.test.js"
   },
   "repository": {
     "type": "git",
@@ -36,47 +32,26 @@
   },
   "homepage": "https://github.com/Canary-PrintDesign/dtr-manager#readme",
   "dependencies": {
+    "~": "file:.",
     "date-fns": "^2.16.1",
     "debug": "^4.1.1",
     "express": "^4.17.1",
+    "faucet": "^0.0.1",
     "joi": "^17.2.1",
     "knex": "^0.21.5",
     "lodash.groupby": "^4.6.0",
     "pg": "^8.3.3",
     "pm2": "^4.5.0",
     "pug": "^3.0.0",
-    "uuid": "^8.3.0",
-    "~": "file:."
+    "uuid": "^8.3.0"
   },
   "devDependencies": {
-    "eslint": "^7.6.0",
-    "eslint-config-standard": "^14.1.1",
-    "eslint-plugin-chai-expect": "^2.2.0",
-    "eslint-plugin-import": "^2.22.0",
-    "eslint-plugin-mocha": "^8.0.0",
+    "eslint": "^7.32.0",
+    "eslint-config-standard": "^16.0.3",
+    "eslint-plugin-import": "^2.24.2",
     "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^4.2.1",
-    "eslint-plugin-security": "^1.4.0",
-    "eslint-plugin-standard": "^4.0.1",
-    "mkdirp": "^1.0.4",
-    "nodemon": "^2.0.4",
-    "slug": "^3.3.4",
-    "tap": "^14.10.8"
-  },
-  "mocha": {
-    "diff": true,
-    "reporter": "spec",
-    "slow": 75,
-    "timeout": 2000,
-    "ui": "bdd",
-    "parallel": false,
-    "recursive": true
-  },
-  "nyc": {
-    "reporter": [
-      "html",
-      "text"
-    ]
+    "eslint-plugin-promise": "^5.1.0",
+    "nodemon": "^2.0.4"
   },
   "adr": {
     "path": "./docs/architecture_decision_records",
@@ -84,39 +59,18 @@
   },
   "eslintConfig": {
     "env": {
-      "browser": false,
-      "es2020": true,
-      "mocha": true
+        "browser": true,
+        "commonjs": true,
+        "es2021": true,
+        "node": true
     },
     "extends": [
-      "standard",
-      "plugin:chai-expect/recommended",
-      "plugin:promise/recommended",
-      "plugin:security/recommended",
-      "plugin:mocha/recommended"
+        "standard"
     ],
     "parserOptions": {
-      "ecmaVersion": 11,
-      "sourceType": "module"
+        "ecmaVersion": 12
     },
-    "plugins": [
-      "chai-expect",
-      "promise",
-      "security",
-      "mocha"
-    ],
-    "rules": {},
-    "overrides": [
-      {
-        "files": [
-          "./src/**/*.test.js",
-          "./scripts/**/*.js"
-        ],
-        "rules": {
-          "no-unused-expressions": "off",
-          "security/detect-non-literal-fs-filename": "off"
-        }
-      }
-    ]
+    "rules": {
+    }
   }
 }
