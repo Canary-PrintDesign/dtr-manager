@@ -7,7 +7,7 @@ module.exports = () => (req, _res, next) => {
     params: req.params,
     headers: req.headers,
     query: req.query,
-    body: req.body
+    body: req.body,
   }
 
   debug(data)

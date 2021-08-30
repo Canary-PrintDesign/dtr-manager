@@ -10,16 +10,13 @@
     "adr": "node --use-strict ./scripts/architecture-decision-record.js",
     "db:migrate:make": "knex migrate:make --",
     "db:migrate:latest": "knex migrate:latest",
-    "test:db:migrate:latest": "NODE_ENV=test knex migrate:latest",
     "db:seed:run": "knex seed:run",
     "dev": "DEBUG=dtr:* nodemon --inspect ./src/server.js",
     "fix": "npx eslint --fix ./src",
     "markdown": "node --use-strict ./scripts/markdown.js",
-    "playground": "nodemon --inspect ./playground.js",
     "readme": "npm run markdown docs/templates/README.md README.md",
     "repl": "node --inspect --use-strict",
-    "start": "export $(cat .env | xargs) && pm2 start ./src/server.js --name dtr-manager",
-    "test": "NODE_ENV=test tape tests/**/*.test.js"
+    "start": "export $(cat .env | xargs) && pm2 start ./src/server.js --name dtr-manager"
   },
   "repository": {
     "type": "git",
@@ -32,7 +29,6 @@
   },
   "homepage": "https://github.com/Canary-PrintDesign/dtr-manager#readme",
   "dependencies": {
-    "~": "file:.",
     "date-fns": "^2.16.1",
     "debug": "^4.1.1",
     "express": "^4.17.1",
@@ -71,6 +67,11 @@
         "ecmaVersion": 12
     },
     "rules": {
+      "comma-dangle": false
     }
+  },
+  "prettier": {
+    "semi": false,
+    "singleQuote": true
   }
 }
