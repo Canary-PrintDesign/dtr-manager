@@ -1,80 +1,82 @@
-const debug = require('lib/debug')('http:web:controller:report')
-const groupBy = require('lodash.groupby')
-const TimeReport = require('components/time-report')
-const RecordNote = require('components/record-note')
-const format = require('date-fns/format')
+const debug = require("../../lib/debug")("http:web:controller:report");
+const groupBy = require("lodash.groupby");
+const TimeReport = require("../../components/time-report");
+const RecordNote = require("../../components/record-note");
+const format = require("date-fns/format");
 
 module.exports = {
-  index
-}
+  index,
+};
 
-async function index (req, res) {
-  debug('index', req.params)
+async function index(req, res) {
+  debug("index", req.params);
 
-  const { project } = req.context
+  const { project } = req.context;
 
   const recordNotes = await getRecordNotes(project.id)
-    .then(res => res.filter(note => note.date))
-    .then(res => res.filter(note => note.note !== ''))
-    .then(res => res.map(note => ({ ...note, date: formatDate(note.date) })))
+    .then((res) => res.filter((note) => note.date))
+    .then((res) => res.filter((note) => note.note !== ""))
+    .then((res) =>
+      res.map((note) => ({ ...note, date: formatDate(note.date) }))
+    );
 
   const timeReportByDate = await getTimeReport(project.id)
-    .then(res => res.map(report => ({ ...report, date: formatDate(report.date) })))
-    .then(res => groupBy(res, 'date'))
-    .then(res => attachNotes(res, recordNotes))
+    .then((res) =>
+      res.map((report) => ({ ...report, date: formatDate(report.date) }))
+    )
+    .then((res) => groupBy(res, "date"))
+    .then((res) => attachNotes(res, recordNotes));
 
-  const filteredDates = Object.keys(timeReportByDate)
+  const filteredDates = Object.keys(timeReportByDate);
 
-  const departments = Object.values(timeReportByDate)
-    .flatMap(report => Object.keys(report.departments))
+  const departments = Object.values(timeReportByDate).flatMap((report) =>
+    Object.keys(report.departments)
+  );
 
-  const filteredDepartments = [...new Set(departments)]
-    .sort((a, b) => a < b)
+  const filteredDepartments = [...new Set(departments)].sort((a, b) => a < b);
 
-  res.view = 'report'
+  res.view = "report";
   res.locals = {
     ...req.context,
     dates: filteredDates,
     departments: filteredDepartments,
     report: timeReportByDate,
-    title: 'Project Report'
-  }
+    title: "Project Report",
+  };
 }
 
-async function getTimeReport (project, date) {
-  return await TimeReport.findAll({ project, date })
+async function getTimeReport(project, date) {
+  return await TimeReport.findAll({ project, date });
 }
 
-async function getRecordNotes (projectId) {
-  const notes = await RecordNote.findAll(projectId)
-  return Promise.all(notes)
+async function getRecordNotes(projectId) {
+  const notes = await RecordNote.findAll(projectId);
+  return Promise.all(notes);
 }
 
-function formatDate (date, style = 'yyyy-MM-dd') {
-  return format(date, style)
+function formatDate(date, style = "yyyy-MM-dd") {
+  return format(date, style);
 }
 
 // Here be mutation demons
-function attachNotes (timeRecordGroups, recordNotes) {
-  Object.keys(timeRecordGroups)
-    .forEach(date => {
-      const entries = timeRecordGroups[`${date}`]
-      const departments = groupBy(entries, 'department')
+function attachNotes(timeRecordGroups, recordNotes) {
+  Object.keys(timeRecordGroups).forEach((date) => {
+    const entries = timeRecordGroups[`${date}`];
+    const departments = groupBy(entries, "department");
 
-      Object.entries(departments)
-        .forEach(([deptName, deptEntries]) => {
-          const notes = recordNotes
-            .filter(note => note.date === date)
-            .filter(note => note.department === deptName)
+    Object.entries(departments).forEach(([deptName, deptEntries]) => {
+      const notes = recordNotes
+        .filter((note) => note.date === date)
+        .filter((note) => note.department === deptName);
 
-          departments[`${deptName}`] = {
-            notes,
-            entries: deptEntries
-          }
-        })
+      departments[`${deptName}`] = {
+        notes,
+        entries: deptEntries,
+      };
+    });
 
-      timeRecordGroups[`${date}`] = { departments }
-    })
+    timeRecordGroups[`${date}`] = { departments };
+  });
 
-  return timeRecordGroups
+  return timeRecordGroups;
 }

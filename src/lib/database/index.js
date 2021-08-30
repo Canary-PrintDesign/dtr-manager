@@ -1,70 +1,76 @@
-const debug = require('lib/debug')('database')
-const knex = require('knex')
-const connection = require('../../../knexfile')
-const { v4: uuid } = require('uuid')
+const debug = require("../debug")("database");
+const knex = require("knex");
+const connection = require("../../../knexfile");
+const { v4: uuid } = require("uuid");
 
-const Knex = knex(connection)
+const Knex = knex(connection);
 
-exports.db = Knex
+exports.db = Knex;
 
-exports.uuid = uuid
+exports.uuid = uuid;
 
-exports.findAll = (table, db = Knex) =>
+exports.findAll =
+  (table, db = Knex) =>
   async (props) => {
-    debug('findAll', table, props)
+    debug("findAll", table, props);
 
     return await db
       .select()
       .table(table)
-      .where(builder =>
-        Object.entries(props)
-          .forEach(([key, value]) => builder.where(key, value))
-      )
-  }
+      .where((builder) =>
+        Object.entries(props).forEach(([key, value]) =>
+          builder.where(key, value)
+        )
+      );
+  };
 
-exports.findWith = (table, db = Knex) =>
+exports.findWith =
+  (table, db = Knex) =>
   async (props) =>
     await db
       .select()
       .table(table)
-      .where(builder =>
-        Object.entries(props).forEach(([key, value]) => builder.where(key, value))
+      .where((builder) =>
+        Object.entries(props).forEach(([key, value]) =>
+          builder.where(key, value)
+        )
       )
       .limit(1)
-      .then(results => results[0])
+      .then((results) => results[0]);
 
-exports.store = (table, db = Knex) =>
+exports.store =
+  (table, db = Knex) =>
   async (data) => {
-    debug('store', table, data)
+    debug("store", table, data);
 
-    return (data.id)
+    return data.id
       ? await update(table, data, db)
-      : await create(table, data, db)
-  }
+      : await create(table, data, db);
+  };
 
 // Private
 
-async function create (table, data, db) {
-  debug('create', table, data)
+async function create(table, data, db) {
+  debug("create", table, data);
 
-  data.id = uuid()
-  data.created_at = new Date()
-  data.updated_at = new Date()
+  data.id = uuid();
+  data.created_at = new Date();
+  data.updated_at = new Date();
 
   return await db(table)
     .insert({ ...data })
-    .returning('*')
-    .then(results => results[0])
+    .returning("*")
+    .then((results) => results[0]);
 }
 
-async function update (table, data, db) {
-  debug('update', table, data)
+async function update(table, data, db) {
+  debug("update", table, data);
 
-  data.updated_at = new Date()
+  data.updated_at = new Date();
 
   return await db(table)
-    .where('id', data.id)
+    .where("id", data.id)
     .update({ ...data })
-    .returning('*')
-    .then(results => results[0])
+    .returning("*")
+    .then((results) => results[0]);
 }

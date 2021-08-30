@@ -1,15 +1,15 @@
-const debug = require('lib/debug')('http:web:controller:home')
+const debug = require("../../lib/debug")("http:web:controller:home");
 
 module.exports = {
-  index
-}
+  index,
+};
 
-async function index (req, res) {
-  debug('index', req.params)
+async function index(req, res) {
+  debug("index", req.params);
 
-  res.view = 'home'
+  res.view = "home";
   res.locals = {
     ...req.context,
-    title: 'Welcome'
-  }
+    title: "Welcome",
+  };
 }

@@ -1,8 +1,8 @@
-const Repo = require('./time-report-repo')
-const Component = require('lib/component')
+const Repo = require("./time-report-repo");
+const Component = require("../../lib/component");
 
-exports.create = create
-function create () {
+exports.create = create;
+function create() {
   return async (props = {}) => ({
     date: props.date,
     department: props.department,
@@ -11,13 +11,14 @@ function create () {
     workStart: props.workStart,
     workStop: props.workStop,
     lunchStart: props.lunchStart,
-    lunchStop: props.lunchStop
-  })
+    lunchStop: props.lunchStop,
+  });
 }
 
-exports.findAll = (repo = Repo) =>
+exports.findAll =
+  (repo = Repo) =>
   async ({ project, date }) => {
-    const reports = await repo.findAll({ project, date })
+    const reports = await repo.findAll({ project, date });
 
-    return Promise.all(reports.map(create()))
-  }
+    return Promise.all(reports.map(create()));
+  };
