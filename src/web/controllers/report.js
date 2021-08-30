@@ -1,16 +1,13 @@
-const debug = require('../../lib/debug')('http:web:controller:report')
 const groupBy = require('lodash.groupby')
 const TimeReport = require('../../components/time-report')
 const RecordNote = require('../../components/record-note')
 const format = require('date-fns/format')
 
 module.exports = {
-  index
+  index,
 }
 
-async function index (req, res) {
-  debug('index', req.params)
-
+async function index(req, res) {
   const { project } = req.context
 
   const recordNotes = await getRecordNotes(project.id)
@@ -41,25 +38,25 @@ async function index (req, res) {
     dates: filteredDates,
     departments: filteredDepartments,
     report: timeReportByDate,
-    title: 'Project Report'
+    title: 'Project Report',
   }
 }
 
-async function getTimeReport (project, date) {
+async function getTimeReport(project, date) {
   return await TimeReport.findAll({ project, date })
 }
 
-async function getRecordNotes (projectId) {
+async function getRecordNotes(projectId) {
   const notes = await RecordNote.findAll(projectId)
   return Promise.all(notes)
 }
 
-function formatDate (date, style = 'yyyy-MM-dd') {
+function formatDate(date, style = 'yyyy-MM-dd') {
   return format(date, style)
 }
 
 // Here be mutation demons
-function attachNotes (timeRecordGroups, recordNotes) {
+function attachNotes(timeRecordGroups, recordNotes) {
   Object.keys(timeRecordGroups).forEach((date) => {
     const entries = timeRecordGroups[`${date}`]
     const departments = groupBy(entries, 'department')
@@ -71,7 +68,7 @@ function attachNotes (timeRecordGroups, recordNotes) {
 
       departments[`${deptName}`] = {
         notes,
-        entries: deptEntries
+        entries: deptEntries,
       }
     })
 

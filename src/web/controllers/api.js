@@ -1,4 +1,3 @@
-const debug = require('../../lib/debug')('http:web:controller:api')
 const Agent = require('../../components/agent')
 const { pipeWith } = require('../../lib/utils')
 
@@ -7,8 +6,6 @@ module.exports = {
 }
 
 async function requestAgents(req, res) {
-  debug('requestAgents', req.params, req.body, req.query)
-
   const { project } = req.context
   const agents = await getAgents({
     projectId: project.id,

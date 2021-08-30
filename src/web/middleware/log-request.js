@@ -1,5 +1,3 @@
-const debug = require('../../lib/debug')('http:api:middleware:logRequest')
-
 module.exports = () => (req, _res, next) => {
   const data = {
     method: req.method,
@@ -9,8 +7,6 @@ module.exports = () => (req, _res, next) => {
     query: req.query,
     body: req.body,
   }
-
-  debug(data)
 
   next()
 }

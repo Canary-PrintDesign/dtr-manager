@@ -1,12 +1,8 @@
-const debug = require('../../lib/debug')('http:api:middleware:respond')
-
 module.exports = () => async (req, res, next) => {
   const requestData = {
     method: req.method,
-    path: req.path
+    path: req.path,
   }
-
-  debug(requestData)
 
   try {
     const locals = await res.locals

@@ -1,4 +1,3 @@
-const debug = require('./debug')('database')
 const knex = require('knex')
 const connection = require('../../knexfile')
 const { randomUUID } = require('node:crypto')
@@ -12,8 +11,6 @@ exports.uuid = randomUUID
 exports.findAll =
   (table, db = Knex) =>
   async (props) => {
-    debug('findAll', table, props)
-
     return await db
       .select()
       .table(table)
@@ -41,8 +38,6 @@ exports.findWith =
 exports.store =
   (table, db = Knex) =>
   async (data) => {
-    debug('store', table, data)
-
     return data.id
       ? await update(table, data, db)
       : await create(table, data, db)
@@ -51,8 +46,6 @@ exports.store =
 // Private
 
 async function create(table, data, db) {
-  debug('create', table, data)
-
   data.id = randomUUID()
   data.created_at = new Date()
   data.updated_at = new Date()
@@ -64,8 +57,6 @@ async function create(table, data, db) {
 }
 
 async function update(table, data, db) {
-  debug('update', table, data)
-
   data.updated_at = new Date()
 
   return await db(table)
