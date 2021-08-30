@@ -1,9 +1,10 @@
 const app = require('./app')
 const debug = require('./lib/debug')('http:server')
-const { httpPort, httpMaxConnectionTime } = require('./lib/env')
 
-const server = app.listen(httpPort, () => {
-  debug(`App started on port ${httpPort}`)
+const { HTTP_PORT, HTTP_MAX_CONNECTION_TIME_SECS } = process.env
+
+const server = app.listen(HTTP_PORT, () => {
+  debug(`App started on port ${HTTP_PORT}`)
 })
 
 process.on('uncaughtException', (err) => {
@@ -14,7 +15,7 @@ process.on('unhandledRejection', (err) => {
   shutdownGracefully(err, () => processExit())
 })
 
-function shutdownGracefully (err, callback) {
+function shutdownGracefully(err, callback) {
   debug('error', err, err.stack)
 
   debug('Shutting down gracefully, waiting for connections to close')
@@ -23,10 +24,10 @@ function shutdownGracefully (err, callback) {
   setTimeout(() => {
     debug('Connections not closed in time, forced shutdown')
     callback()
-  }, httpMaxConnectionTime).unref()
+  }, HTTP_MAX_CONNECTION_TIME_SECS).unref()
 }
 
-function processExit () {
+function processExit() {
   debug('Process exiting')
   process.exit(1)
 }

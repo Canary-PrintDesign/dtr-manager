@@ -1,6 +1,6 @@
-const debug = require('../debug')('database')
+const debug = require('./debug')('database')
 const knex = require('knex')
-const connection = require('../../../knexfile')
+const connection = require('../../knexfile')
 const { randomUUID } = require('node:crypto')
 
 const Knex = knex(connection)

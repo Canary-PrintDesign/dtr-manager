@@ -11,12 +11,12 @@
     "db:migrate:make": "knex migrate:make --",
     "db:migrate:latest": "knex migrate:latest",
     "db:seed:run": "knex seed:run",
-    "dev": "DEBUG=dtr:* nodemon --inspect ./src/server.js",
+    "dev": "DEBUG=dtr:* nodemon --inspect --use_strict -r ./bin/env ./src/server.js",
     "fix": "npx eslint --fix ./src",
     "markdown": "node --use-strict ./scripts/markdown.js",
     "readme": "npm run markdown docs/templates/README.md README.md",
     "repl": "node --inspect --use-strict",
-    "start": "export $(cat .env | xargs) && pm2 start ./src/server.js --name dtr-manager"
+    "start": "&& pm2 start ./src/server.js --name dtr-manager"
   },
   "repository": {
     "type": "git",
@@ -31,8 +31,12 @@
   "dependencies": {
     "date-fns": "^2.16.1",
     "debug": "^4.1.1",
+    "dotenv": "^10.0.0",
+    "dotenv-expand": "^5.1.0",
+    "env-schema": "^3.3.0",
     "express": "^4.17.1",
     "faucet": "^0.0.1",
+    "fluent-json-schema": "^3.0.1",
     "joi": "^17.2.1",
     "knex": "^0.21.5",
     "lodash.groupby": "^4.6.0",
@@ -54,16 +58,16 @@
   },
   "eslintConfig": {
     "env": {
-        "browser": true,
-        "commonjs": true,
-        "es2021": true,
-        "node": true
+      "browser": true,
+      "commonjs": true,
+      "es2021": true,
+      "node": true
     },
     "extends": [
-        "standard"
+      "standard"
     ],
     "parserOptions": {
-        "ecmaVersion": 12
+      "ecmaVersion": 12
     },
     "rules": {
       "comma-dangle": false
