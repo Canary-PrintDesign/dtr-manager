@@ -1,15 +1,13 @@
 const groupBy = require('lodash.groupby')
-const TimeReport = require('../../components/time-report')
-const RecordNote = require('../../components/record-note')
+const TimeReport = require('../components/time-report')
+const RecordNote = require('../components/record-note')
 const format = require('date-fns/format')
 
 module.exports = {
   index,
 }
 
-async function index(req, res) {
-  const { project } = req.context
-
+async function index({ project }) {
   const recordNotes = await getRecordNotes(project.id)
     .then((res) => res.filter((note) => note.date))
     .then((res) => res.filter((note) => note.note !== ''))
@@ -32,13 +30,10 @@ async function index(req, res) {
 
   const filteredDepartments = [...new Set(departments)].sort((a, b) => a < b)
 
-  res.view = 'report'
-  res.locals = {
-    ...req.context,
+  return {
     dates: filteredDates,
     departments: filteredDepartments,
     report: timeReportByDate,
-    title: 'Project Report',
   }
 }
 

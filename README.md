@@ -1,4 +1,5 @@
 ## Table of Contents
+
 - [Getting started](#getting-started)
 - - [Prerequisites](#prerequisites)
 - - [Installing](#installing)
@@ -77,12 +78,17 @@ Automatic formatting for code (where possible) can be done with `fix` which will
 npm run fix
 ```
 
-REPL Driven Development
+### Generate SSL Cert
 
-To provide a playground for testing out code, or ideas, the root directory contains a file called `playground.js` which has some setup in it (logging, iife). The playground will reload the file anytime it's saved through `nodemon`.
+```sh
+# Generate private-key.pem
+$ openssl genpkey -algorithm RSA -des3 -out private-key.pem -pkeyopt rsa_keygen_bits:4096
 
-```
-npm run playground
+# Create certificate-signing-request
+$ openssl req -new -key private-key.pem -out csr.pem
+
+# self sign certificate
+$ openssl x509 -in csr.pem -out certificate.pem -req -signkey private-key.pem -days 365
 ```
 
 ## Testing
@@ -138,7 +144,7 @@ The main repository `/README.md` is generated through a command line operation t
 
 Updating the main repository README.md should be done in one of the partials found in the `/docs` directory. These are easy to spot with the `readme-` prefix. If there is a need for a new partial, it can be added to the template found in `/docs/templates/README.md`.
 
-If a partial of readme has changed, or you need to regenerate a listing of files, eg: ADRs, use the following command. __This will replace the content of the existing README file__
+If a partial of readme has changed, or you need to regenerate a listing of files, eg: ADRs, use the following command. **This will replace the content of the existing README file**
 
 ```
 npm run readme
@@ -163,8 +169,6 @@ npm run adr [my-new-adr-name]
 
 ### Current ADRs
 
-
-
 # Contributing
 
 Guidelines for contributing, code of context, and process for submitting pull requets to be determined.
@@ -172,4 +176,3 @@ Guidelines for contributing, code of context, and process for submitting pull re
 # License
 
 This project is licensed under the 3-Clause BSD license. See the [LICENSE.md](LICENSE.md) file for details.
-

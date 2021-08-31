@@ -1,18 +1,17 @@
-const Agent = require('../../components/agent')
-const { pipeWith } = require('../../lib/utils')
+const Agent = require('../components/agent')
+const { pipeWith } = require('../lib/utils')
 
 module.exports = {
   requestAgents,
 }
 
-async function requestAgents(req, res) {
-  const { project } = req.context
+async function requestAgents({ project, department }) {
   const agents = await getAgents({
     projectId: project.id,
-    departmentId: req.query.department,
+    departmentId: department,
   })
 
-  res.data = { agents }
+  return agents
 }
 
 // Private

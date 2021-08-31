@@ -1,6 +1,6 @@
-const Agent = require('../../components/agent')
-const RecordNote = require('../../components/record-note')
-const TimeRecord = require('../../components/time-record')
+const Agent = require('../components/agent')
+const RecordNote = require('../components/record-note')
+const TimeRecord = require('../components/time-record')
 const { getDepartmentsForSelect, getDepartment } = require('./helpers')
 
 module.exports = {
@@ -8,26 +8,17 @@ module.exports = {
   create,
 }
 
-async function index(req, res) {
-  const { project } = req.context
-  const departments = await getDepartmentsForSelect(project.id)
-
-  res.view = 'time-record.pug'
-  res.locals = {
-    ...req.context,
-    departments,
-    title: 'New Time Sheet',
-  }
+async function index({ project }) {
+  return await getDepartmentsForSelect(project.id)
 }
 
-async function create(req, res) {
-  const { project } = req.context
+async function create({ project, formBody }) {
   const {
     department,
     date,
     entries = [],
     notes = '',
-  } = handleFormValues(req.body)
+  } = handleFormValues(formBody)
   const reportDepartment = await getDepartment(department)
 
   const timeRecords = await createTimeRecords({
@@ -43,15 +34,12 @@ async function create(req, res) {
     project: project.id,
   })
 
-  res.view = 'time-record-receipt.pug'
-  res.locals = {
+  return {
     project,
     date,
     recordNote,
     department: reportDepartment,
     records: timeRecords,
-
-    title: 'Receipt of Time Sheet',
   }
 }
 
@@ -99,6 +87,7 @@ async function createTimeRecords({ date, entries, department, project }) {
 }
 
 function handleFormValues(data) {
+  console.log(data)
   return Object.entries(data)
     .flatMap(([key, value]) => ({ key, value }))
     .reduce((acc, item) => Object.assign(acc, { [item.key]: item.value }), {})

@@ -1,5 +1,5 @@
-const Agent = require('../../components/agent')
-const Department = require('../../components/department')
+const Agent = require('../components/agent')
+const Department = require('../components/department')
 
 exports.getDepartmentsForSelect = async (projectId) => {
   const departments = await Department.findAll(projectId)
