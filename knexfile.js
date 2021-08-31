@@ -1,11 +1,11 @@
 const {
   DB_NAME: database,
   DB_HOST: host,
-  DB_USERNAME: user,
+  DB_USER: user,
   DB_PASSWORD: password,
   DB_PORT: port,
   DB_SSL: ssl,
-} = process.env
+} = require('./bin/env')
 
 const config = {
   client: 'postgres',

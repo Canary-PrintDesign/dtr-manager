@@ -1,8 +1,8 @@
-const Project = require('components/project')
-const Department = require('components/department')
-const Agent = require('components/agent')
-const TimeRecord = require('components/time-record')
-const RecordNote = require('components/record-note')
+const Project = require('../src/components/project')
+const Department = require('../src/components/department')
+const Agent = require('../src/components/agent')
+const TimeRecord = require('../src/components/time-record')
+const RecordNote = require('../src/components/record-note')
 
 const project = Project.create({
   name: 'Test Project',

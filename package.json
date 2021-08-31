@@ -9,6 +9,7 @@
   "scripts": {
     "adr": "node --use-strict ./scripts/architecture-decision-record.js",
     "dev": "DEBUG=dtr:* nodemon --inspect --use_strict -r ./bin/env ./src/server.js",
+    "knex": "npx knex --knexfile ./knexfile.js",
     "markdown": "node --use-strict ./scripts/markdown.js",
     "readme": "npm run markdown docs/templates/README.md README.md",
     "repl": "node --inspect --use-strict",

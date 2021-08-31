@@ -5,13 +5,13 @@ services:
     image: postgres:alpine
     restart: always
     environment:
-      - "POSTGRES_DB=${PSQL_DB}"
-      - "POSTGRES_USER=${PSQL_USER}"
-      - "POSTGRES_PASSWORD=${PSQL_PASSWORD}"
+      - "POSTGRES_DB=${DB_NAME}"
+      - "POSTGRES_USER=${DB_USER}"
+      - "POSTGRES_PASSWORD=${DB_PASSWORD}"
     networks:
       - overlay
     ports:
-      - "${PSQL_PORT}:5432"
+      - "${DB_PORT}:5432"
 
 networks:
   overlay:

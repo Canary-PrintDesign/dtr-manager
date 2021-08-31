@@ -31,6 +31,8 @@ function dotenvValidate(config) {
       data: environment,
     })
 
+    config.parsed = Object.assign(config.parsed, x)
+
     for (const [key, value] of Object.entries(x)) {
       environment[`${key}`] = value
     }
@@ -45,4 +47,5 @@ function dotenvValidate(config) {
 const env = dotenv.config()
 dotenvExpand(env)
 dotenvTest(env)
-dotenvValidate(env)
+
+module.exports = dotenvValidate(env).parsed
