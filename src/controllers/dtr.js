@@ -19,6 +19,7 @@ async function create({ project, formBody }) {
     entries = [],
     notes = '',
   } = handleFormValues(formBody)
+
   const reportDepartment = await getDepartment(department)
 
   const timeRecords = await createTimeRecords({
@@ -87,7 +88,6 @@ async function createTimeRecords({ date, entries, department, project }) {
 }
 
 function handleFormValues(data) {
-  console.log(data)
   return Object.entries(data)
     .flatMap(([key, value]) => ({ key, value }))
     .reduce((acc, item) => Object.assign(acc, { [item.key]: item.value }), {})

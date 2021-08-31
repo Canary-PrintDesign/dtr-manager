@@ -10,6 +10,7 @@ const Project = require('./components/project/index.js')
 const dtr = require('./controllers/dtr.js')
 const Report = require('./controllers/report.js')
 const Api = require('./controllers/api.js')
+const qs = require('qs')
 
 module.exports = async (options) => {
   const fastify = Fastify(options)
@@ -18,7 +19,9 @@ module.exports = async (options) => {
     contentSecurityPolicy: false,
   })
 
-  fastify.register(fastifyFormbody)
+  fastify.register(fastifyFormbody, {
+    parser: str => qs.parse(str)
+  })
 
   fastify.register(fastifyStatic, {
     root: path.join(__dirname, 'public'),
