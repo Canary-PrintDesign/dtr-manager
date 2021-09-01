@@ -1,20 +1,18 @@
 const Agent = require('../components/agent')
-const { pipeWith } = require('../lib/utils')
 
-module.exports = {
-  requestAgents,
-}
+module.exports = async (fastify) => {
+  fastify.get('/api/agents', async (req, reply) => {
+    const project = req.data.project
+    const departmentId = req.query.department
 
-async function requestAgents({ project, department }) {
-  const agents = await getAgents({
-    projectId: project.id,
-    departmentId: department,
+    const agents = await getAgents({
+      projectId: project.id,
+      departmentId,
+    })
+
+    return { agents }
   })
-
-  return agents
 }
-
-// Private
 
 async function getAgents({ projectId, departmentId }) {
   const agents = await Agent.findAll(projectId, departmentId)

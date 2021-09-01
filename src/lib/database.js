@@ -8,9 +8,8 @@ exports.db = Knex
 
 exports.uuid = randomUUID
 
-exports.findAll =
-  (table, db = Knex) =>
-  async (props) => {
+exports.findAll = (table, db = Knex) => {
+  return async (props) => {
     return await db
       .select()
       .table(table)
@@ -20,10 +19,10 @@ exports.findAll =
         )
       )
   }
+}
 
-exports.findWith =
-  (table, db = Knex) =>
-  async (props) =>
+exports.findWith = (table, db = Knex) => {
+  return async (props) =>
     await db
       .select()
       .table(table)
@@ -34,14 +33,15 @@ exports.findWith =
       )
       .limit(1)
       .then((results) => results[0])
+}
 
-exports.store =
-  (table, db = Knex) =>
-  async (data) => {
+exports.store = (table, db = Knex) => {
+  return async (data) => {
     return data.id
       ? await update(table, data, db)
       : await create(table, data, db)
   }
+}
 
 // Private
 

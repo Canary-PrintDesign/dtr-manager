@@ -4,17 +4,16 @@
 // create and return a function built up of functions (right to left)
 // first function can receive any number of arguments, all other
 // functions require a single argument format
-exports.compose =
-  (...fns) =>
-  (input) =>
+exports.compose = (...fns) => {
+  return (input) =>
     fns.reduceRight((v, fn) => v.then(fn), Promise.resolve(input))
+}
 
 // pipe
 // like compose but left to right composition of functions
-exports.pipe =
-  (...fns) =>
-  (input) =>
-    fns.reduce((v, fn) => v.then(fn), Promise.resolve(input))
+exports.pipe = (...fns) => {
+  return (input) => fns.reduce((v, fn) => v.then(fn), Promise.resolve(input))
+}
 
 // pipeWith
 // used as a shorthand for pipe, that takes the first argument and
@@ -23,9 +22,9 @@ exports.pipeWith = (x, ...fns) => exports.pipe(...fns)(x)
 
 // inspect
 // log data received to stdout and forward data
-exports.inspect =
-  (indicator = '>>>') =>
-  (args) => {
+exports.inspect = (indicator = '>>>') => {
+  return (args) => {
     console.info(indicator, { ...args })
     return args
   }
+}

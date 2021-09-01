@@ -1,50 +1,57 @@
 const Agent = require('../components/agent')
 const RecordNote = require('../components/record-note')
 const TimeRecord = require('../components/time-record')
-const { getDepartmentsForSelect, getDepartment } = require('./helpers')
+const { getDepartmentsForSelect, getDepartment } = require('./route-helpers')
 
-module.exports = {
-  index,
-  create,
-}
+module.exports = async (fastify) => {
+  fastify.post('/dtr', async (req, reply) => {
+    const project = req.data.project
+    const formBody = req.body
 
-async function index({ project }) {
-  return await getDepartmentsForSelect(project.id)
-}
+    const {
+      department,
+      date,
+      entries = [],
+      notes = '',
+    } = handleFormValues(formBody)
 
-async function create({ project, formBody }) {
-  const {
-    department,
-    date,
-    entries = [],
-    notes = '',
-  } = handleFormValues(formBody)
+    const reportDepartment = await getDepartment(department)
 
-  const reportDepartment = await getDepartment(department)
+    const timeRecords = await createTimeRecords({
+      date,
+      department,
+      entries,
+      project: project.id,
+    })
 
-  const timeRecords = await createTimeRecords({
-    date,
-    department,
-    entries,
-    project: project.id,
+    const recordNote = await createRecordNote({
+      date,
+      department,
+      notes,
+      project: project.id,
+    })
+
+    return reply.view('time-record-receipt', {
+      title: 'Receipt of Time Sheet',
+      date,
+      recordNote,
+      department: reportDepartment,
+      records: timeRecords,
+      project,
+    })
   })
-  const recordNote = await createRecordNote({
-    date,
-    department,
-    notes,
-    project: project.id,
+
+  fastify.get('/dtr', async (req, reply) => {
+    const project = req.data.project
+    const departments = await getDepartmentsForSelect(project.id)
+
+    return reply.view('time-record', {
+      title: 'New Time Sheet',
+      departments,
+      project,
+    })
   })
-
-  return {
-    project,
-    date,
-    recordNote,
-    department: reportDepartment,
-    records: timeRecords,
-  }
 }
-
-// Private
 
 async function findOrCreateAgent({ entry, department, project }) {
   const { name, position } = entry

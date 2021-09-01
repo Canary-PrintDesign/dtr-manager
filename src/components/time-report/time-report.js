@@ -1,5 +1,4 @@
 const Repo = require('./time-report-repo')
-const Component = require('../../lib/component')
 
 exports.create = create
 function create() {
