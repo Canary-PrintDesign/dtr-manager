@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const fs = require('node:fs')
+const fs = require('fs')
 const buildServer = require('./index.js')
 
 const { HTTP_HOST, HTTP_PORT, HTTP_MAX_CONNECTION_TIME_SECS } = process.env

@@ -1,6 +1,6 @@
 const knex = require('knex')
 const connection = require('../../knexfile')
-const { randomUUID } = require('node:crypto')
+const { randomUUID } = require('crypto')
 
 const Knex = knex(connection)
 

@@ -1,4 +1,4 @@
-const path = require('node:path')
+const path = require('path')
 const Fastify = require('fastify')
 const fastifyStatic = require('fastify-static')
 const fastifyHelmet = require('fastify-helmet')
