@@ -6,7 +6,9 @@ const { HTTP_HOST, HTTP_PORT, HTTP_MAX_CONNECTION_TIME_SECS } = process.env
 
 const config = {
   appName: 'Test',
-  logger: true,
+  logger: {
+    level: 'debug',
+  },
   connectionTimeout: HTTP_MAX_CONNECTION_TIME_SECS,
   ignoreTrailingSlash: true,
 }
