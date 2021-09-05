@@ -68,7 +68,8 @@ module.exports = async (fastify) => {
   fastify.get('/dtr', async (req, reply) => {
     const project = req.data.project
 
-    const { department, date, entries, notes } = req.session.get('time-report')
+    const { department, date, entries, notes } =
+      req.session.get('time-report') || {}
 
     const departments = await getDepartmentsForSelect(project.id)
 
