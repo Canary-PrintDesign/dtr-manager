@@ -1,6 +1,6 @@
 extends layout.pug
 
-mixin agent(index='{{entryIndex}}', name='{{entryName}}', position='{{entryPosition}}')
+mixin agent(index='{{entryIndex}}', name='{{entryName}}', position='{{entryPosition}}', workStart, workStop, lunchStart, lunchStop)
   .row.js-agent.my-3
     .col-12
       .card
@@ -8,7 +8,7 @@ mixin agent(index='{{entryIndex}}', name='{{entryName}}', position='{{entryPosit
           .row
             .col-6.col-md-2
               label.form-text.text-muted Full Name
-              input.form-control(required, value= name , name=`entries[${index}][name]`)
+              input.form-control(required, value= name, name=`entries[${index}][name]`)
               small.form-text.text-muted
             .col-6.col-md-2
               label.form-text.text-muted Position
@@ -16,19 +16,19 @@ mixin agent(index='{{entryIndex}}', name='{{entryName}}', position='{{entryPosit
               small.form-text.text-muted
             .col-6.col-md-2
               label.form-text.text-muted Work Start
-              input.form-control.js-work-start(required, minlength="4", maxlength="4", pattern="[0-3][0-9][0-5][0-9]", placeholder="0700", name=`entries[${index}][workStart]`)
+              input.form-control.js-work-start(required, value= workStart, minlength="4", maxlength="4", pattern="[0-3][0-9][0-5][0-9]", placeholder="0700", name=`entries[${index}][workStart]`)
               small.form-text.text-muted
             .col-6.col-md-2
               label.form-text.text-muted Work Stop
-              input.form-control.js-work-stop(required, minlength="4", maxlength="4", pattern="[0-3][0-9][0-5][0-9]", placeholder="2100", name=`entries[${index}][workStop]`)
+              input.form-control.js-work-stop(required, value= workStop, minlength="4", maxlength="4", pattern="[0-3][0-9][0-5][0-9]", placeholder="2100", name=`entries[${index}][workStop]`)
               small.form-text.text-muted
             .col-6.col-md-2
               label.form-text.text-muted Lunch Start
-              input.form-control.js-lunch-start(minlength="4", maxlength="4", pattern="[0-3][0-9][0-5][0-9]", placeholder="1300", name=`entries[${index}][lunchStart]`)
+              input.form-control.js-lunch-start(minlength="4", value= lunchStart, maxlength="4", pattern="[0-3][0-9][0-5][0-9]", placeholder="1300", name=`entries[${index}][lunchStart]`)
               small.form-text.text-muted
             .col-6.col-md-2
               label.form-text.text-muted Lunch Stop
-              input.form-control.js-lunch-stop(minlength="4", maxlength="4", pattern="[0-3][0-9][0-5][0-9]", placeholder="1400", name=`entries[${index}][lunchStop]`)
+              input.form-control.js-lunch-stop(minlength="4", value= lunchStop, maxlength="4", pattern="[0-3][0-9][0-5][0-9]", placeholder="1400", name=`entries[${index}][lunchStop]`)
               small.form-text.text-muted
         .card-footer
           p.form-text.text-muted.text-bold.text-center
@@ -45,10 +45,13 @@ block content
 
           .card-body
             label.form-text.text-muted Date Worked
-              input.form-control(type="date", name="date", required)
+              input.form-control(type="date", value= date, name="date", required)
               small.form-text.text-muted
 
     .js-agents.my-3
+      if entries
+        each entry, index in entries
+          +agent(index, entry.name, entry.position, entry.workStart, entry.workStop, entry.lunchStart, entry.lunchStop)
 
     .row.my-3
       .col-12
@@ -60,6 +63,8 @@ block content
           .card-body
             label.form-text.text-muted Notes
             textarea.form-control(name="notes")
+              if notes
+                = notes
             small.form-text.text-muted
 
     input(type="hidden", value= project.id)
