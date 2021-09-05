@@ -15,6 +15,28 @@ module.exports = async (fastify) => {
       notes = '',
     } = handleFormValues(formBody)
 
+    req.session.set('time-report', {
+      department,
+      date,
+      entries,
+      notes,
+      project,
+    })
+
+    return reply.view('time-record-review', {
+      title: 'Review Time Sheet',
+      date,
+      notes,
+      department,
+      entries,
+      project,
+    })
+  })
+
+  fastify.get('/dtr/submit', async (req, reply) => {
+    const { department, date, entries, notes, project } =
+      req.session.get('time-report')
+
     const reportDepartment = await getDepartment(department)
 
     const timeRecords = await createTimeRecords({
@@ -30,6 +52,8 @@ module.exports = async (fastify) => {
       notes,
       project: project.id,
     })
+
+    req.session.delete('time-report')
 
     return reply.view('time-record-receipt', {
       title: 'Receipt of Time Sheet',
