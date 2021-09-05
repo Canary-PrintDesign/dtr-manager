@@ -8,6 +8,7 @@ const config = {
   appName: 'Test',
   logger: true,
   connectionTimeout: HTTP_MAX_CONNECTION_TIME_SECS,
+  ignoreTrailingSlash: true,
 }
 
 ;(async () => {
