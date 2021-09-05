@@ -1,0 +1,40 @@
+extends layout.pug
+
+mixin record(record)
+  tr
+    td= record.name
+    td= record.position
+    td= record.workStart
+    td= record.workStop
+    td= record.lunchStart
+    td= record.lunchStop
+
+block content
+  .row
+    h3= department.name
+
+  .row
+    p= date
+
+  .row
+    p= notes
+
+  .row
+    table.table.stripe.table-striped.border
+      thead
+        tr
+          th Name
+          th Position
+          th Work Start
+          th Work Stop
+          th Lunch Start
+          th Lunch Stop
+
+      tbody
+        if entries
+          each record in entries
+            +record(record)
+
+  .row
+    a(href="dtr/submit").btn.btn-block.btn-success Submit to AD & production
+    a(href="dtr").btn.btn-block.btn-warning Make changes before submitting to AD & Production

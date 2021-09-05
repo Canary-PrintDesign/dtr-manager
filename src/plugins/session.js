@@ -7,8 +7,6 @@ module.exports = fp(async (fastify) => {
     key: fs.readFileSync(path.join(__dirname, '..', '..', 'secret-key')),
     cookie: {
       path: '/',
-      httpOnly: true,
-      signed: true,
     },
   })
 })
