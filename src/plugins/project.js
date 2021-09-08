@@ -1,5 +1,5 @@
 const fp = require('fastify-plugin')
-const Project = require('../components/project/index.js')
+const Project = require('../components/project.js')
 const httpErrors = require('http-errors')
 
 module.exports = fp(async (fastify) => {
@@ -8,7 +8,7 @@ module.exports = fp(async (fastify) => {
 
     try {
       const project = await Project.findWith({ hostname })
-      req.data = { project }
+      req.data = { project: project[0] }
     } catch (err) {
       fastify.log.error(err)
       reply.send(httpErrors.Unauthorized())

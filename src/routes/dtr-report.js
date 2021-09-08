@@ -1,8 +1,8 @@
 const httpErrors = require('http-errors')
 const groupBy = require('lodash.groupby')
-const TimeReport = require('../components/time-report')
-const RecordNote = require('../components/record-note')
 const format = require('date-fns/format')
+const TimeReport = require('../components/time-report.js')
+const RecordNote = require('../components/record-note.js')
 
 module.exports = async (fastify) => {
   fastify.get('/dtr/report', {}, async (req, reply) => {

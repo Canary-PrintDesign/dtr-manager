@@ -1,25 +1,15 @@
-const Agent = require('../components/agent')
-const Department = require('../components/department')
+const Agent = require('../components/agent.js')
+const Department = require('../components/department.js')
 
-exports.getDepartmentsForSelect = async (projectId) => {
-  const departments = await Department.findAll(projectId)
+exports.getDepartmentsForSelect = async (project) => {
+  const departments = await Department.findAll({ project })
 
-  return Promise.all(departments.map(toKeyValue('id', 'name')))
+  return departments.map(({ id, name }) => {
+    return { key: id, value: name }
+  })
 }
 
-exports.toKeyValue = toKeyValue
-function toKeyValue(keyKey, valueKey) {
-  return async (dataPromise) => {
-    const data = await dataPromise
+exports.getDepartment = async ({ department, project }) =>
+  await Department.findWith({ id: department, project })
 
-    return {
-      key: data[`${keyKey}`],
-      value: data[`${valueKey}`],
-    }
-  }
-}
-
-exports.getDepartment = async (departmentId) =>
-  await Department.findWith({ id: departmentId })
-
-exports.getAgent = async (agentId) => await Agent.findWith({ id: agentId })
+exports.getAgent = async (id) => await Agent.findWith({ id })

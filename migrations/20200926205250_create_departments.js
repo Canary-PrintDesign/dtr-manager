@@ -1,12 +1,10 @@
 exports.up = function (knex) {
   return knex.schema.createTable('departments', (table) => {
-    table.uuid('id')
-    table.uuid('project')
-
-    table.string('name')
-    table.boolean('custom')
-
-    table.timestamps()
+    table.uuid('id').primary()
+    table.uuid('project').nullable()
+    table.string('name').notNullable()
+    table.boolean('custom').notNullable().default(false)
+    table.timestamps(true, true)
   })
 }
 

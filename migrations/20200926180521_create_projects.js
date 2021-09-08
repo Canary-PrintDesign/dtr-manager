@@ -1,13 +1,15 @@
 exports.up = function (knex) {
   return knex.schema.createTable('projects', (table) => {
-    table.uuid('id')
-
-    table.string('logo')
-    table.string('name')
-    table.string('hostname')
-    table.datetime('startDate')
-    table.enum('status', ['published', 'unpublished'])
-    table.timestamps()
+    table.uuid('id').primary()
+    table.string('logo').nullable()
+    table.string('name').notNullable()
+    table.string('hostname').notNullable()
+    table.datetime('start_date').notNullable()
+    table
+      .enum('status', ['published', 'unpublished'])
+      .default('unpublished')
+      .notNullable()
+    table.timestamps(true, true)
   })
 }
 

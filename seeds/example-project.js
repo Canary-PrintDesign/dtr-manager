@@ -1,75 +1,9 @@
-const Project = require('../src/components/project')
-const Department = require('../src/components/department')
-const Agent = require('../src/components/agent')
-const TimeRecord = require('../src/components/time-record')
-const RecordNote = require('../src/components/record-note')
-
-const project = Project.create({
-  name: 'Test Project',
-  logo: 'https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png',
-  hostname: 'localhost',
-})
-
-const departmentA = Department.create({
-  name: 'Department A',
-})
-
-const departmentB = Department.create({
-  name: 'Department B',
-})
-
-const departmentC = Department.create({
-  name: 'Department C',
-  custom: true,
-})
-
-const agent1 = Agent.create({
-  name: 'Agent 1',
-  position: 'First Agent',
-})
-
-const agent2 = Agent.create({
-  name: 'Agent 2',
-  position: 'Number Two',
-})
-
-const agent3 = Agent.create({
-  name: 'Agent 3',
-  position: 'Tertiary',
-})
-
-const timeRecord1 = TimeRecord.create({
-  workStart: '0800',
-  lunchStart: '1400',
-  lunchStop: '1500',
-  workStop: '2100',
-})
-
-const timeRecord2 = TimeRecord.create({
-  workStart: '0700',
-  lunchStart: '1300',
-  lunchStop: '1400',
-  workStop: '2800',
-})
-
-const timeRecord3 = TimeRecord.create({
-  workStart: '0400',
-  lunchStart: '1300',
-  lunchStop: '1400',
-  workStop: '3300',
-})
-
-const timeRecord4 = TimeRecord.create({
-  workStart: '0900',
-  lunchStart: '1300',
-  lunchStop: '1400',
-  workStop: '1700',
-})
-
-const recordNote = RecordNote.create({
-  note: 'This is a test note',
-  date: new Date(),
-})
+const Role = require('../src/components/role.js')
+const Project = require('../src/components/project.js')
+const Department = require('../src/components/department.js')
+const Agent = require('../src/components/agent.js')
+const TimeRecord = require('../src/components/time-record.js')
+const RecordNote = require('../src/components/record-note.js')
 
 exports.seed = function (knex) {
   return Promise.resolve()
@@ -80,6 +14,7 @@ exports.seed = function (knex) {
         knex('agents').del(),
         knex('time_records').del(),
         knex('record_notes').del(),
+        knex('roles').del(),
       ])
     )
     .then(() => projectFactory())
@@ -87,62 +22,163 @@ exports.seed = function (knex) {
     .then(agentFactory)
     .then(timeRecordFactory)
     .then(recordNoteFactory)
+    .then(roleFactory)
 }
 
 async function projectFactory() {
-  return await Project.save(await project)
+  const seedProject = await Project.save({
+    name: 'Test Project',
+    logo: 'https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png',
+    hostname: 'localhost',
+    startDate: new Date().toISOString(),
+  })
+
+  return seedProject
 }
 
 async function departmentFactory(project) {
-  const projectId = project.id
+  const departments = [
+    {
+      name: 'Department A',
+      project: project.id,
+    },
+    {
+      name: 'Department B',
+      project: project.id,
+    },
+    {
+      project: project.id,
+      name: 'Department C',
+      custom: true,
+    },
+  ]
 
-  const departments = [await departmentA, await departmentB, await departmentC]
-    .map((department) => ({ ...department, project: projectId }))
-    .map((department) => Department.save(department))
+  const newDepartments = []
+  for (const department of departments) {
+    const newDepartment = await Department.save(department)
+    newDepartments.push(newDepartment)
+  }
 
-  return Promise.all(departments)
+  return newDepartments
 }
 
 async function agentFactory(departments) {
   const project = departments[0].project
 
-  const agents = [await agent1, await agent2, await agent3]
-    .map((agent, i) => ({
-      ...agent,
+  const agents = [
+    {
+      name: 'Agent 1',
+      position: 'First Agent',
       project,
-      department: departments[`${i}`].id,
-    }))
-    .map((agent) => Agent.save(agent))
+      department: departments[0].id,
+    },
+    {
+      name: 'Agent 2',
+      position: 'Number Two',
+      project,
+      department: departments[1].id,
+    },
+    {
+      name: 'Agent 3',
+      position: 'Tertiary',
+      project,
+      department: departments[2].id,
+    },
+    {
+      name: 'Agent 4',
+      position: 'Quart',
+      project,
+      department: departments[0].id,
+    },
+  ]
 
-  return Promise.all(agents)
+  const newAgents = []
+  for (const agent of agents) {
+    const newAgent = await Agent.save(agent)
+    newAgents.push(newAgent)
+  }
+
+  return newAgents
 }
 
 async function timeRecordFactory(agents) {
   const project = await agents[0].project
 
   const timeRecords = [
-    await timeRecord1,
-    await timeRecord2,
-    await timeRecord3,
-    await timeRecord4,
+    {
+      workStart: '0800',
+      lunchStart: '1400',
+      lunchStop: '1500',
+      workStop: '2100',
+      project,
+    },
+    {
+      workStart: '0700',
+      lunchStart: '1300',
+      lunchStop: '1400',
+      workStop: '2800',
+      project,
+    },
+    {
+      workStart: '0400',
+      lunchStart: '1300',
+      lunchStop: '1400',
+      workStop: '3300',
+      project,
+    },
+    {
+      workStart: '0900',
+      lunchStart: '1300',
+      lunchStop: '1400',
+      workStop: '1700',
+      project,
+    },
   ]
-    .map(async (timeRecord, i) => {
-      const agent = (await agents[`${i}`]) || agents[0]
 
-      return {
-        ...timeRecord,
-        project,
-        department: agent.department,
-        agent: agent.id,
-      }
+  const newTimeRecords = []
+  for (const [i, timeRecord] of Object.entries(timeRecords)) {
+    const newTimeRecord = await TimeRecord.save({
+      ...timeRecord,
+      department: agents[i].department,
+      agent: agents[i].id,
+      date: new Date().toISOString().split('T')[0],
     })
-    .map(async (res) => TimeRecord.save(await res))
+    newTimeRecords.push(newTimeRecord)
+  }
 
-  return Promise.all(timeRecords)
+  return newTimeRecords
 }
 
 async function recordNoteFactory(timeRecords) {
   const { project, department } = await timeRecords[0]
-  const note = await recordNote
-  return RecordNote.save({ ...note, project, department })
+
+  return RecordNote.save({
+    note: 'This is a test note',
+    date: new Date().toISOString().split('T')[0],
+    project,
+    department,
+  })
+}
+
+async function roleFactory(agents) {
+  const roles = [
+    {
+      id: 1,
+      role: 'crew',
+    },
+    {
+      id: 2,
+      role: 'admin',
+    },
+    {
+      id: 3,
+      role: 'project-admin',
+    },
+    {
+      id: 4,
+      role: 'super-admin',
+    },
+  ].map((role) => Role.save(role))
+
+  return await Promise.all(roles)
 }

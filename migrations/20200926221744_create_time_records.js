@@ -1,17 +1,15 @@
 exports.up = function (knex) {
   return knex.schema.createTable('time_records', (table) => {
-    table.uuid('id')
-    table.uuid('project')
-    table.uuid('department')
-    table.uuid('agent')
-
-    table.datetime('date')
-    table.string('work_start')
-    table.string('work_stop')
-    table.string('lunch_start')
-    table.string('lunch_stop')
-
-    table.timestamps()
+    table.uuid('id').primary()
+    table.uuid('project').notNullable()
+    table.uuid('department').notNullable()
+    table.uuid('agent').notNullable()
+    table.date('date').notNullable()
+    table.string('work_start').notNullable()
+    table.string('work_stop').notNullable()
+    table.string('lunch_start').notNullable()
+    table.string('lunch_stop').notNullable()
+    table.timestamps(true, true)
   })
 }
 

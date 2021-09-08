@@ -1,6 +1,6 @@
-const Agent = require('../components/agent')
-const RecordNote = require('../components/record-note')
-const TimeRecord = require('../components/time-record')
+const Agent = require('../components/agent.js')
+const RecordNote = require('../components/record-note.js')
+const TimeRecord = require('../components/time-record.js')
 const { getDepartmentsForSelect, getDepartment } = require('./route-helpers')
 
 module.exports = async (fastify) => {
@@ -37,7 +37,10 @@ module.exports = async (fastify) => {
     const { department, date, entries, notes, project } =
       req.session.get('time-report')
 
-    const reportDepartment = await getDepartment(department)
+    const reportDepartment = await getDepartment({
+      department,
+      project: project.id,
+    })
 
     const timeRecords = await createTimeRecords({
       date,
@@ -58,7 +61,7 @@ module.exports = async (fastify) => {
     return reply.view('time-record-receipt', {
       title: 'Receipt of Time Sheet',
       date,
-      recordNote,
+      recordNote: recordNote,
       department: reportDepartment,
       records: timeRecords,
       project,
@@ -90,28 +93,27 @@ async function findOrCreateAgent({ entry, department, project }) {
   const { name, position } = entry
 
   const agent = await Agent.findWith({ name, project, department })
+  if (agent[0].id) return agent[0]
 
-  if (agent.id) return agent
-
-  return await Agent.save({ name, position, department, project })
+  const newAgent = await Agent.save({ name, position, department, project })
+  return newAgent
 }
 
 async function createRecordNote({ date, department, notes, project }) {
-  const newRecordNote = await RecordNote.create({
+  return await RecordNote.save({
     date,
     department,
     project,
     note: notes,
   })
-
-  return await RecordNote.save(newRecordNote)
 }
 
 async function createTimeRecords({ date, entries, department, project }) {
-  const records = entries.map(async (entry) => {
-    const agent = await findOrCreateAgent({ entry, department, project })
+  const records = []
 
-    const timeRecord = await TimeRecord.create({
+  for (const entry of entries) {
+    const agent = await findOrCreateAgent({ entry, department, project })
+    const storedTimeRecord = await TimeRecord.save({
       ...entry,
       date,
       department,
@@ -119,12 +121,10 @@ async function createTimeRecords({ date, entries, department, project }) {
       agent: agent.id,
     })
 
-    const storedTimeRecord = await TimeRecord.save(timeRecord)
+    records.push({ ...storedTimeRecord, agent })
+  }
 
-    return { ...storedTimeRecord, agent }
-  })
-
-  return Promise.all(records)
+  return records
 }
 
 function handleFormValues(data) {
