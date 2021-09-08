@@ -1,67 +1,34 @@
-const knex = require('knex')
-const connection = require('../../knexfile')
 const { randomUUID } = require('crypto')
+const { Model, knexSnakeCaseMappers } = require('objection')
+const Knex = require('knex')
+const connection = require('../../knexfile')
 
-const Knex = knex(connection)
+const knex = Knex({
+  ...connection,
+  ...knexSnakeCaseMappers(),
+})
 
-exports.db = Knex
+Model.knex(knex)
 
-exports.uuid = randomUUID
+class BaseModel extends Model {
+  async $beforeInsert(queryContext) {
+    await super.$beforeInsert(queryContext)
 
-exports.findAll = (table, db = Knex) => {
-  return async (props) => {
-    return await db
-      .select()
-      .table(table)
-      .where((builder) =>
-        Object.entries(props).forEach(([key, value]) =>
-          builder.where(key, value)
-        )
-      )
+    this.id = randomUUID()
+  }
+
+  async $beforeUpdate(queryContext) {
+    await super.$beforeInsert(queryContext)
+
+    this.updatedAt = null
+  }
+
+  static get pickJsonSchemaProperties() {
+    return true
   }
 }
 
-exports.findWith = (table, db = Knex) => {
-  return async (props) =>
-    await db
-      .select()
-      .table(table)
-      .where((builder) =>
-        Object.entries(props).forEach(([key, value]) =>
-          builder.where(key, value)
-        )
-      )
-      .limit(1)
-      .then((results) => results[0])
-}
-
-exports.store = (table, db = Knex) => {
-  return async (data) => {
-    return data.id
-      ? await update(table, data, db)
-      : await create(table, data, db)
-  }
-}
-
-// Private
-
-async function create(table, data, db) {
-  data.id = randomUUID()
-  data.created_at = new Date()
-  data.updated_at = new Date()
-
-  return await db(table)
-    .insert({ ...data })
-    .returning('*')
-    .then((results) => results[0])
-}
-
-async function update(table, data, db) {
-  data.updated_at = new Date()
-
-  return await db(table)
-    .where('id', data.id)
-    .update({ ...data })
-    .returning('*')
-    .then((results) => results[0])
+module.exports = {
+  database: knex,
+  Model: BaseModel,
 }
