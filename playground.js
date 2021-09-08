@@ -27,12 +27,17 @@ const TimeReport = require('./src/components/time-report.js')
 async function run() {
   const project = await Project.findWith({ name: 'Test Project' })
   const department = await Department.findAll({ project: project.id })
-  const agent = await Agent.findAll({ project: project.id })
-  const timeRecord = await TimeRecord.findWith({ project: project.id })
-  const recordNote = await RecordNote.findWith({ project: project.id })
+  // const agent = await Agent.findAll({ project: project.id })
+  // const timeRecord = await TimeRecord.findWith({ project: project.id })
+  // const recordNote = await RecordNote.findWith({ project: project.id })
+  // const timeReport = await TimeReport.findAll({ project: project[0].id })
   const role = await Role.findWith({ role: 'crew' })
-  const timeReport = await TimeReport.findAll({ project: project[0].id })
-  console.log(timeReport)
+  const token = await Auth.createToken({
+    department: department[0].id,
+    role: role[0].id,
+  })
+
+  console.log(token)
 }
 
 // Execute the playground and log results
