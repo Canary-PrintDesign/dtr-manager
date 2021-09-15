@@ -51,8 +51,7 @@ async function getTimeReport(project, date) {
 }
 
 async function getRecordNotes(projectId) {
-  const notes = await RecordNote.findAll(projectId)
-  return Promise.all(notes)
+  return await RecordNote.findAll(projectId)
 }
 
 function formatDate(date, style = 'yyyy-MM-dd') {

@@ -11,26 +11,33 @@ mixin record(record)
 
 block content
   .row
-    h3= department.name
+    .col-md-6
+      p= department.name
 
-  .row
-    p= date
+    .col-md-6
+      p= date
 
-  .row
-    p= recordNote.note
+  .row.my-3
+    .table-responsive
+      table.table.table-sm
+        thead
+          tr
+            th Name
+            th Position
+            th Work Start
+            th Work Stop
+            th Lunch Start
+            th Lunch Stop
 
-  .row
-    table.table.stripe.table-striped.border
-      thead
-        tr
-          th Name
-          th Position
-          th Work Start
-          th Work Stop
-          th Lunch Start
-          th Lunch Stop
+        tbody
+          if records
+            each record in records
+              +record(record)
 
-      tbody
-        if records
-          each record in records
-            +record(record)
+  if notes
+    .row
+      .col-12
+        p.text-muted Notes
+        p= notes
+
+

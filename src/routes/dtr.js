@@ -7,16 +7,18 @@ module.exports = async (fastify) => {
   fastify.post('/dtr', async (req, reply) => {
     const project = req.data.project
     const formBody = req.body
-
     const {
-      department,
+      department: departmentId,
       date,
       entries = [],
       notes = '',
     } = handleFormValues(formBody)
 
+    if (!departmentId) throw new Error('nope')
+    const department = await getDepartment(departmentId)
+
     req.session.set('time-report', {
-      department,
+      department: department[0],
       date,
       entries,
       notes,
@@ -27,7 +29,7 @@ module.exports = async (fastify) => {
       title: 'Review Time Sheet',
       date,
       notes,
-      department,
+      department: department[0],
       entries,
       project,
     })
@@ -38,20 +40,20 @@ module.exports = async (fastify) => {
       req.session.get('time-report')
 
     const reportDepartment = await getDepartment({
-      department,
+      department: department.id,
       project: project.id,
     })
 
     const timeRecords = await createTimeRecords({
       date,
-      department,
+      department: department.id,
       entries,
       project: project.id,
     })
 
     const recordNote = await createRecordNote({
       date,
-      department,
+      department: department.id,
       notes,
       project: project.id,
     })
@@ -61,8 +63,8 @@ module.exports = async (fastify) => {
     return reply.view('time-record-receipt', {
       title: 'Receipt of Time Sheet',
       date,
-      recordNote: recordNote,
-      department: reportDepartment,
+      notes: [recordNote.note],
+      department,
       records: timeRecords,
       project,
     })
@@ -93,7 +95,7 @@ async function findOrCreateAgent({ entry, department, project }) {
   const { name, position } = entry
 
   const agent = await Agent.findWith({ name, project, department })
-  if (agent[0].id) return agent[0]
+  if (agent.length && agent[0].id) return agent[0]
 
   const newAgent = await Agent.save({ name, position, department, project })
   return newAgent

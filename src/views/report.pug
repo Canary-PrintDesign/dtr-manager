@@ -1,42 +1,34 @@
 extends layout.pug
 
 block content
-    .row
-      .form.m-3
-        .form-row.align-items-center
-          .col-auto
-            label Filter
-          .col-auto
-            label.sr-only(for="dateFilter") Date
-            .input-group
-              .input-group-prepend
-                .input-group-text Date
-              select.form-control.js-date-filter#dateFilter
-                option(default, value='') -- By Date --
-                each date in dates
-                  option(value=date)= date
-          .col-auto
-            label.sr-only(for="departmentFilter") Department
-            .input-group
-              .input-group-prepend
-                .input-group-text Department
-              select.form-control.js-department-filter#departmentFilter
-                option(default, value='') -- By Department --
-                each department in departments
-                  option(value=department)= department
+  .row.mb-3
+    .col-6
+      .input-group
+        .input-group-text Date
+        select.form-control.js-date-filter#dateFilter
+          option(default, value='') -- By Date --
+          each date in dates
+            option(value=date)= date
+    .col-6
+      .input-group
+        .input-group-text Department
+        select.form-control.js-department-filter#departmentFilter
+          option(default, value='') -- By Department --
+          each department in departments
+            option(value=department)= department
 
-    .row
-      table.table.table-bordered.report
-        thead.thead-dark
-          tr
-            th.report-sticky Date
-            th.report-sticky Department
-            th.report-sticky Name
-            th.report-sticky Position
-            th.report-sticky Work Start
-            th.report-sticky Work End
-            th.report-sticky Lunch Start
-            th.report-sticky Lunch End
+  .row
+    table.table.report
+      thead.report-sticky.shadow-sm
+        tr
+          th Date
+          th Department
+          th Name
+          th Position
+          th Work Start
+          th Work End
+          th Lunch Start
+          th Lunch End
 
         each val, key in report
           -var date = key
@@ -48,7 +40,7 @@ block content
 
             tbody
               each entry in entries
-                tr(data-report-row, data-report-date=date, data-report-department=departmentName).table-light
+                tr(data-report-row, data-report-date=date, data-report-department=departmentName)
                   td
                     span= date
                   td
@@ -69,8 +61,6 @@ block content
                   td Note
                   td(colspan=5)= note.note
 
-              tr(data-report-row, data-report-date=date, data-report-department=departmentName).table-secondary.table-sm
-                td(colspan=8)
 block scripts
   script
     include scripts/report-script.js

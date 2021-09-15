@@ -1,5 +1,6 @@
 html {
   overflow-y: scroll;
+  height: 100%;
 }
 
 .report tbody tr:nth-child(1n + 2) td:nth-child(1) span,
@@ -10,4 +11,5 @@ html {
 .report-sticky {
   position: sticky;
   top: 0;
+  background-color: white !important;
 }

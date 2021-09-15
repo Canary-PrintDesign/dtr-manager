@@ -29,9 +29,10 @@ $(document).ready(() => {
   }
 
   function bindDeleteRecordButton() {
+    console.log('bound')
     $('.js-delete-record').click((event) => {
       event.preventDefault()
-      $(event.target).closest('.row').remove()
+      $(event.target).closest('.js-time-record').remove()
     })
   }
 
@@ -72,7 +73,7 @@ $(document).ready(() => {
       .parent()
       .parent()
       .find('.js-calculated-time')
-      .html(`Worked for ${hours}h ${minutes}m`)
+      .val(`${hours}h ${minutes}m`)
   }
 
   const template = $('.js-agent-template')
