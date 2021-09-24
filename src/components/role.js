@@ -18,11 +18,9 @@ class Role extends Model {
 exports.findAll = findAll
 async function findAll({ roles } = {}) {
   try {
-    return await Role.query()
-      .whereNot({ role: 'super-admin' })
-      .where((builder) => {
-        if (roles?.length) builder.whereIn('role', roles)
-      })
+    return await Role.query().where((builder) => {
+      if (roles?.length) builder.whereIn('role', roles)
+    })
   } catch (err) {
     throw new Error(err)
   }
