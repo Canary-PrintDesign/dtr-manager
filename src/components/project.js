@@ -19,6 +19,15 @@ class Project extends Model {
   }
 }
 
+exports.findAll = findAll
+async function findAll() {
+  try {
+    return await Project.query()
+  } catch (err) {
+    throw new Error(err)
+  }
+}
+
 exports.findWith = findWith
 async function findWith({ id, name, hostname, status }) {
   try {

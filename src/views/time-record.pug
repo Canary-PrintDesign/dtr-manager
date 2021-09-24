@@ -31,10 +31,11 @@ block content
     input(type="hidden", value= project.id)
 
     .row
-      .col-md-6
-        include includes/departments-select.pug
+      if user.isAdmin
+        .col
+          include includes/departments-select.pug
 
-      .col-md-6
+      .col
         label.form-text.text-muted Date Worked
         input.form-control(type="date", value= date, name="date", required)
         small.form-text.text-muted
@@ -64,7 +65,8 @@ block content
         input.btn.btn-block.btn-primary.me-2.my-1(type="submit" value="Review Time Sheet & Submit to AD & Production")
         input.btn.btn-block.btn-outline-secondary.me-2.my-1(type="reset" value="Reset Time Entries")
 
-
+    if user.isCrew && !user.isAdmin
+      input(value= user.department, name="department", required, readonly, hidden)
 
 block scripts
   template.js-agent-template

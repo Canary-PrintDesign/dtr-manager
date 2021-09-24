@@ -28,3 +28,7 @@ exports.inspect = (indicator = '>>>') => {
     return args
   }
 }
+
+// titleCase
+// capitalize first character of string
+exports.toTitleCase = (word) => word.charAt(0).toUpperCase() + word.slice(1)

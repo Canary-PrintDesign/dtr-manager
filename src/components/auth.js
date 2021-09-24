@@ -36,12 +36,33 @@ async function fetch(token) {
 
 exports.findAll = findAll
 async function findAll({ project }) {
-  return await Token.query().where({ project })
+  return await Token.query()
+    .select('tokens.*', 'roles.role as role')
+    .where({ project })
+    .join('roles as roles', 'roles.id', 'tokens.role')
+}
+
+exports.departmentRoleToken = departmentRoleToken
+async function departmentRoleToken({ project, roles }) {
+  return await Token.query()
+    .select(
+      'tokens.token',
+      'role.role',
+      'department.name as department_name',
+      'department.id as department_id'
+    )
+    .where('tokens.project', project)
+    .whereIn('role.role', roles)
+    .join('roles as role', 'role.id', 'tokens.role')
+    .join('departments as department', 'department.id', 'tokens.department')
+    .orderBy('department.name', 'ASC')
+    .orderBy('role.role', 'ASC')
 }
 
 exports.createToken = createToken
-async function createToken({ department, role }) {
+async function createToken({ project, department, role }) {
   return await exports.save({
+    project,
     department,
     role,
     token: generateToken(),

@@ -1,0 +1,36 @@
+extends layout.pug
+
+mixin tokenTemplate(token)
+  tr
+    td= token.departmentName
+    td= token.role
+    td= token.token
+    td
+      input(value=`${baseLoginUrl}${token.token}`, readonly).w-100.border-0
+
+block content
+  .row
+    .table-responsive
+      table.table.table-sm
+        thead
+          tr
+            th Department Name
+            th Role
+            th Token
+            th Login Url
+        tbody
+          if tokens
+            each token in tokens
+              +tokenTemplate(token)
+        tfoot
+          tr
+            td(colspan=3)
+              form(method="post", action="/account-management/token").row.row-cols-lg-auto.g-3.align-items-center
+                .col
+                  include includes/departments-select.pug
+                if user.isProjectAdmin
+                  .col
+                    include includes/roles-select.pug
+                .col
+                  label.form-text.text-muted.d-block &nbsp;
+                  button(type="submit").btn.btn-success +

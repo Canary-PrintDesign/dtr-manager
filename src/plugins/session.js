@@ -9,4 +9,19 @@ module.exports = fp(async (fastify) => {
       path: '/',
     },
   })
+
+  fastify.addHook('preHandler', (request, reply, done) => {
+    const user = request.session.get('user') || {
+      department: '',
+      project: '',
+      role: '',
+      isCrew: false,
+      isAdmin: false,
+      isProjectAdmin: false,
+    }
+
+    request.user = user
+
+    done()
+  })
 })

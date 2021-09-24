@@ -163,19 +163,15 @@ async function recordNoteFactory(timeRecords) {
 async function roleFactory(agents) {
   const roles = [
     {
-      id: 1,
       role: 'crew',
     },
     {
-      id: 2,
       role: 'admin',
     },
     {
-      id: 3,
       role: 'project-admin',
     },
     {
-      id: 4,
       role: 'super-admin',
     },
   ].map((role) => Role.save(role))

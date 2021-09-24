@@ -10,13 +10,25 @@ module.exports = async (fastify) => {
       if (!token.length || !token[0].isActive)
         throw new Error('Token is invalid')
 
-      const department = await Department.findWith({ id: token.department })
-      const role = await Role.findWith({ id: token.role })
+      const department = await Department.findWith({ id: token[0].department })
+      const role = await Role.findWith({ id: token[0].role })
 
-      req.session.set('auth', {
+      const roles = { isCrew: false, isAdmin: false, isProjectAdmin: false }
+
+      switch (role[0].role) {
+        case 'project-admin':
+          roles.isProjectAdmin = true
+        case 'admin':
+          roles.isAdmin = true
+        case 'crew':
+          roles.isCrew = true
+      }
+
+      req.session.set('user', {
         department: department[0].id,
         project: department[0].project,
         role: role[0].role,
+        ...roles,
       })
 
       reply.redirect('/dtr')

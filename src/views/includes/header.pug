@@ -1,13 +1,16 @@
 header.d-flex.justify-content-between.py-3.mb-4.border-bottom
   a(href="/").text-dark.text-decoration-none
     h2
-      span.badge.bg-dark.me-2 TP
+      span.badge.bg-dark.me-2= `${project.name.split(' ').map((w) => w.slice(0, 1).toUpperCase()).join('')}`
       span.fs-4= project.name
 
   ul.nav.justify-content-center
-    li.nav-item.my-0
-      a(href="/dtr/report").btn.btn-link.text-decoration-none.link-secondary Report
-    li.nav-item.py-0
-      a(href="/dtr").btn.btn-link.text-decoration-none.link-secondary Timesheet
-    li.nav-item.py-0
-      a(href="/account-management").btn.btn-link.text-decoration-none.link-secondary Account Management
+    if user.isAdmin
+      li.nav-item.my-0
+        a(href="/dtr/report").btn.btn-link.text-decoration-none.link-secondary Report
+    if user.isCrew
+      li.nav-item.py-0
+        a(href="/dtr").btn.btn-link.text-decoration-none.link-secondary Timesheet
+    if user.isAdmin
+      li.nav-item.py-0
+        a(href="/account-management").btn.btn-link.text-decoration-none.link-secondary Account Management

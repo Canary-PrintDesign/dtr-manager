@@ -1,0 +1,6 @@
+if (roles)
+  label.form-text.text-muted Role
+  select.form-control.js-role-select(name="role", required)
+    option(disabled="disabled", selected="true") -- Select Role --
+    each role in roles
+      option(value= role.key)= role.value

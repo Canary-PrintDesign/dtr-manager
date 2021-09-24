@@ -38,6 +38,7 @@ module.exports = async (fastify) => {
         departments: filteredDepartments,
         report: timeReportByDate,
         project,
+        user: req.user,
       })
     } catch (err) {
       fastify.log.error(err)

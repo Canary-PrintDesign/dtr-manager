@@ -2,9 +2,12 @@ const Agent = require('../components/agent.js')
 const RecordNote = require('../components/record-note.js')
 const TimeRecord = require('../components/time-record.js')
 const { getDepartmentsForSelect, getDepartment } = require('./route-helpers')
+const createError = require('http-errors')
 
 module.exports = async (fastify) => {
   fastify.post('/dtr', async (req, reply) => {
+    if (!req.user.isCrew) return createError(401)
+
     const project = req.data.project
     const formBody = req.body
     const {
@@ -14,7 +17,7 @@ module.exports = async (fastify) => {
       notes = '',
     } = handleFormValues(formBody)
 
-    if (!departmentId) throw new Error('nope')
+    if (!departmentId) throw new Error('Department not found')
     const department = await getDepartment(departmentId)
 
     req.session.set('time-report', {
@@ -32,17 +35,15 @@ module.exports = async (fastify) => {
       department: department[0],
       entries,
       project,
+      user: req.user,
     })
   })
 
   fastify.get('/dtr/submit', async (req, reply) => {
+    if (!req.user.isCrew) return createError(401)
+
     const { department, date, entries, notes, project } =
       req.session.get('time-report')
-
-    const reportDepartment = await getDepartment({
-      department: department.id,
-      project: project.id,
-    })
 
     const timeRecords = await createTimeRecords({
       date,
@@ -67,21 +68,52 @@ module.exports = async (fastify) => {
       department,
       records: timeRecords,
       project,
+      user: req.user,
     })
   })
 
   fastify.get('/dtr', async (req, reply) => {
+    if (!req.user.isCrew) return createError(401)
+
     const project = req.data.project
 
-    const { department, date, entries, notes } =
-      req.session.get('time-report') || {}
+    let { department, isCrew, isAdmin, isProjectAdmin } = req.user
+    const {
+      department: reportDepartment,
+      date,
+      entries = [],
+      notes,
+    } = req.session.get('time-report') || {}
 
-    const departments = await getDepartmentsForSelect(project.id)
+    if ((isAdmin || isProjectAdmin) && reportDepartment) {
+      department = reportDepartment
+    }
+
+    const departments =
+      isAdmin || isProjectAdmin ? await getDepartmentsForSelect(project.id) : []
+
+    if (!entries.length) {
+      const agents = await Agent.findAll({
+        project: project.id,
+        department,
+      })
+
+      if (isCrew && !isAdmin) {
+        for (const agent of agents) {
+          entries.push({
+            name: agent.name,
+            position: agent.position,
+            department: agent.department,
+          })
+        }
+      }
+    }
 
     return reply.view('time-record', {
       title: 'New Time Sheet',
       departments,
       project,
+      user: req.user,
 
       department,
       date,

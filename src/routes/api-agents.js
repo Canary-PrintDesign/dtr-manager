@@ -1,7 +1,10 @@
 const Agent = require('../components/agent.js')
+const createError = require('http-errors')
 
 module.exports = async (fastify) => {
   fastify.get('/api/agents', async (req, reply) => {
+    if (!req.user.isCrew) return createError(401)
+
     const agents = await getAgents({
       project: req.data.project,
       department: req.query.department,

@@ -3,6 +3,7 @@ module.exports = async (fastify) => {
     return reply.view('home', {
       title: 'Welcome',
       project: req.data.project,
+      user: req.user,
     })
   })
 }

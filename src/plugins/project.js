@@ -8,7 +8,8 @@ module.exports = fp(async (fastify) => {
 
     try {
       const project = await Project.findWith({ hostname })
-      req.data = { project: project[0] }
+
+      req.data = { ...req.data, project: project[0] }
     } catch (err) {
       fastify.log.error(err)
       reply.send(httpErrors.Unauthorized())

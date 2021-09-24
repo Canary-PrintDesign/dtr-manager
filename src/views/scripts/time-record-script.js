@@ -29,7 +29,6 @@ $(document).ready(() => {
   }
 
   function bindDeleteRecordButton() {
-    console.log('bound')
     $('.js-delete-record').click((event) => {
       event.preventDefault()
       $(event.target).closest('.js-time-record').remove()
@@ -102,4 +101,6 @@ $(document).ready(() => {
   $(document).on('change', '.js-work-stop', calculateWorkTime)
   $(document).on('change', '.js-lunch-start', calculateWorkTime)
   $(document).on('change', '.js-lunch-stop', calculateWorkTime)
+
+  bindDeleteRecordButton()
 })
