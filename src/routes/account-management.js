@@ -32,7 +32,7 @@ module.exports = async (fastify) => {
       tokens: groupColumns(tokens),
       departments: await getDepartmentsForSelect(project.id),
       roles: await getRolesForSelect(roles),
-      baseLoginUrl: 'http://localhost:3000/login/',
+      baseLoginUrl: `${req.hostname}/login/`,
       user: req.user,
     })
   })
