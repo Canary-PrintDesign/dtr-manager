@@ -1,0 +1,18 @@
+{
+  "name": "dtr",
+  "description": "CLI to manage accounts & projects",
+  "version": "0.0.1",
+  "type": "module",
+  "author": {
+    "name": "Gregory Daynes",
+    "email": "gregdaynes@gmail.com",
+    "url": "https://github.com/gregdaynes"
+  },
+  "bin": {
+    "dtr": "index.js"
+  },
+  "files": [
+    "index.js",
+    "utils"
+  ]
+}
