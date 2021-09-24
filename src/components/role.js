@@ -34,7 +34,6 @@ async function findWith({ id, role }) {
         if (id) builder.where({ id })
         if (role) builder.where({ role })
       })
-      .whereNot({ role: 'super-admin' })
       .limit(1)
   } catch (err) {
     throw new Error(err)

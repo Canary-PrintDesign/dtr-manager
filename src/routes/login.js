@@ -16,6 +16,8 @@ module.exports = async (fastify) => {
       const roles = { isCrew: false, isAdmin: false, isProjectAdmin: false }
 
       switch (role[0].role) {
+        case 'super-admin':
+          roles.isSuperAdmin = true
         case 'project-admin':
           roles.isProjectAdmin = true
         case 'admin':

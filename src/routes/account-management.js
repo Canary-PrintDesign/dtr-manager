@@ -12,6 +12,8 @@ module.exports = async (fastify) => {
 
     const roles = []
     switch (req.user.role) {
+      case 'super-admin':
+        roles.push('project-admin')
       case 'project-admin':
         roles.push('admin')
       case 'admin':
