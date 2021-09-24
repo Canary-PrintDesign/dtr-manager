@@ -21,7 +21,7 @@ async function findAll({ roles } = {}) {
     return await Role.query()
       .whereNot({ role: 'super-admin' })
       .where((builder) => {
-        if (roles.length) builder.whereIn('role', roles)
+        if (roles?.length) builder.whereIn('role', roles)
       })
   } catch (err) {
     throw new Error(err)
