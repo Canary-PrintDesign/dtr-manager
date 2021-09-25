@@ -8,9 +8,8 @@ const schema = S.object()
   .required()
   .prop('role', S.string().format(S.FORMATS.UUID))
   .required()
-  .prop('project', S.string().format(S.FORMATS.UUID))
-  .required()
   .prop('isActive', S.boolean().default(false))
+  .prop('project', S.anyOf([S.null(), S.string().format(S.FORMATS.UUID)]))
   .prop('department', S.anyOf([S.null(), S.string().format(S.FORMATS.UUID)]))
 
 class Token extends Model {
