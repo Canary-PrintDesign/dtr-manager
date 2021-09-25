@@ -37,10 +37,13 @@ async function fetch(token) {
 }
 
 exports.findAll = findAll
-async function findAll({ project }) {
+async function findAll({ project, roles } = {}) {
   return await Token.query()
     .select('tokens.*', 'roles.role as role')
-    .where({ project })
+    .where((builder) => {
+      if (project) builder.where({ project })
+      if (roles) builder.whereIn('roles.role', roles)
+    })
     .join('roles as roles', 'roles.id', 'tokens.role')
 }
 

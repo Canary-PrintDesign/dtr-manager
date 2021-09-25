@@ -2,6 +2,7 @@ import Select from './utils/prompt-select.js'
 import { toTitleCase } from '../src/lib/utils.js'
 
 const commands = {
+  'Admin List': await import('./commands/admin-list.js'),
   'Project List': await import('./commands/project-list.js'),
   'Project Create': await import('./commands/project-create.js'),
   'Project Token List': await import('./commands/project-token-list.js'),
