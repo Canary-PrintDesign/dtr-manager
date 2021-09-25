@@ -18,11 +18,12 @@ class Department extends Model {
 }
 
 exports.findAll = findAll
-async function findAll({ project, name }) {
+async function findAll({ project, name } = {}) {
   try {
     return await Department.query().where((builder) => {
       if (name) builder.where({ name })
       if (project) builder.where({ project }).orWhereNull('project')
+      if (project === null) builder.whereNull('project')
     })
   } catch (err) {
     throw new Error(err)
@@ -30,7 +31,7 @@ async function findAll({ project, name }) {
 }
 
 exports.findWith = findWith
-async function findWith({ id, project, name }) {
+async function findWith({ id, project, name } = {}) {
   try {
     return await Department.query()
       .where((builder) => {
