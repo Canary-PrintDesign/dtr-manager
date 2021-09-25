@@ -5,10 +5,13 @@ const { randomUUID } = require('crypto')
 const schema = S.object()
   .prop('id', S.number())
   .prop('token', S.string())
-  .prop('isActive', S.boolean().default(false))
+  .required()
   .prop('role', S.string().format(S.FORMATS.UUID))
-  .prop('department', S.string().format(S.FORMATS.UUID))
+  .required()
   .prop('project', S.string().format(S.FORMATS.UUID))
+  .required()
+  .prop('isActive', S.boolean().default(false))
+  .prop('department', S.anyOf([S.null(), S.string().format(S.FORMATS.UUID)]))
 
 class Token extends Model {
   static get tableName() {
@@ -47,16 +50,16 @@ async function departmentRoleToken({ project, roles }) {
   return await Token.query()
     .select(
       'tokens.token',
-      'role.role',
-      'department.name as department_name',
-      'department.id as department_id'
+      'roles.role',
+      'departments.name as department_name',
+      'departments.id as department_id'
     )
+    .leftJoin('roles', 'roles.id', 'tokens.role')
+    .leftJoin('departments', 'departments.id', 'tokens.department')
+    .whereIn('roles.role', roles)
     .where('tokens.project', project)
-    .whereIn('role.role', roles)
-    .join('roles as role', 'role.id', 'tokens.role')
-    .join('departments as department', 'department.id', 'tokens.department')
-    .orderBy('department.name', 'ASC')
-    .orderBy('role.role', 'ASC')
+    .orderBy('departments.name', 'ASC')
+    .orderBy('roles.role', 'ASC')
 }
 
 exports.createToken = createToken

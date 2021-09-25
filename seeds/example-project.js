@@ -40,15 +40,13 @@ async function departmentFactory(project) {
   const departments = [
     {
       name: 'Department A',
-      project: project.id,
     },
     {
       name: 'Department B',
-      project: project.id,
     },
     {
       project: project.id,
-      name: 'Department C',
+      name: 'Custom Department C',
       custom: true,
     },
   ]
@@ -63,7 +61,7 @@ async function departmentFactory(project) {
 }
 
 async function agentFactory(departments) {
-  const project = departments[0].project
+  const project = departments[2].project
 
   const agents = [
     {

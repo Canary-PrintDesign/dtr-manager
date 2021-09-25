@@ -22,7 +22,7 @@ async function findAll({ project, name }) {
   try {
     return await Department.query().where((builder) => {
       if (name) builder.where({ name })
-      if (project) builder.where({ project })
+      if (project) builder.where({ project }).orWhereNull('project')
     })
   } catch (err) {
     throw new Error(err)
