@@ -1,3 +1,4 @@
+import Table from 'cli-table3'
 import Project from '../../src/components/project.js'
 import promptAsk from '../utils/prompt-ask.cjs'
 import promptSelect from '../utils/prompt-select.js'
@@ -32,15 +33,25 @@ export default async function handleCommand(input = ['']) {
   if (!isValidDate(startDate)) return error('Date', 'invalid')
 
   try {
-    const result = await Project.save({
+    const project = await Project.save({
       name: `${name}`,
       hostname: `${hostname}`,
       startDate: startDate.toISOString(),
       status,
     })
 
-    success('Created', 'successfully')
-    console.log(result)
+    const table = new Table()
+
+    success('Project', 'Created successfully')
+
+    table.push(
+      { ID: project.id },
+      { Name: project.name },
+      { Hostname: project.hostname },
+      { 'Start Date': project.startDate },
+      { Status: project.status }
+    )
+    console.log(table.toString())
   } catch (err) {
     return error('Error', err.message)
   }
