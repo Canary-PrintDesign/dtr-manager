@@ -59,7 +59,7 @@ module.exports = async (fastify) => {
       project: project.id,
     })
 
-    req.session.delete('time-report')
+    req.session.set('time-report', null)
 
     return reply.view('time-record-receipt', {
       title: 'Receipt of Time Sheet',
@@ -129,8 +129,7 @@ async function findOrCreateAgent({ entry, department, project }) {
   const agent = await Agent.findWith({ name, project, department })
   if (agent.length && agent[0].id) return agent[0]
 
-  const newAgent = await Agent.save({ name, position, department, project })
-  return newAgent
+  return await Agent.save({ name, position, department, project })
 }
 
 async function createRecordNote({ date, department, notes, project }) {
