@@ -18,7 +18,10 @@ module.exports = async (fastify) => {
     } = handleFormValues(formBody)
 
     if (!departmentId) throw new Error('Department not found')
-    const department = await getDepartment(departmentId)
+    const department = await getDepartment({
+      department: departmentId,
+      project: project.id,
+    })
 
     req.session.set('time-report', {
       department: department[0],

@@ -20,11 +20,14 @@ class Department extends Model {
 exports.findAll = findAll
 async function findAll({ project, name } = {}) {
   try {
-    return await Department.query().where((builder) => {
-      if (name) builder.where({ name })
-      if (project) builder.where({ project }).orWhereNull('project')
-      if (project === null) builder.whereNull('project')
-    })
+    return await Department.query()
+      .where((builder) => {
+        if (name) builder.where({ name })
+      })
+      .where((builder) => {
+        if (project) builder.where({ project }).orWhereNull('project')
+        if (project === null) builder.whereNull('project')
+      })
   } catch (err) {
     throw new Error(err)
   }
@@ -37,7 +40,9 @@ async function findWith({ id, project, name } = {}) {
       .where((builder) => {
         if (id) builder.where({ id })
         if (name) builder.where({ name })
-        if (project) builder.where({ project })
+      })
+      .where((builder) => {
+        if (project) builder.where({ project }).orWhereNull('project')
       })
       .limit(1)
   } catch (err) {
