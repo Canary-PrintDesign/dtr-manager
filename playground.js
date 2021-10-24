@@ -9,6 +9,7 @@ if (process.env.NODE_ENV !== 'development') process.exit(1)
 
 const logger = require('pino')({ level: 'debug' })
 const log = (...args) => logger.debug(...args)
+const Path = require('path')
 // const { compose, pipe, pipeWith } = require('lib/utils')
 
 // -------------------
@@ -25,19 +26,11 @@ const TimeRecord = require('./src/components/time-record.js')
 const TimeReport = require('./src/components/time-report.js')
 
 async function run() {
-  const project = await Project.findWith({ name: 'Test Project' })
-  const department = await Department.findAll({ project: project.id })
-  // const agent = await Agent.findAll({ project: project.id })
-  // const timeRecord = await TimeRecord.findWith({ project: project.id })
-  // const recordNote = await RecordNote.findWith({ project: project.id })
-  // const timeReport = await TimeReport.findAll({ project: project[0].id })
-  const role = await Role.findWith({ role: 'crew' })
-  const token = await Auth.createToken({
-    department: department[0].id,
-    role: role[0].id,
-  })
+  let department = '0a0ef5aa-d6e0-4778-91a8-32244ccb1ac4'
 
-  console.log(token)
+  const results = await TimeRecord.getAgentsInLatestReport({ department })
+
+  console.log(results)
 }
 
 // Execute the playground and log results

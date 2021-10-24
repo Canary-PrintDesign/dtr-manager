@@ -1,4 +1,5 @@
 const Agent = require('../components/agent.js')
+const TimeRecord = require('../components/time-record.js')
 const createError = require('http-errors')
 
 module.exports = async (fastify) => {
@@ -15,7 +16,10 @@ module.exports = async (fastify) => {
 }
 
 async function getAgents({ project, department }) {
-  const agents = await Agent.findAll({ project: project.id, department })
+  const agents = await TimeRecord.getAgentsInLatestReport({
+    project: project.id,
+    department,
+  })
 
   return agents.map((agent) => ({
     name: agent.name,
