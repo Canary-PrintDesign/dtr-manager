@@ -18,7 +18,20 @@ class Agent extends Model {
   static get jsonSchema() {
     return schema.valueOf()
   }
+
+  static relationMappings = {
+    timeRecord: {
+      relation: Model.BelongsToOneRelation,
+      modelClass: 'time-record',
+      join: {
+        from: 'agents.id',
+        to: 'timeRecords.agent',
+      },
+    },
+  }
 }
+
+exports.Agent = Agent
 
 exports.findAll = findAll
 async function findAll({ project, department, position, name }) {

@@ -20,9 +20,21 @@ exports.TimeRecord = class TimeRecord extends Model {
   static get jsonSchema() {
     return { ...schema.valueOf(), removeUnused: true }
   }
+
+  static relationMappings = {
+    _agent: {
+      relation: Model.BelongsToOneRelation,
+      modelClass: 'agent',
+      join: {
+        from: 'timeRecords.agent',
+        to: 'agents.id',
+      },
+    },
+  }
 }
 
 exports.findWith = findWith
+
 async function findWith({ id, project, department, agent, date }) {
   try {
     return await exports.TimeRecord.query()
@@ -40,9 +52,41 @@ async function findWith({ id, project, department, agent, date }) {
 }
 
 exports.save = save
+
 async function save(timeRecordProps = {}) {
   try {
     return await exports.TimeRecord.query().insert({ ...timeRecordProps })
+  } catch (err) {
+    throw new Error(err)
+  }
+}
+
+// find and return agents who were present on the last time sheet
+exports.getAgentsInLatestReport = getAgentsLatestReport
+async function getAgentsLatestReport({ project, department, date }) {
+  try {
+    const agents = await exports.TimeRecord.query()
+      .withGraphJoined('_agent')
+      .distinct('timeRecords.agent')
+      .where((builder) => {
+        if (project) builder.where('timeRecords.project', project)
+        if (department) builder.where('timeRecords.department', department)
+        if (date) {
+          builder.where({ date })
+        } else {
+          builder.where(
+            'date',
+            'in',
+            exports.TimeRecord.query()
+              .select('date')
+              .where('timeRecords.department', department)
+              .orderBy('date', 'desc')
+              .limit(1)
+          )
+        }
+      })
+
+    return agents.map((agent) => agent._agent)
   } catch (err) {
     throw new Error(err)
   }
