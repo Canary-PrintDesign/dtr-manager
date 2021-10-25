@@ -2,27 +2,33 @@ extends layout.pug
 
 block content
   .row.mb-3
+    if user.isAdmin
+        .col-6
+          .input-group
+            .input-group-text Department
+            select.form-control.js-department-filter#departmentFilter
+              option(default, value='') -- By Department --
+              each department in departments
+                option(value=department)= department
+    else
+        .col-6
+            h3= departments
+
     .col-6
-      .input-group
-        .input-group-text Date
-        select.form-control.js-date-filter#dateFilter
-          option(default, value='') -- By Date --
-          each date in dates
-            option(value=date)= date
-    .col-6
-      .input-group
-        .input-group-text Department
-        select.form-control.js-department-filter#departmentFilter
-          option(default, value='') -- By Department --
-          each department in departments
-            option(value=department)= department
+        .input-group
+            .input-group-text Date
+            select.form-control.js-date-filter#dateFilter
+                option(default, value='') -- By Date --
+                each date in dates
+                    option(value=date)= date
 
   .row
     table.table.report
       thead.report-sticky.shadow-sm
         tr
           th Date
-          th Department
+          if user.isAdmin
+            th Department
           th Name
           th Position
           th Work Start
@@ -43,8 +49,9 @@ block content
                 tr(data-report-row, data-report-date=date, data-report-department=departmentName)
                   td
                     span= date
-                  td
-                    span= departmentName
+                  if user.isAdmin
+                      td
+                        span= departmentName
                   td= entry.name
                   td= entry.position
                   td= entry.workStart
@@ -56,8 +63,9 @@ block content
                 tr(data-report-row, data-report-date=date, data-report-department=departmentName).table-warning
                   td
                     span= date
-                  td
-                    span= departmentName
+                  if user.isAdmin
+                    td
+                      span= departmentName
                   td Note
                   td(colspan=5)= note.note
 

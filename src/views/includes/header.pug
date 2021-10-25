@@ -5,7 +5,7 @@ header.d-flex.justify-content-between.py-3.mb-4.border-bottom
       span.fs-4= project.name
 
   ul.nav.justify-content-center
-    if user.isAdmin
+    if user.isCrew
       li.nav-item.my-0
         a(href="/dtr/report").btn.btn-link.text-decoration-none.link-secondary Report
     if user.isCrew

@@ -6,16 +6,25 @@ const RecordNote = require('../components/record-note.js')
 
 module.exports = async (fastify) => {
   fastify.get('/dtr/report', {}, async (req, reply) => {
+    if (!req.user.isCrew) return httpErrors.NotAuthorized()
+
     try {
       const project = req.data.project
-      const recordNotes = await getRecordNotes(project.id)
+      const department = req.user.isAdmin ? undefined : req.user.department
+      const recordNotes = await RecordNote.findAll({
+        project: project.id,
+        department,
+      })
         .then((res) => res.filter((note) => note.date))
         .then((res) => res.filter((note) => note.note !== ''))
         .then((res) =>
           res.map((note) => ({ ...note, date: formatDate(note.date) }))
         )
 
-      const timeReportByDate = await getTimeReport(project.id)
+      const timeReportByDate = await TimeReport.findAll({
+        project: project.id,
+        department,
+      })
         .then((res) =>
           res.map((report) => ({ ...report, date: formatDate(report.date) }))
         )
@@ -47,14 +56,6 @@ module.exports = async (fastify) => {
   })
 }
 
-async function getTimeReport(project, date) {
-  return await TimeReport.findAll({ project, date })
-}
-
-async function getRecordNotes(projectId) {
-  return await RecordNote.findAll(projectId)
-}
-
 function formatDate(date, style = 'yyyy-MM-dd') {
   return format(date, style)
 }
@@ -65,18 +66,19 @@ function attachNotes(timeRecordGroups, recordNotes) {
     const entries = timeRecordGroups[`${date}`]
     const departments = groupBy(entries, 'department')
 
-    Object.entries(departments).forEach(([deptName, deptEntries]) => {
+    const departmentsWithNotes = {}
+    Object.entries(departments).forEach(([department, deptEntries]) => {
       const notes = recordNotes
         .filter((note) => note.date === date)
-        .filter((note) => note.department === deptName)
+        .filter((note) => note.department === department)
 
-      departments[`${deptName}`] = {
+      departmentsWithNotes[`${deptEntries[0].departmentName}`] = {
         notes,
         entries: deptEntries,
       }
     })
 
-    timeRecordGroups[`${date}`] = { departments }
+    timeRecordGroups[`${date}`] = { departments: departmentsWithNotes }
   })
 
   return timeRecordGroups

@@ -1,11 +1,12 @@
 const { TimeRecord } = require('./time-record.js')
 
 exports.findAll = findAll
-async function findAll({ project, date }) {
+async function findAll({ project, date, department }) {
   try {
     return await TimeRecord.query()
       .select(
-        'departments.name as department',
+        'departments.id as department',
+        'departments.name as departmentName',
         'timeRecords.date as date',
         'timeRecords.workStart as workStart',
         'timeRecords.workStop as workStop',
@@ -19,8 +20,10 @@ async function findAll({ project, date }) {
       .where((builder) => {
         if (project) builder.where('timeRecords.project', project)
         if (date) builder.where({ date })
+        if (department) builder.where('timeRecords.department', department)
       })
       .groupBy(
+        'departments.id',
         'timeRecords.date',
         'departments.name',
         'timeRecords.workStart',
