@@ -13,6 +13,8 @@ const apiRoute = require('./routes/api-agents.js')
 const homeRoute = require('./routes/home.js')
 const loginRoute = require('./routes/login.js')
 const accountManagementRoute = require('./routes/account-management.js')
+const projectManagementRoute = require('./routes/project-management.js')
+const departmentRoute = require('./routes/departments.js')
 
 module.exports = async (options) => {
   const fastify = Fastify(options)
@@ -30,6 +32,8 @@ module.exports = async (options) => {
   fastify.register(reportRoute)
   fastify.register(loginRoute)
   fastify.register(accountManagementRoute)
+  fastify.register(projectManagementRoute)
+  fastify.register(departmentRoute)
 
   fastify.log.info(`${options.appName} is ready!`)
   return fastify

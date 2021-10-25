@@ -1,0 +1,26 @@
+extends layout.pug
+
+block content
+    .row
+        h1 Departments
+        table.table.table-striped.table-hover
+            thead
+                tr
+                    th Department
+                    th Delete
+            tbody
+              each department in departments
+                  tr
+                      td= department.name
+                      td
+                          if department.custom
+                              a.btn.btn-light.text-danger(href=`/departments/${department.id}/delete` data-bs-toggle="tooltip" data-bs-placement="top" title="Delete Department") &times;
+
+            tfoot
+                tr
+                    td(colspan=3)
+                        form(method="post", action="/departments/create").row.row-cols-lg-auto.g-3.align-items-center
+                            .col
+                                input.border-0.form-control(required, value= department, name=`name` placeholder="New department name")
+                            .col
+                                button(type="submit").btn.btn-success +

@@ -14,3 +14,6 @@ header.d-flex.justify-content-between.py-3.mb-4.border-bottom
     if user.isAdmin
       li.nav-item.py-0
         a(href="/account-management").btn.btn-link.text-decoration-none.link-secondary Account Management
+    if user.isProjectAdmin
+      li.nav-item.py-0
+        a(href="/project-management").btn.btn-link.text-decoration-none.link-secondary Project Management

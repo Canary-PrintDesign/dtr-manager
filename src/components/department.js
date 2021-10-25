@@ -6,6 +6,7 @@ const schema = S.object()
   .prop('project', S.anyOf([S.string().format(S.FORMATS.UUID), S.null()]))
   .prop('name', S.string())
   .prop('custom', S.boolean().default(false))
+  .prop('published', S.boolean().default(true))
 
 class Department extends Model {
   static get tableName() {
@@ -22,6 +23,7 @@ async function findAll({ project, name } = {}) {
   try {
     return await Department.query()
       .where((builder) => {
+        builder.where({ published: true })
         if (name) builder.where({ name })
       })
       .where((builder) => {
@@ -38,6 +40,7 @@ async function findWith({ id, project, name } = {}) {
   try {
     return await Department.query()
       .where((builder) => {
+        builder.where({ published: true })
         if (id) builder.where({ id })
         if (name) builder.where({ name })
       })
@@ -54,6 +57,17 @@ exports.save = save
 async function save(departmentProps = {}) {
   try {
     return await Department.query().insert({ ...departmentProps })
+  } catch (err) {
+    throw new Error(err)
+  }
+}
+
+exports.remove = remove
+async function remove({ department, project } = {}) {
+  try {
+    return await Department.query()
+      .where({ id: department, project })
+      .patch({ published: false })
   } catch (err) {
     throw new Error(err)
   }
