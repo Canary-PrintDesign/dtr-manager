@@ -1,18 +1,55 @@
 /* globals $, fetch, moment */
 
-function workedTime(start = '0000', stop = '0000', lStart, lStop) {
-  const timeDiff = moment(stop, 'HHmm') - moment(start, 'HHmm')
+function parseTime(time) {
+  let [hh, mm, hhr, mmr] = [
+    Number(time.slice(0, 2)),
+    Number(time.slice(2)),
+    0,
+    0,
+  ]
 
-  let lTimeDiff = 0
-  if (lStart && lStop) {
-    lTimeDiff = moment(lStop, 'HHmm') - moment(lStart, 'HHmm')
+  if (hh > 23) {
+    hhr = hh - 23
+    hh = 23
   }
 
-  const ms = timeDiff - lTimeDiff
-  return moment().startOf('day').milliseconds(ms).format('H:mm').split(':')
+  if (mm > 59) {
+    mmr = mm - 59
+    mm = 59
+  }
+
+  return [hh, mm, hhr, mmr]
 }
 
-function createNewAgent(template, {index, name = '', position = ''}) {
+function calculateTime(hh, mm, hhr, mmr) {
+  return moment(
+    `${hh.toString().padStart(2, 0)}${mm.toString().padStart(2, 0)}`,
+    'HHmm'
+  )
+    .add(hhr, 'hours')
+    .add(mmr, 'minutes')
+}
+
+function workedTime(startTime, stopTime, startLunch, stopLunch) {
+  const xStartTime = calculateTime(...parseTime(startTime))
+  const xStopTime = calculateTime(...parseTime(stopTime))
+  const diff = xStopTime.diff(xStartTime)
+
+  let diffLunch = 0
+  if (startLunch && stopLunch) {
+    const xStartLunch = calculateTime(...parseTime(startLunch))
+    const xStopLunch = calculateTime(...parseTime(stopLunch))
+    diffLunch = xStopLunch.diff(xStartLunch)
+  }
+
+  return moment()
+    .startOf('day')
+    .milliseconds(diff - diffLunch)
+    .format('HH:mm')
+    .split(':')
+}
+
+function createNewAgent(template, { index, name = '', position = '' }) {
   const agentsList = $('.js-agents')
   const agents = $('.js-agent')
 
@@ -66,9 +103,7 @@ function calculateWorkTime(event) {
     lunchStop.value
   )
 
-  $(agent)
-    .find('.js-calculated-time')
-    .val(`${hours}h ${minutes}m`)
+  $(agent).find('.js-calculated-time').val(`${hours}h ${minutes}m`)
 }
 
 $(document).ready(() => {
@@ -88,7 +123,7 @@ $(document).ready(() => {
     const data = await results.json()
 
     data.agents.forEach((agent, i) => {
-      createNewAgent(template, {...agent, index: i})
+      createNewAgent(template, { ...agent, index: i })
     })
 
     bindDeleteRecordButton()

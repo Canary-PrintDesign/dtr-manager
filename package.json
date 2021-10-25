@@ -12,7 +12,8 @@
     "dev": "DEBUG=dtr:* nodemon --inspect --use_strict -r ./bin/env ./src/server.js",
     "knex": "npx knex --knexfile ./knexfile.js",
     "start": "pm2 start --name='dtr-manager' --node-args='--use_strict -r ./bin/env' ./src/server.js",
-    "playground": "NODE_ENV=development nodemon --inspect --use_strict -r ./bin/env ./playground.js | npx pino-pretty"
+    "playground": "NODE_ENV=development nodemon --inspect --use_strict -r ./bin/env ./playground.js | npx pino-pretty",
+    "test": "tap"
   },
   "repository": {
     "type": "git",
@@ -65,7 +66,8 @@
     "eslint-plugin-promise": "^5.1.0",
     "nodemon": "^2.0.4",
     "pino-pretty": "^6.0.0",
-    "prettier": "^2.4.0"
+    "prettier": "^2.4.0",
+    "tap": "^15.0.10"
   },
   "adr": {
     "path": "./docs/architecture_decision_records",
