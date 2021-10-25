@@ -96,7 +96,7 @@ module.exports = async (fastify) => {
       isAdmin || isProjectAdmin ? await getDepartmentsForSelect(project.id) : []
 
     if (!entries.length) {
-      const agents = await Agent.findAll({
+      const agents = await TimeRecord.getAgentsInLatestReport({
         project: project.id,
         department,
       })
