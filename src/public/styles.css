@@ -13,3 +13,11 @@ html {
   top: 0;
   background-color: white !important;
 }
+
+h2 div:first-of-type {
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: auto;
+  aspect-ratio: 3/2;
+  width: 2rem;
+}

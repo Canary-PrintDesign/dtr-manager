@@ -1,7 +1,10 @@
 header.d-flex.justify-content-between.py-3.mb-4.border-bottom
   a(href="/").text-dark.text-decoration-none
     h2
-      span.badge.bg-dark.me-2= `${project.name.split(' ').map((w) => w.slice(0, 1).toUpperCase()).join('')}`
+      if project.logo
+        div.d-inline-block.me-2(style="background-image: url(" + project.logo + ")")
+      else
+        span.badge.bg-dark.me-2= `${project.name.split(' ').map((w) => w.slice(0, 1).toUpperCase()).join('')}`
       span.fs-4= project.name
 
   ul.nav.justify-content-center
