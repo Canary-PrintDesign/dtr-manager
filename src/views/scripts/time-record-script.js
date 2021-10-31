@@ -67,7 +67,11 @@ function createNewAgent(template, { index, name = '', position = '' }) {
 function bindDeleteRecordButton() {
   $('.js-delete-record').click((event) => {
     event.preventDefault()
-    $(event.target).closest('.js-time-record').remove()
+
+    const result = confirm('Remove the entry?')
+    if (result) {
+      $(event.target).closest('.js-time-record').remove()
+    }
   })
 }
 
@@ -109,7 +113,8 @@ function calculateWorkTime(event) {
 $(document).ready(() => {
   const template = $('.js-agent-template')
 
-  $('.js-new-record').click(() => {
+  $('.js-new-record').click((e) => {
+    e.preventDefault()
     createNewAgent(template, {})
 
     bindDeleteRecordButton()

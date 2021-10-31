@@ -45,34 +45,39 @@ module.exports = async (fastify) => {
   fastify.get('/dtr/submit', async (req, reply) => {
     if (!req.user.isCrew) return createError(401)
 
-    const { department, date, entries, notes, project } =
-      req.session.get('time-report')
+    try {
+      const { department, date, entries, notes, project } =
+        req.session.get('time-report')
 
-    const timeRecords = await createTimeRecords({
-      date,
-      department: department.id,
-      entries,
-      project: project.id,
-    })
+      const timeRecords = await createTimeRecords({
+        date,
+        department: department.id,
+        entries,
+        project: project.id,
+      })
 
-    const recordNote = await createRecordNote({
-      date,
-      department: department.id,
-      notes,
-      project: project.id,
-    })
+      const recordNote = await createRecordNote({
+        date,
+        department: department.id,
+        notes,
+        project: project.id,
+      })
 
-    req.session.set('time-report', null)
+      req.session.set('time-report', null)
 
-    return reply.view('time-record-receipt', {
-      title: 'Receipt of Time Sheet',
-      date,
-      notes: [recordNote.note],
-      department,
-      records: timeRecords,
-      project,
-      user: req.user,
-    })
+      return reply.view('time-record-receipt', {
+        title: 'Receipt of Time Sheet',
+        date,
+        notes: [recordNote.note],
+        department,
+        records: timeRecords,
+        project,
+        user: req.user,
+      })
+    } catch (err) {
+      fastify.log.error(err)
+      return reply.redirect('/dtr')
+    }
   })
 
   fastify.get('/dtr', async (req, reply) => {

@@ -1,38 +1,50 @@
 extends layout.pug
 
 mixin agent(index='{{entryIndex}}', name='{{entryName}}', position='{{entryPosition}}', workStart, workStop, lunchStart, lunchStop)
-  tr.js-agent.js-time-record
-    td.form-floating
-        input.border-0.form-control(required, value= name, name=`entries[${index}][name]` placeholder="Full name")
-        label Full name
-    td.form-floating
-      input.border-0.form-control.form-control-sm(required, value= position, name=`entries[${index}][position]` placeholder="Position")
-      label Position
-    td.form-floating
-      input.border-0.form-control.js-work-start(required, value= workStart, minlength="4", maxlength="4", pattern="[0-3][0-9][0-5][0-9]", placeholder="0700", name=`entries[${index}][workStart]`)
-      label Work Start
-    td.form-floating
-      input.border-0.form-control.js-work-stop(required, value= workStop, minlength="4", maxlength="4", pattern="[0-3][0-9][0-5][0-9]", placeholder="2100", name=`entries[${index}][workStop]`)
-      label Work End
-    td.form-floating
-      input.border-0.form-control.js-lunch-start(minlength="4", value= lunchStart, maxlength="4", pattern="[0-3][0-9][0-5][0-9]", placeholder="1300", name=`entries[${index}][lunchStart]`)
-      label Lunch start
-    td.form-floating
-      input.border-0.form-control.js-lunch-stop(minlength="4", value= lunchStop, maxlength="4", pattern="[0-3][0-9][0-5][0-9]", placeholder="1400", name=`entries[${index}][lunchStop]`)
-      label Lunch Stop
-    td.form-floating
-      input.border-0.form-control.bg-transparent.js-calculated-time(readonly placeholder="")
-      label Worked Time
-    td
-      button.btn.btn-light.text-danger.js-delete-record(formnovalidate data-bs-toggle="tooltip" data-bs-placement="top" title="Remove Entry") &times;
+  .card.my-3.d-flex.flex-nowrap.js-agent.js-time-record
+    div
+      .row
+        .col-12.col-md-6.col-lg-2.flex-shrink-1
+          .form-floating.m-2.m-md-0
+            input.px-lg-1.px-xl-3.border-0.form-control(required, value= name, name=`entries[${index}][name]` placeholder="Full name")
+            label.px-lg-1.px-xl-3 Full name
+        .col-12.col-md-6.col-lg-2.flex-shrink-1
+          .form-floating.m-2.m-md-0
+            input.px-lg-1.px-xl-3.border-0.form-control.form-control-sm(required, value= position, name=`entries[${index}][position]` placeholder="Position")
+            label.px-lg-1.px-xl-3 Position
+        .col-6.col-md-3.col-lg-1.flex-grow-1
+          .form-floating.m-2.m-md-0
+            input.px-lg-1.px-xl-3.border-0.form-control.js-work-start(required, value= workStart, minlength="4", maxlength="4", pattern="[0-3][0-9][0-5][0-9]", placeholder="0700", name=`entries[${index}][workStart]`)
+            label.px-lg-1.px-xl-3 Work Start
+        .col-6.col-md-3.col-lg-1.flex-grow-1
+          .form-floating.m-2.m-md-0
+            input.px-lg-1.px-xl-3.border-0.form-control.js-work-stop(required, value= workStop, minlength="4", maxlength="4", pattern="[0-3][0-9][0-5][0-9]", placeholder="2100", name=`entries[${index}][workStop]`)
+            label.px-lg-1.px-xl-3 Work End
+        .col-6.col-md-3.col-lg-1.flex-grow-1
+          .form-floating.m-2.m-md-0
+            input.px-lg-1.px-xl-3.border-0.form-control.js-lunch-start(minlength="4", value= lunchStart, maxlength="4", pattern="[0-3][0-9][0-5][0-9]", placeholder="1300", name=`entries[${index}][lunchStart]`)
+            label.px-lg-1.px-xl-3 Lunch start
+        .col-6.col-md-3.col-lg-1.flex-grow-1
+          .form-floating.m-2.m-md-0
+            input.px-lg-1.px-xl-3.border-0.form-control.js-lunch-stop(minlength="4", value= lunchStop, maxlength="4", pattern="[0-3][0-9][0-5][0-9]", placeholder="1400", name=`entries[${index}][lunchStop]`)
+            label.px-lg-1.px-xl-3 Lunch Stop
+        .col-12.col-md-6.col-lg-1.flex-grow-1
+          .form-floating.m-2.m-md-0.bg-light
+            input.px-lg-1.px-xl-3.border-0.form-control.bg-transparent.js-calculated-time(readonly placeholder="1400")
+            label.px-lg-1.px-xl-3 Time
+    div.d-grid
+      button.btn.btn-light.text-danger.js-delete-record(formnovalidate data-bs-toggle="tooltip" data-bs-placement="top" title="Remove Entry")
+        i.me-2 &times;
+        span.d-lg-none Remove Entry
 
 block content
+  h1 New Timesheet
   form(method="post", action="/dtr")
     input(type="hidden", value= project.id)
 
     .row
       if user.isAdmin
-        .col
+        .col-xs-12.col-sm-6
           include includes/departments-select.pug
 
       .col
@@ -40,17 +52,13 @@ block content
         input.form-control(type="date", value= date, name="date", required)
         small.form-text.text-muted
 
-    .row.my-3
-      .table-responsive
-        table.table.table-sm
-          tbody.js-agents
-            if entries
-              each entry, index in entries
-                +agent(index, entry.name, entry.position, entry.workStart, entry.workStop, entry.lunchStart, entry.lunchStop)
+    .js-agents
+        if entries
+          each entry, index in entries
+            +agent(index, entry.name, entry.position, entry.workStart, entry.workStop, entry.lunchStart, entry.lunchStop)
 
-      ul.nav.justify-content-end
-        li.nav-item
-          a.nav-link.active.js-new-record(aria-current="page" href="#") + Add Crew Member
+    .d-flex.justify-content-end
+      a.nav-link.active.js-new-record(aria-current="page" href="") + Add Crew Member
 
     .row
       .col-12
@@ -62,8 +70,8 @@ block content
 
     .row
       .col-12.my-3.text-center
-        input.btn.btn-block.btn-primary.me-2.my-1(type="submit" value="Review Time Sheet & Submit to AD & Production")
-        input.btn.btn-block.btn-outline-secondary.me-2.my-1(type="reset" value="Reset Time Entries")
+        input.btn.btn-block.btn-primary.me-2.my-1(type="submit" value="Review TimeSheet")
+        input.btn.btn-block.btn-outline-secondary.me-2.my-1(type="reset" value="Clear TimeSheet")
 
     if user.isCrew && !user.isAdmin
       input(value= user.department, name="department", required, readonly, hidden)

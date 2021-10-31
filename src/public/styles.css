@@ -14,10 +14,33 @@ html {
   background-color: white !important;
 }
 
-h2 div:first-of-type {
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-size: auto;
-  aspect-ratio: 3/2;
-  width: 2rem;
+.site-logo {
+  max-width: 2rem;
+}
+
+@media screen and (min-width: 992px) {
+  .js-agent .row {
+    --bs-gutter-x: 0.5rem;
+    --bs-gutter-y: 0;
+  }
+
+  .js-agent {
+      /* Override for .card having flex-column*/
+      flex-direction: row !important;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+    --bs-gutter-x: 1.5rem;
+}
+
+.btn-pill {
+  border-radius: 100px;
+}
+
+@media screen and (max-width: 500px) {
+
+.js-new-timesheet {
+  order: 666;
+}
 }

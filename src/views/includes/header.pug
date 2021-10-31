@@ -1,22 +1,21 @@
-header.d-flex.justify-content-between.py-3.mb-4.border-bottom
-  a(href="/").text-dark.text-decoration-none
-    h2
-      if project.logo
-        div.d-inline-block.me-2(style="background-image: url(" + project.logo + ")")
-      else
-        span.badge.bg-dark.me-2= `${project.name.split(' ').map((w) => w.slice(0, 1).toUpperCase()).join('')}`
-      span.fs-4= project.name
+header
+  .d-flex.flex-column.flex-md-row.align-items-center.justify-content-between.pb-3.mb-4.border-bottom
+    a(href="/").text-dark.text-decoration-none
+      h2.d-flex.align-items-center
+        if project.logo
+          span.site-logo.me-3
+            img(src= project.logo).w-100
+        else
+          span.badge.bg-dark.me-2= `${project.name.split(' ').map((w) => w.slice(0, 1).toUpperCase()).join('')}`
 
-  ul.nav.justify-content-center
-    if user.isCrew
-      li.nav-item.my-0
-        a(href="/dtr/report").btn.btn-link.text-decoration-none.link-secondary Report
-    if user.isCrew
-      li.nav-item.py-0
-        a(href="/dtr").btn.btn-link.text-decoration-none.link-secondary Timesheet
-    if user.isAdmin
-      li.nav-item.py-0
-        a(href="/account-management").btn.btn-link.text-decoration-none.link-secondary Account Management
-    if user.isProjectAdmin
-      li.nav-item.py-0
-        a(href="/project-management").btn.btn-link.text-decoration-none.link-secondary Project Management
+        span.fs-4= project.name
+
+    nav.d-flex.flex-wrap.justify-content-center
+      if user.isCrew
+        a(href="/dtr").btn.btn-pill.btn-success.me-3.px-4.js-new-timesheet + New Timesheet
+      if user.isCrew
+        a(href="/dtr/report").me-3.py-2.text-dark.text-decoration-none Report
+      if user.isAdmin
+        a(href="/account-management").me-3.py-2.text-dark.text-decoration-none Accounts
+      if user.isProjectAdmin
+        a(href="/project-management").py-2.text-dark.text-decoration-none Departments

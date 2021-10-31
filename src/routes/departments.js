@@ -24,10 +24,11 @@ module.exports = async (fastify) => {
   fastify.get('/departments/:departmentId/delete', {}, async (req, reply) => {
     try {
       if (!req.user.isProjectAdmin) return createError(401)
+      const departmentId = req.params.departmentId
 
       const project = req.data.project
       await Department.remove({
-        department: req.params.departmentId,
+        department: departmentId,
         project: project.id,
       })
 
