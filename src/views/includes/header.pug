@@ -12,9 +12,9 @@ header
 
     nav.d-flex.flex-wrap.justify-content-center
       if user.isCrew
-        a(href="/dtr").btn.btn-pill.btn-success.me-3.px-4.js-new-timesheet + New Timesheet
+        a(href="/dtr").btn.btn-pill.btn-success.me-3.px-4.js-new-timesheet + New DTR
       if user.isCrew
-        a(href="/dtr/report").me-3.py-2.text-dark.text-decoration-none Report
+        a(href="/dtr/report").me-3.py-2.text-dark.text-decoration-none Reports
       if user.isAdmin
         a(href="/account-management").me-3.py-2.text-dark.text-decoration-none Accounts
       if user.isProjectAdmin
