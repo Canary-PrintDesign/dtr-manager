@@ -4,7 +4,10 @@ const httpErrors = require('http-errors')
 
 module.exports = fp(async (fastify) => {
   fastify.addHook('preValidation', async (req, reply) => {
-    const hostname = req.hostname.split(':')[0]
+    const hostname = req.hostname
+      .split(':')[0]
+      .replace('.wrap.work', '')
+      .replace('.canaryfilm.ca', '')
 
     try {
       const project = await Project.findWith({ hostname })
