@@ -38,17 +38,58 @@ block content
 
   .row
     h2 What are accounts?
-    p Instead of username/passwords, we have secure tokens that give restricted access based on your 'role' type. There are 3 types of roles:
-    p
-      h4 Crew Role:
-      p These tokens are for the crew member that will be filling out the daily DTR. If Crew role is selected, the token will give access only for filling out that specific departments DTR or report.
-      p Crew Role CANNOT create new accounts, edit departments, or file/see reports for any other department other than the one they are created under.
-    p --------
-    p
-      h4 Admin Role:
-      p These tokens give access to ALL departments and reports. These tokens are for AD's, accounting, and the production office only, NEVER for crew!!
-      p Admin Role CANNOT create other admin accounts, or add/remove departments
-    p --------
-    p
-      h4 Project-Admin Role:
-      p This will be hidden for most users. This will usually be for the 3rd AD and PC. This role can create/remove departments, add other project-admins, add admins, add crew, and can file/view reports for all departments.
+    p.mb-4 Instead of username/passwords, we have secure tokens that give restricted access based on your 'role' type. There are 3 types of roles:
+    .col-sm-4
+      .card
+        .card-body
+          h5.card-title Crew Role
+          p.card-text These tokens are for the crew member that will be filling out the daily DTR
+            .alert.alert-success(role:'alert')
+              | Permitted actions:
+              li Fill out specified dept DTR
+              li View specified dept Report
+            .alert.alert-danger(role:'alert')
+              | Not Permitted:
+              li Create new accounts
+              li File for other depts
+              li View report for other depts
+            .alert.alert-warning(role:'alert')
+              | Given to:
+              li A crew member of the specified dept that will be filling out DTR
+    .col-sm-4
+      .card
+        .card-body
+          h5.card-title Admin role
+          p.card-text These tokens give access to all departments
+            .alert.alert-success(role:'alert')
+              | Permitted actions:
+              li Create new "Crew" tokens
+              li Fill out DTR for any dept
+              li View Report for any dept
+            .alert.alert-danger(role:'alert')
+              | Not Permitted:
+              li Create/View other admin tokens
+              li Create/Remove departments
+              li View report for other depts
+            .alert.alert-warning(role:'alert')
+              | Given to:
+              li AD Team
+              li Production Office
+              li Accounting Office
+    .col-sm-4
+      .card
+        .card-body
+          h5.card-title Super-Admin Role
+          p.card-text These tokens are for management of the app
+            .alert.alert-success(role:'alert')
+              | Permitted actions:
+              li Add/Remove Departments
+              li View all tokens
+              li Create/Remove tokens
+              li Create/Edit Alerts
+              li Set Official Lunch
+              li Change Project info (logo, title, etc...)
+            .alert.alert-warning(role:'alert')
+              | Given to:
+              li 3rd AD
+              li Production Coordinator
