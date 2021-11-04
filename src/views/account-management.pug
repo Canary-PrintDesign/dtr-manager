@@ -36,4 +36,19 @@ block content
                   label.form-text.text-muted.d-block &nbsp;
                   button(type="submit").btn.btn-success +
 
-
+  .row
+    h2 What are accounts?
+    p Instead of username/passwords, we have secure tokens that give restricted access based on your 'role' type. There are 3 types of roles:
+    p
+      h4 Crew Role:
+      p These tokens are for the crew member that will be filling out the daily DTR. If Crew role is selected, the token will give access only for filling out that specific departments DTR or report.
+      p Crew Role CANNOT create new accounts, edit departments, or file/see reports for any other department other than the one they are created under.
+    p --------
+    p
+      h4 Admin Role:
+      p These tokens give access to ALL departments and reports. These tokens are for AD's, accounting, and the production office only, NEVER for crew!!
+      p Admin Role CANNOT create other admin accounts, or add/remove departments
+    p --------
+    p
+      h4 Project-Admin Role:
+      p This will be hidden for most users. This will usually be for the 3rd AD and PC. This role can create/remove departments, add other project-admins, add admins, add crew, and can file/view reports for all departments.
