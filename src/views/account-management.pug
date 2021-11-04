@@ -6,7 +6,7 @@ mixin tokenTemplate(token)
     td= token.role
     td= token.token
     td
-      input(value=`${baseLoginUrl}${token.token}`, readonly).w-100.border-0
+      input(value=`https://${baseLoginUrl}${token.token}`, readonly).w-100.border-0
 
 block content
   .row
