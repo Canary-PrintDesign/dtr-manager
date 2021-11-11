@@ -6,6 +6,15 @@ html {
 .report tbody tr:nth-child(1n + 2) td:nth-child(1) span,
 .report tbody tr:nth-child(1n + 2) td:nth-child(2) span {
   visibility: hidden;
+  border: 0;
+  clip: rect(0, 0, 0, 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
 }
 
 .report-sticky {
