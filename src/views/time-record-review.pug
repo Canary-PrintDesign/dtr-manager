@@ -5,9 +5,9 @@ mixin record(record)
     td= record.name
     td= record.position
     td= record.workStart
-    td= record.workStop
     td= record.lunchStart
     td= record.lunchStop
+    td= record.workStop
 
 block content
   .row
@@ -26,9 +26,9 @@ block content
             th Name
             th Position
             th Work Start
-            th Work Stop
             th Lunch Start
             th Lunch Stop
+            th Work Stop
 
         tbody
           if entries

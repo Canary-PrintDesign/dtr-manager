@@ -32,9 +32,9 @@ block content
               th Name
               th Position
               th Work Start
-              th Work End
               th Lunch Start
               th Lunch End
+              th Work End
 
             each val, key in report
               -var date = key
@@ -55,9 +55,9 @@ block content
                       td= entry.name
                       td= entry.position
                       td= entry.workStart
-                      td= entry.workStop
                       td= entry.lunchStart
                       td= entry.lunchStop
+                      td= entry.workStop
 
                   each note in notes
                     tr(data-report-row, data-report-date=date, data-report-department=departmentName).table-warning

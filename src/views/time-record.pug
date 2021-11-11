@@ -12,22 +12,22 @@ mixin agent(index='{{entryIndex}}', name='{{entryName}}', position='{{entryPosit
           .form-floating.m-2.m-md-0
             input.px-lg-1.px-xl-3.border-0.form-control.form-control-sm(required, value= position, name=`entries[${index}][position]` placeholder="Position")
             label.px-lg-1.px-xl-3 Position
-        .col-6.col-md-3.col-lg-1.flex-grow-1
+        .col-6.col-md-3.col-lg-1.flex-grow-1.time-field__work-start
           .form-floating.m-2.m-md-0
             input.px-lg-1.px-xl-3.border-0.form-control.js-work-start(required, value= workStart, minlength="4", maxlength="4", pattern="[0-3][0-9][0-5][0-9]", placeholder="0700", name=`entries[${index}][workStart]`)
             label.px-lg-1.px-xl-3 Work Start
-        .col-6.col-md-3.col-lg-1.flex-grow-1
-          .form-floating.m-2.m-md-0
-            input.px-lg-1.px-xl-3.border-0.form-control.js-work-stop(required, value= workStop, minlength="4", maxlength="4", pattern="[0-3][0-9][0-5][0-9]", placeholder="2100", name=`entries[${index}][workStop]`)
-            label.px-lg-1.px-xl-3 Work End
-        .col-6.col-md-3.col-lg-1.flex-grow-1
+        .col-6.col-md-3.col-lg-1.flex-grow-1.time-field__lunch-start
           .form-floating.m-2.m-md-0
             input.px-lg-1.px-xl-3.border-0.form-control.js-lunch-start(minlength="4", value= lunchStart, maxlength="4", pattern="[0-3][0-9][0-5][0-9]", placeholder="1300", name=`entries[${index}][lunchStart]`)
             label.px-lg-1.px-xl-3 Lunch start
-        .col-6.col-md-3.col-lg-1.flex-grow-1
+        .col-6.col-md-3.col-lg-1.flex-grow-1.time-field__lunch-stop
           .form-floating.m-2.m-md-0
             input.px-lg-1.px-xl-3.border-0.form-control.js-lunch-stop(minlength="4", value= lunchStop, maxlength="4", pattern="[0-3][0-9][0-5][0-9]", placeholder="1400", name=`entries[${index}][lunchStop]`)
             label.px-lg-1.px-xl-3 Lunch Stop
+        .col-6.col-md-3.col-lg-1.flex-grow-1.time-field__work-stop
+          .form-floating.m-2.m-md-0
+              input.px-lg-1.px-xl-3.border-0.form-control.js-work-stop(required, value= workStop, minlength="4", maxlength="4", pattern="[0-3][0-9][0-5][0-9]", placeholder="2100", name=`entries[${index}][workStop]`)
+              label.px-lg-1.px-xl-3 Work End
         .col-12.col-md-6.col-lg-1.flex-grow-1
           .form-floating.m-2.m-md-0.bg-light
             input.px-lg-1.px-xl-3.border-0.form-control.bg-transparent.js-calculated-time(readonly placeholder="1400")

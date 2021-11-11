@@ -31,7 +31,7 @@ html {
 }
 
 @media screen and (min-width: 1200px) {
-    --bs-gutter-x: 1.5rem;
+  --bs-gutter-x: 1.5rem;
 }
 
 .btn-pill {
@@ -39,8 +39,25 @@ html {
 }
 
 @media screen and (max-width: 500px) {
-
-.js-new-timesheet {
-  order: 666;
+  .js-new-timesheet {
+    order: 666;
+  }
 }
+
+@media screen and (max-width: 767.9px) {
+  .time-field__work-start {
+    order: 1;
+  }
+
+  .time-field__lunch-start {
+    order: 3;
+  }
+
+  .time-field__lunch-stop {
+    order: 4;
+  }
+
+  .time-field__work-stop {
+    order: 2;
+  }
 }
