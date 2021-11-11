@@ -32,8 +32,7 @@ block content
               th Name
               th Position
               th Work Start
-              th Lunch Start
-              th Lunch End
+              th Lunch
               th Work End
 
             each val, key in report
@@ -55,8 +54,7 @@ block content
                       td= entry.name
                       td= entry.position
                       td= entry.workStart
-                      td= entry.lunchStart
-                      td= entry.lunchStop
+                      td= `${entry.lunchStart} - ${entry.lunchStop}`
                       td= entry.workStop
 
                   each note in notes
