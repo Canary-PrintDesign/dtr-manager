@@ -73,7 +73,7 @@ async function getAgentsLatestReport({ project, department, date }) {
         if (department) builder.where('timeRecords.department', department)
         if (date) {
           builder.where({ date })
-        } else {
+        } else if (department) {
           builder.where(
             'date',
             'in',
