@@ -42,7 +42,7 @@ module.exports = async (fastify) => {
       )
 
       return reply.view('report', {
-        title: 'Project Report',
+        title: 'DTR Report',
         dates: filteredDates,
         departments: filteredDepartments,
         report: timeReportByDate,
