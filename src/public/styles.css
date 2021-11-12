@@ -24,7 +24,7 @@ html {
 }
 
 .site-logo {
-  max-width: 2rem;
+  max-width: 10rem;
 }
 
 @media screen and (min-width: 992px) {
@@ -86,4 +86,10 @@ html {
 
 .project-notification > *:last-child {
   margin-bottom: 0 !important;
+}
+
+@media print {
+ /* All your print styles go here */
+ .PrintHide, .footer, .header, nav.d-flex, .alert { display: none !important; }
+ body {font-size:.7rem;}
 }
