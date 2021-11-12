@@ -110,6 +110,20 @@ function calculateWorkTime(event) {
   $(agent).find('.js-calculated-time').val(`${hours}h ${minutes}m`)
 }
 
+function bindNoCallButton() {
+  $('.js-no-call').click((event) => {
+    event.preventDefault()
+    
+    const target = event.target
+    const agent = $(target).closest('.js-agent')
+    const timeInputs = $(agent).find('.js-time-input')
+
+    $(timeInputs).each((i, timeInput) => {
+      $(timeInput).val('0000')
+    })
+  })
+}
+
 $(document).ready(() => {
   const template = $('.js-agent-template')
 
@@ -118,6 +132,7 @@ $(document).ready(() => {
     createNewAgent(template, {})
 
     bindDeleteRecordButton()
+    bindNoCallButton()
   })
 
   $('.js-department-select').change(async (event) => {
@@ -132,6 +147,7 @@ $(document).ready(() => {
     })
 
     bindDeleteRecordButton()
+    bindNoCallButton()
   })
 
   $(document).on('change', '.js-work-start', calculateWorkTime)
@@ -140,4 +156,5 @@ $(document).ready(() => {
   $(document).on('change', '.js-lunch-stop', calculateWorkTime)
 
   bindDeleteRecordButton()
+  bindNoCallButton()
 })
