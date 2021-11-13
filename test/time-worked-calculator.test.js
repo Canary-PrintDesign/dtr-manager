@@ -9,48 +9,28 @@ tap.test('things', (t) => {
 })
 
 function parseTime(time) {
-  let [hh, mm, hhr, mmr] = [
-    Number(time.slice(0, 2)),
-    Number(time.slice(2)),
-    0,
-    0,
-  ]
-
-  if (hh > 23) {
-    hhr = hh - 23
-    hh = 23
-  }
-
-  if (mm > 59) {
-    mmr = mm - 59
-    mm = 59
-  }
-
-  return [hh, mm, hhr, mmr]
+  const hh = Number(time.slice(0, 2))
+  const mm = Number(time.slice(2))
+  
+  return (hh * 60) + mm
 }
 
-function calculateTime(hh, mm, hhr, mmr) {
-  return moment(
-    `${hh.toString().padStart(2, 0)}${mm.toString().padStart(2, 0)}`,
-    'HHmm'
-  )
-    .add(hhr, 'hours')
-    .add(mmr, 'minutes')
+function calculateTime(time1, time2) {
+  return parseTime(time2) - parseTime(time1)
 }
 
-function calculateTimeWorked({ startTime, stopTime, startLunch, stopLunch }) {
-  const xStartTime = calculateTime(...parseTime(startTime))
-  const xStopTime = calculateTime(...parseTime(stopTime))
-  const xStartLunch = calculateTime(...parseTime(startLunch || '0000'))
-  const xStopLunch = calculateTime(...parseTime(stopLunch || '0000'))
-
-  const diff = xStopTime.diff(xStartTime)
-  const diffLunch = xStopLunch.diff(xStartLunch)
-
-  return moment()
-    .startOf('day')
-    .milliseconds(diff - diffLunch)
-    .format('H:mm')
+function calculateTimeWorked({ startTime, stopTime, startLunch = '0000', stopLunch = '0000'}) {
+  const work = calculateTime(startTime, stopTime)
+  const lunch = calculateTime(startLunch, stopLunch)
+  
+  const timeWorked = work - lunch
+  
+  let hours = Math.floor(timeWorked / 60)
+  let minutes = timeWorked % 60
+  if (hours < 0) hours = 24 + hours
+  if (minutes < 0) minutes = 60 + minutes
+  
+  return `${hours}:${minutes.toString().padStart(2, 0)}`
 }
 
 tap.test('regular day', (t) => {

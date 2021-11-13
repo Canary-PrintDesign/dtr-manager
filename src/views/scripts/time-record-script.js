@@ -1,52 +1,31 @@
-/* globals $, fetch, moment */
+/* globals $, fetch */
 
 function parseTime(time) {
-  let [hh, mm, hhr, mmr] = [
-    Number(time.slice(0, 2)),
-    Number(time.slice(2)),
-    0,
-    0,
-  ]
-
-  if (hh > 23) {
-    hhr = hh - 23
-    hh = 23
-  }
-
-  if (mm > 59) {
-    mmr = mm - 59
-    mm = 59
-  }
-
-  return [hh, mm, hhr, mmr]
+  const hh = Number(time.slice(0, 2))
+  const mm = Number(time.slice(2))
+  
+  return (hh * 60) + mm
 }
 
-function calculateTime(hh, mm, hhr, mmr) {
-  return moment(
-    `${hh.toString().padStart(2, 0)}${mm.toString().padStart(2, 0)}`,
-    'HHmm'
-  )
-    .add(hhr, 'hours')
-    .add(mmr, 'minutes')
+function calculateTime(time1, time2) {
+  console.log({ time1, time2 })
+  return parseTime(time2) - parseTime(time1)
 }
 
-function workedTime(startTime, stopTime, startLunch, stopLunch) {
-  const xStartTime = calculateTime(...parseTime(startTime))
-  const xStopTime = calculateTime(...parseTime(stopTime))
-  const diff = xStopTime.diff(xStartTime)
-
-  let diffLunch = 0
-  if (startLunch && stopLunch) {
-    const xStartLunch = calculateTime(...parseTime(startLunch))
-    const xStopLunch = calculateTime(...parseTime(stopLunch))
-    diffLunch = xStopLunch.diff(xStartLunch)
-  }
-
-  return moment()
-    .startOf('day')
-    .milliseconds(diff - diffLunch)
-    .format('HH:mm')
-    .split(':')
+function calculateTimeWorked(startTime, stopTime, startLunch = '0000', stopLunch = '0000') {
+  const work = calculateTime(startTime, stopTime)
+  const lunch = calculateTime(startLunch, stopLunch)
+  
+  const timeWorked = work - lunch
+  
+  let hours = Math.floor(timeWorked / 60)
+  let minutes = timeWorked % 60
+  if (hours < 0) hours = 24 + hours
+  if (minutes < 0) minutes = 60 + minutes
+  
+  console.log({ timeWorked })
+  
+  return [hours, minutes]
 }
 
 function createNewAgent(template, { index, name = '', position = '' }) {
@@ -83,6 +62,18 @@ function calculateWorkTime(event) {
   const lunchStart = $(agent).find('.js-lunch-start')[0]
   const lunchStop = $(agent).find('.js-lunch-stop')[0]
 
+  if (
+    [
+      $(workStart).val(),
+      $(workStop).val(),
+      $(lunchStart).val(),
+      $(lunchStop).val(),
+    ].includes('N/C')
+  ) {
+    $(agent).find('.js-calculated-time').val(`No Call`)
+    return
+  }
+
   // clear custom validations
   workStart.setCustomValidity('')
   workStop.setCustomValidity('')
@@ -100,27 +91,26 @@ function calculateWorkTime(event) {
     lunchStop.setCustomValidity('Stop must be later than Start')
   }
 
-  const [hours, minutes] = workedTime(
-    workStart.value,
-    workStop.value,
-    lunchStart.value,
-    lunchStop.value
-  )
+  const [hours, minutes] = calculateTimeWorked(workStart.value, workStop.value, lunchStart.value, lunchStop.value)
 
-  $(agent).find('.js-calculated-time').val(`${hours}h ${minutes}m`)
+  const time = `${hours}h ${minutes.toString().padStart(2, '0')}m`
+  $(agent).find('.js-calculated-time').val(time)
+  
 }
 
 function bindNoCallButton() {
   $('.js-no-call').click((event) => {
     event.preventDefault()
-    
+
     const target = event.target
     const agent = $(target).closest('.js-agent')
     const timeInputs = $(agent).find('.js-time-input')
 
     $(timeInputs).each((i, timeInput) => {
-      $(timeInput).val('0000')
+      $(timeInput).val('N/C')
     })
+
+    calculateWorkTime(event)
   })
 }
 
