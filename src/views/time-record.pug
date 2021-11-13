@@ -41,7 +41,7 @@ mixin agent(index='{{entryIndex}}', name='{{entryName}}', position='{{entryPosit
         span.d-lg-none Remove Entry
 
 block content
-  h1 New Timesheet
+  h1 New DTR
   form(method="post", action="/dtr")
     input(type="hidden", value= project.id)
 
@@ -78,6 +78,16 @@ block content
 
     if user.isCrew && !user.isAdmin
       input(value= user.department, name="department", required, readonly, hidden)
+
+  .row
+    h2 DTR Information
+    li Adding a new crew member will save them as part of the crew for subsequent days
+    li Removing a crew member will remove them from appearing on subsequent days
+    li If a crew member is not present, but will be working on future days, click "Set N/C"
+    li Don't forget lunch!
+    li Notes: Include notes whenever possible. Equipment damage, injuries, danger on set, etc.
+    .col-sm-4
+
 
 block scripts
   template.js-agent-template
