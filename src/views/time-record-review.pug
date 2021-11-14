@@ -23,7 +23,7 @@ block content
         div
           p Confirm your date of work before submitting!
           p Date worked: 
-            strong=date
+            strong= date
           p Today's Date: 
             strong
               script.
@@ -33,10 +33,6 @@ block content
                 var yyyy = today.getFullYear();
                 today = yyyy + '-' + mm + '-' + dd;
                 document.write(today);
-
-
-
-
 
   .row.my-3
     .table-responsive
