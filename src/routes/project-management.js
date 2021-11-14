@@ -8,10 +8,15 @@ module.exports = async (fastify) => {
     const project = req.data.project
     const departments = await Department.findAll({ project: project.id })
 
+    const notifications = { ...project.notifications }
+    delete project.notifications
+
     return reply.view('project-management', {
       title: 'Project Management',
+      projectNotifications: null,
       departments,
       project,
+      notifications,
       user: req.user,
     })
   })
