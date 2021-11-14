@@ -15,6 +15,7 @@ const loginRoute = require('./routes/login.js')
 const accountManagementRoute = require('./routes/account-management.js')
 const projectManagementRoute = require('./routes/project-management.js')
 const departmentRoute = require('./routes/departments.js')
+const notifications = require('./routes/notifications.js')
 
 module.exports = async (options) => {
   const fastify = Fastify(options)
@@ -34,6 +35,7 @@ module.exports = async (options) => {
   fastify.register(accountManagementRoute)
   fastify.register(projectManagementRoute)
   fastify.register(departmentRoute)
+  fastify.register(notifications)
 
   fastify.log.info(`${options.appName} is ready!`)
   return fastify

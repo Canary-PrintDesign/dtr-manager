@@ -122,7 +122,6 @@ module.exports = async (fastify) => {
       departments,
       project,
       user: req.user,
-
       department,
       date,
       entries,

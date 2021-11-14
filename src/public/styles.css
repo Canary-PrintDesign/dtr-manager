@@ -70,3 +70,20 @@ html {
     order: 2;
   }
 }
+
+.ql-editor {
+  padding: 0 !important;
+}
+
+.ql-editor:last-child {
+  margin-bottom: 0;
+}
+
+.js-scrolling-container {
+  overflow-y: auto;
+  max-height: 5rem;
+}
+
+.project-notification > *:last-child {
+  margin-bottom: 0 !important;
+}

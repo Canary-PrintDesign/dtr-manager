@@ -1,0 +1,3 @@
+if (project.notifications)
+  each notification in project.notifications
+    div(class="alert alert-"+ notification.type).project-notification !{notification.msg}
