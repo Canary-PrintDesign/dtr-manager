@@ -16,6 +16,10 @@ module.exports = fp(async (fastify) => {
         project: project[0].id,
       })
 
+      if (!project.length) {
+        throw new Error(`Project with hostname ${hostname} not found`)
+      }
+
       req.data = {
         ...req.data,
         project: {
