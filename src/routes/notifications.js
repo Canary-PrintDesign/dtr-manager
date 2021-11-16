@@ -11,8 +11,6 @@ module.exports = async (fastify) => {
       const formBody = req.body
       const { type, notification } = handleFormValues(formBody)
 
-      console.log(notification)
-
       await Notification.save({
         body: notification,
         type,
