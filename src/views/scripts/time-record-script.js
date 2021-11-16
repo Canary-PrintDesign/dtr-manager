@@ -3,28 +3,30 @@
 function parseTime(time) {
   const hh = Number(time.slice(0, 2))
   const mm = Number(time.slice(2))
-  
-  return (hh * 60) + mm
+
+  return hh * 60 + mm
 }
 
 function calculateTime(time1, time2) {
-  console.log({ time1, time2 })
   return parseTime(time2) - parseTime(time1)
 }
 
-function calculateTimeWorked(startTime, stopTime, startLunch = '0000', stopLunch = '0000') {
+function calculateTimeWorked(
+  startTime,
+  stopTime,
+  startLunch = '0000',
+  stopLunch = '0000'
+) {
   const work = calculateTime(startTime, stopTime)
   const lunch = calculateTime(startLunch, stopLunch)
-  
+
   const timeWorked = work - lunch
-  
+
   let hours = Math.floor(timeWorked / 60)
   let minutes = timeWorked % 60
   if (hours < 0) hours = 24 + hours
   if (minutes < 0) minutes = 60 + minutes
-  
-  console.log({ timeWorked })
-  
+
   return [hours, minutes]
 }
 
@@ -91,11 +93,15 @@ function calculateWorkTime(event) {
     lunchStop.setCustomValidity('Stop must be later than Start')
   }
 
-  const [hours, minutes] = calculateTimeWorked(workStart.value, workStop.value, lunchStart.value, lunchStop.value)
+  const [hours, minutes] = calculateTimeWorked(
+    workStart.value,
+    workStop.value,
+    lunchStart.value,
+    lunchStop.value
+  )
 
   const time = `${hours}h ${minutes.toString().padStart(2, '0')}m`
   $(agent).find('.js-calculated-time').val(time)
-  
 }
 
 function bindNoCallButton() {

@@ -12,6 +12,7 @@ module.exports = fp(async (fastify) => {
 
     try {
       const project = await Project.findWith({ hostname })
+
       const notifications = await ProjectNotification.findWith({
         project: project[0].id,
       })

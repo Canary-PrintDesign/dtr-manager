@@ -36,7 +36,7 @@ async function findWith({ id, project }) {
 exports.save = save
 async function save(notificationProps = {}) {
   try {
-    return await ProjectNotification.query().insert({ ...notificationProps })
+    return await ProjectNotification.query().insert(notificationProps)
   } catch (err) {
     throw new Error(err)
   }
