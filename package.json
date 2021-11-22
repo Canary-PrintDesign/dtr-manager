@@ -11,6 +11,9 @@
     "adr": "node --use-strict ./scripts/architecture-decision-record.js",
     "dev": "DEBUG=dtr:* nodemon --inspect --use_strict -r ./bin/env ./src/server.js",
     "knex": "npx knex --knexfile ./knexfile.js",
+    "db:migrate": "npx knex --knexfile ./knexfile.js -- migrate:latest",
+    "db:rollback": "npx knex --knexfile ./knexfile.js -- migrate:rollback",
+    "db:seed": "npx knex --knexfile ./knexfile.js -- seed:run",
     "start": "pm2 start --name='dtr-manager' --node-args='--use_strict -r ./bin/env' ./src/server.js",
     "playground": "NODE_ENV=development nodemon --inspect --use_strict -r ./bin/env ./playground.js | npx pino-pretty",
     "test": "tap"
