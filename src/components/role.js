@@ -1,50 +1,31 @@
-const S = require('fluent-json-schema')
+const { OBJECT, UUID, STRING } = require('../lib/helper-schema.js')
 const { Model } = require('../lib/database.js')
 
-const schema = S.object()
-  .prop('id', S.string(S.FORMATS.UUID))
-  .prop('role', S.string())
+const schema = OBJECT
+  .prop('id', UUID)
+  .prop('role', STRING)
 
-class Role extends Model {
-  static get tableName() {
-    return 'roles'
-  }
+module.exports = class Role extends Model {
+  static tableName = 'roles'
 
-  static get jsonSchema() {
+  static get jsonSchema () {
     return schema.valueOf()
   }
-}
 
-exports.findAll = findAll
-async function findAll({ roles } = {}) {
-  try {
-    return await Role.query().where((builder) => {
+  static async findAll ({ roles } = {}) {
+    return Role.query().where((builder) => {
       if (roles?.length) builder.whereIn('role', roles)
     })
-  } catch (err) {
-    throw new Error(err)
   }
-}
 
-exports.findWith = findWith
-async function findWith({ id, role }) {
-  try {
-    return await Role.query()
-      .where((builder) => {
-        if (id) builder.where({ id })
-        if (role) builder.where({ role })
-      })
-      .limit(1)
-  } catch (err) {
-    throw new Error(err)
+  static async findWith ({ id, role }) {
+    return Role.query().where({
+      ...(id && { id }),
+      ...(role && { role }),
+    })
   }
-}
 
-exports.save = save
-async function save(roleProps) {
-  try {
-    return await Role.query().insert({ ...roleProps })
-  } catch (err) {
-    throw new Error(err)
+  static async save (roleProps) {
+    return Role.query().insert(roleProps)
   }
 }

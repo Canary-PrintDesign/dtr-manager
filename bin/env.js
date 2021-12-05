@@ -5,7 +5,7 @@ const dotenvExpand = require('dotenv-expand')
 const envSchema = require('env-schema')
 const schema = require('../env.js')
 
-function dotenvTest(config) {
+function dotenvTest (config) {
   const environment = config.ignoreProcessEnv ? {} : process.env
   if (environment.NODE_ENV !== 'test') return config
 
@@ -22,7 +22,7 @@ function dotenvTest(config) {
   return config
 }
 
-function dotenvValidate(config) {
+function dotenvValidate (config) {
   const environment = config.ignoreProcessEnv ? {} : process.env
 
   try {

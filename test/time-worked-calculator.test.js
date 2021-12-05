@@ -1,5 +1,4 @@
 const tap = require('tap')
-const moment = require('moment')
 
 tap.equal(1, 1, 'Test working correctly')
 
@@ -8,28 +7,28 @@ tap.test('things', (t) => {
   t.end()
 })
 
-function parseTime(time) {
+function parseTime (time) {
   const hh = Number(time.slice(0, 2))
   const mm = Number(time.slice(2))
-  
+
   return (hh * 60) + mm
 }
 
-function calculateTime(time1, time2) {
+function calculateTime (time1, time2) {
   return parseTime(time2) - parseTime(time1)
 }
 
-function calculateTimeWorked({ startTime, stopTime, startLunch = '0000', stopLunch = '0000'}) {
+function calculateTimeWorked ({ startTime, stopTime, startLunch = '0000', stopLunch = '0000' }) {
   const work = calculateTime(startTime, stopTime)
   const lunch = calculateTime(startLunch, stopLunch)
-  
+
   const timeWorked = work - lunch
-  
+
   let hours = Math.floor(timeWorked / 60)
   let minutes = timeWorked % 60
   if (hours < 0) hours = 24 + hours
   if (minutes < 0) minutes = 60 + minutes
-  
+
   return `${hours}:${minutes.toString().padStart(2, 0)}`
 }
 

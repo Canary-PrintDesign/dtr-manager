@@ -1,97 +1,55 @@
-const Auth = require('../components/auth.js')
+const GetUserRoles = require('../intents/get-user-roles.js')
+const GetProjectAuthTokens = require('../intents/get-project-auth-tokens.js')
+const GetDepartments = require('../intents/get-departments.js')
 const Role = require('../components/role.js')
-const {
-  getDepartmentsForSelect,
-  getRolesForSelect,
-} = require('./route-helpers')
-const createError = require('http-errors')
+const { requireAdmin } = require('../lib/helper-auth.js')
+const { pipeWith } = require('../lib/utils.js')
+
+const getDepartments = async (project) => await GetDepartments({ project })
+
+const getRoles = async (roles) => await Role.findAll({ roles })
+
+function transformForSelect (key, value) {
+  return function (arr) {
+    return arr.map((obj) => ({ key: obj[key], value: obj[value] }))
+  }
+}
 
 module.exports = async (fastify) => {
   fastify.get('/account-management', async (req, reply) => {
-    if (!req.user.isAdmin) return createError(401)
+    requireAdmin(req.user)
 
-    const roles = []
-    switch (req.user.role) {
-      case 'super-admin':
-        roles.push('project-admin')
-      case 'project-admin':
-        roles.push('admin')
-      case 'admin':
-        roles.push('crew')
-    }
+    const {
+      data: { project },
+      hostname,
+      user,
+    } = req
+    const roleList = GetUserRoles({ userRole: user.role })
+    const tokens = await GetProjectAuthTokens({ project, roleList })
 
-    const project = req.data.project
-    const tokens = await Auth.departmentRoleToken({
-      project: project.id,
-      roles,
-    })
+    const departments = await pipeWith(
+      project,
+      getDepartments,
+      transformForSelect('id', 'name'),
+    )
+
+    const roles = await pipeWith(
+      roleList,
+      getRoles,
+      transformForSelect('id', 'role'),
+    )
+
+    const title = 'Account Management'
+    const baseLoginUrl = `${hostname}/login/`
 
     return reply.view('account-management', {
-      title: 'Account Management',
+      baseLoginUrl,
+      departments,
       project,
-      tokens: groupColumns(tokens),
-      departments: await getDepartmentsForSelect(project.id),
-      roles: await getRolesForSelect(roles),
-      baseLoginUrl: `${req.hostname}/login/`,
-      user: req.user,
+      roles,
+      title,
+      tokens,
+      user,
     })
   })
-
-  fastify.post('/account-management/token', async (req, reply) => {
-    if (!req.user.isAdmin) return createError(401)
-
-    const project = req.data.project.id
-    const { department, role: roleId } = handleFormValues(req.body)
-    const role = await Role.findWith({ id: roleId })
-
-    if (
-      req.user.role === 'project-admin' &&
-      ['project-admin'].includes(role[0].role)
-    ) {
-      return createError(406)
-    } else if (req.user.role === 'admin' && ['admin'].includes(role[0].role)) {
-      return createError(406)
-    }
-
-    await Auth.createToken({
-      project,
-      department,
-      role: role[0].id,
-    })
-
-    return reply.redirect('/account-management')
-  })
-}
-
-function handleFormValues(data) {
-  return Object.entries(data)
-    .flatMap(([key, value]) => ({ key, value }))
-    .reduce((acc, item) => Object.assign(acc, { [item.key]: item.value }), {})
-}
-
-function groupColumns(tokens) {
-  const results = []
-  const departments = []
-  const roles = []
-
-  for (const token of tokens) {
-    const newEntry = { ...token }
-
-    if (departments.includes(token.departmentId)) {
-      newEntry.departmentName = ''
-    } else {
-      departments.push(token.departmentId)
-    }
-
-    const roleSignature = `${token.departmentId}${token.role}`
-    if (roles.includes(roleSignature)) {
-      newEntry.role = ''
-    } else {
-      roles.push(roleSignature)
-    }
-
-    results.push(newEntry)
-  }
-
-  return results
 }

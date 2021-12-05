@@ -1,54 +1,38 @@
-const S = require('fluent-json-schema')
+const { OBJECT, STRING, UUID, STRING_STATUS_UNPUBLISHED } = require('../lib/helper-schema.js')
 const { Model } = require('../lib/database.js')
 
-const schema = S.object()
-  .prop('id', S.string().format(S.FORMATS.UUID))
-  .prop('project', S.string().format(S.FORMATS.UUID))
-  .prop('type', S.string())
-  .prop('body', S.string())
-  .prop('status', S.enum(['published', 'unpublished']).default('unpublished'))
+const schema = OBJECT
+  .prop('id', UUID)
+  .prop('project', UUID)
+  .prop('type', STRING)
+  .prop('body', STRING)
+  .prop('status', STRING_STATUS_UNPUBLISHED)
 
-class ProjectNotification extends Model {
-  static get tableName() {
-    return 'project_notifications'
-  }
+module.exports = class ProjectNotification extends Model {
+  static tableName = 'project_notifications'
 
-  static get jsonSchema() {
+  static get jsonSchema () {
     return schema.valueOf()
   }
-}
 
-exports.ProjectNotification = ProjectNotification
-
-exports.findWith = findWith
-async function findWith({ id, project }) {
-  try {
-    return await ProjectNotification.query().where((builder) => {
-      if (id) builder.where({ id })
-      if (project) builder.where({ project })
-      builder.where({ status: 'published' })
+  static async findWith ({ id, project }) {
+    return ProjectNotification.query().where({
+      ...(id && { id }),
+      ...(project && { project }),
+      status: 'published',
     })
-  } catch (err) {
-    throw new Error(err)
   }
-}
 
-exports.save = save
-async function save(notificationProps = {}) {
-  try {
-    return await ProjectNotification.query().insert(notificationProps)
-  } catch (err) {
-    throw new Error(err)
+  static async save (notificationProps = {}) {
+    return ProjectNotification.query().insert(notificationProps)
   }
-}
 
-exports.remove = remove
-async function remove({ notification, project } = {}) {
-  try {
-    return await ProjectNotification.query()
-      .where({ id: notification, project })
+  static async remove ({ notification, project } = {}) {
+    return ProjectNotification.query()
+      .where({
+        id: notification,
+        project,
+      })
       .patch({ status: 'unpublished' })
-  } catch (err) {
-    throw new Error(err)
   }
 }

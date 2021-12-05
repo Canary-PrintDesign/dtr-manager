@@ -1,13 +1,10 @@
 ## Table of Contents
-
 - [Getting started](#getting-started)
 - - [Prerequisites](#prerequisites)
 - - [Installing](#installing)
 - - [Development](#development)
 - - [Testing](#testing)
 - [Documentation](#documentation)
-- - [Architecture Decision Records](#architecture-decision-records)
-- - - [Current ADRs](#current-adrs)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -20,7 +17,6 @@ These instructions will get the DTR Manager up and running on your machine for d
 What you will need to build, run, and test DTR Manager.
 
 - [ASDF Version Manager](https://github.com/asdf-vm/asdf) to handle system level software requirements
-- [Direnv](https://direnv.net/) autoloading of .env
 - [Docker](https://docker.com) for pre-setup external dependencies
 - [Docker Compose](https://docs.docker.com/compose/install/) easy cli for starting pre-configured docker containers
 
@@ -40,16 +36,15 @@ With Node installed, install software dependencies
 npm install
 ```
 
-Prepare your private development configuration
+Prepare your private development configuration, add the following
+fields to a .env file in the root of the project. This file will not
+be version controlled. Additional configuration can be found in /env.js
 
 ```
-cp .env.example .env
-```
-
-Allow `direnv` to detect and load your `.env` configuration for the directory
-
-```
-direnv allow
+DB_PORT=5432
+DB_NAME=myapp
+DB_PASSWORD=supersecret
+DB_USER=myuser
 ```
 
 Start the docker containers using docker-compose
@@ -78,17 +73,12 @@ Automatic formatting for code (where possible) can be done with `fix` which will
 npm run fix
 ```
 
-### Generate SSL Cert
+REPL Driven Development
 
-```sh
-# Generate private-key.pem
-$ openssl genpkey -algorithm RSA -des3 -out private-key.pem -pkeyopt rsa_keygen_bits:4096
+To provide a playground for testing out code, or ideas, the root directory contains a file called `playground.js` which has some setup in it (logging, iife). The playground will reload the file anytime it's saved through `nodemon`.
 
-# Create certificate-signing-request
-$ openssl req -new -key private-key.pem -out csr.pem
-
-# self sign certificate
-$ openssl x509 -in csr.pem -out certificate.pem -req -signkey private-key.pem -days 365
+```
+npm run playground
 ```
 
 ## Testing
@@ -144,7 +134,7 @@ The main repository `/README.md` is generated through a command line operation t
 
 Updating the main repository README.md should be done in one of the partials found in the `/docs` directory. These are easy to spot with the `readme-` prefix. If there is a need for a new partial, it can be added to the template found in `/docs/templates/README.md`.
 
-If a partial of readme has changed, or you need to regenerate a listing of files, eg: ADRs, use the following command. **This will replace the content of the existing README file**
+If a partial of readme has changed, or you need to regenerate a listing of files, eg: ADRs, use the following command. __This will replace the content of the existing README file__
 
 ```
 npm run readme
@@ -155,24 +145,12 @@ The `/scripts` directory contains a `markdown.js` script which will perform oper
 - Replacing `{{TOC}}` with a table of contents, based on the file's octothorpe headers (#)
 - Inlcuding partials for other text files to be included. On its own line, use `/path/to/file.md` to have the script inline the contents.
 
-## Architecture Decision Records
-
-Documentation for choices made when developing DTR Manager are done through ADRs. These are for recording the reason behind a choice for future developers (even you) to understand why something was done the way it is. These are not permanent choices, and a proposal to change a decision can be made the same way.
-
-Code choices, eg: how to add 1 and 1, do not need to be captured in an ADR.
-
-To create a new ADR use the following command (replace `[my-new-adr-name]` with your proposal name - use hyphens to separate words), then edit the new file in your editor.
-
-```
-npm run adr [my-new-adr-name]
-```
-
-### Current ADRs
-
 # Contributing
 
-Guidelines for contributing, code of context, and process for submitting pull requets to be determined.
+Guidelines for contributing, code of context, and process for 
+submitting pull requests to be determined.
 
 # License
 
 This project is licensed under the 3-Clause BSD license. See the [LICENSE.md](LICENSE.md) file for details.
+

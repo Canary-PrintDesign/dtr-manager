@@ -1,54 +1,36 @@
+const { OBJECT, DATE_TIME, STRING, UUID, STRING_STATUS_UNPUBLISHED, URL } = require('../lib/helper-schema.js')
 const { Model } = require('../lib/database.js')
-const S = require('fluent-json-schema')
 
-const schema = S.object()
-  .prop('id', S.string().format(S.FORMATS.UUID))
-  .prop('name', S.string())
-  .prop('logo', S.string().format(S.FORMATS.URL))
-  .prop('hostname', S.string())
-  .prop('startDate', S.string().format(S.FORMATS.DATE_TIME))
-  .prop('status', S.enum(['published', 'unpublished']).default('unpublished'))
+const schema = OBJECT
+  .prop('id', UUID)
+  .prop('name', STRING)
+  .prop('logo', URL)
+  .prop('hostname', STRING)
+  .prop('startDate', DATE_TIME)
+  .prop('status', STRING_STATUS_UNPUBLISHED)
 
-class Project extends Model {
-  static get tableName() {
-    return 'projects'
-  }
+module.exports = class Project extends Model {
+  static tableName = 'projects'
 
-  static get jsonSchema() {
+  static get jsonSchema () {
     return schema.valueOf()
   }
-}
 
-exports.findAll = findAll
-async function findAll() {
-  try {
-    return await Project.query()
-  } catch (err) {
-    throw new Error(err)
+  static async findAll () {
+    return Project.query()
   }
-}
 
-exports.findWith = findWith
-async function findWith({ id, name, hostname, status }) {
-  try {
-    return await Project.query()
-      .where((builder) => {
-        if (id) builder.where({ id })
-        if (name) builder.where({ name })
-        if (hostname) builder.where({ hostname })
-        if (status) builder.where({ status })
+  static async findWith ({ id, name, hostname, status }) {
+    return Project.query()
+      .where({
+        ...(id && { id }),
+        ...(name && { name }),
+        ...(hostname && { hostname }),
+        ...(status && { status }),
       })
-      .limit(1)
-  } catch (err) {
-    throw new Error(err)
   }
-}
 
-exports.save = save
-async function save(projectProps = {}) {
-  try {
-    return await Project.query().insert({ ...projectProps })
-  } catch (err) {
-    throw new Error(err)
+  static async save (projectProps = {}) {
+    return Project.query().insert({ ...projectProps })
   }
 }

@@ -15,7 +15,7 @@ exports.seed = function (knex) {
         knex('time_records').del(),
         knex('record_notes').del(),
         knex('roles').del(),
-      ])
+      ]),
     )
     .then(() => projectFactory())
     .then(departmentFactory)
@@ -25,24 +25,26 @@ exports.seed = function (knex) {
     .then(roleFactory)
 }
 
-async function projectFactory() {
-  const seedProject = await Project.save({
+async function projectFactory () {
+  return await Project.save({
     name: 'Test Project',
     logo: 'https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png',
     hostname: 'localhost',
     startDate: new Date().toISOString(),
   })
-
-  return seedProject
 }
 
-async function departmentFactory(project) {
+async function departmentFactory (project) {
   const departments = [
     {
       name: 'Department A',
+      project: project.id,
+      custom: true,
     },
     {
       name: 'Department B',
+      project: project.id,
+      custom: true,
     },
     {
       project: project.id,
@@ -60,7 +62,7 @@ async function departmentFactory(project) {
   return newDepartments
 }
 
-async function agentFactory(departments) {
+async function agentFactory (departments) {
   const project = departments[2].project
 
   const agents = [
@@ -99,7 +101,7 @@ async function agentFactory(departments) {
   return newAgents
 }
 
-async function timeRecordFactory(agents) {
+async function timeRecordFactory (agents) {
   const project = await agents[0].project
 
   const timeRecords = [
@@ -147,7 +149,7 @@ async function timeRecordFactory(agents) {
   return newTimeRecords
 }
 
-async function recordNoteFactory(timeRecords) {
+async function recordNoteFactory (timeRecords) {
   const { project, department } = await timeRecords[0]
 
   return RecordNote.save({
@@ -158,20 +160,12 @@ async function recordNoteFactory(timeRecords) {
   })
 }
 
-async function roleFactory(agents) {
+async function roleFactory () {
   const roles = [
-    {
-      role: 'crew',
-    },
-    {
-      role: 'admin',
-    },
-    {
-      role: 'project-admin',
-    },
-    {
-      role: 'super-admin',
-    },
+    { role: 'crew' },
+    { role: 'admin' },
+    { role: 'project-admin' },
+    { role: 'super-admin' },
   ].map((role) => Role.save(role))
 
   return await Promise.all(roles)

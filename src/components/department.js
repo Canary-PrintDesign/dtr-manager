@@ -1,27 +1,22 @@
-const S = require('fluent-json-schema')
+const { OBJECT, STRING, UUID, OPTIONAL_UUID, BOOLEAN_FALSE } = require('../lib/helper-schema.js')
 const { Model } = require('../lib/database.js')
 
-const schema = S.object()
-  .prop('id', S.string().format(S.FORMATS.UUID))
-  .prop('project', S.anyOf([S.string().format(S.FORMATS.UUID), S.null()]))
-  .prop('name', S.string())
-  .prop('custom', S.boolean().default(false))
-  .prop('published', S.boolean().default(true))
+const schema = OBJECT
+  .prop('id', UUID)
+  .prop('project', OPTIONAL_UUID)
+  .prop('name', STRING)
+  .prop('custom', BOOLEAN_FALSE)
+  .prop('published', BOOLEAN_FALSE)
 
-class Department extends Model {
-  static get tableName() {
-    return 'departments'
-  }
+module.exports = class Department extends Model {
+  static tableName = 'departments'
 
-  static get jsonSchema() {
+  static get jsonSchema () {
     return schema.valueOf()
   }
-}
 
-exports.findAll = findAll
-async function findAll({ project, name } = {}) {
-  try {
-    return await Department.query()
+  static async findAll ({ project, name } = {}) {
+    return Department.query()
       .where((builder) => {
         builder.where({ published: true })
         if (name) builder.where({ name })
@@ -30,15 +25,10 @@ async function findAll({ project, name } = {}) {
         if (project) builder.where({ project }).orWhereNull('project')
         if (project === null) builder.whereNull('project')
       })
-  } catch (err) {
-    throw new Error(err)
   }
-}
 
-exports.findWith = findWith
-async function findWith({ id, project, name } = {}) {
-  try {
-    return await Department.query()
+  static async findWith ({ id, project, name } = {}) {
+    return Department.query()
       .where((builder) => {
         builder.where({ published: true })
         if (id) builder.where({ id })
@@ -47,28 +37,15 @@ async function findWith({ id, project, name } = {}) {
       .where((builder) => {
         if (project) builder.where({ project }).orWhereNull('project')
       })
-      .limit(1)
-  } catch (err) {
-    throw new Error(err)
   }
-}
 
-exports.save = save
-async function save(departmentProps = {}) {
-  try {
-    return await Department.query().insert({ ...departmentProps })
-  } catch (err) {
-    throw new Error(err)
+  static async save (departmentProps = {}) {
+    return Department.query().insert({ ...departmentProps })
   }
-}
 
-exports.remove = remove
-async function remove({ department, project } = {}) {
-  try {
-    return await Department.query()
+  static async remove ({ department, project } = {}) {
+    return Department.query()
       .where({ id: department, project })
       .patch({ published: false })
-  } catch (err) {
-    throw new Error(err)
   }
 }

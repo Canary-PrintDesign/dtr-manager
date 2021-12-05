@@ -1,11 +1,11 @@
-const httpErrors = require('http-errors')
 const Notification = require('../components/project-notification.js')
 const createError = require('http-errors')
+const { requireProjectAdmin } = require('../lib/helper-auth.js')
 
 module.exports = async (fastify) => {
   fastify.post('/notifications/create', {}, async (req, reply) => {
     try {
-      if (!req.user.isProjectAdmin) return createError(401)
+      requireProjectAdmin(req.user)
 
       const project = req.data.project
       const formBody = req.body
@@ -21,7 +21,7 @@ module.exports = async (fastify) => {
       reply.redirect('/project-management')
     } catch (err) {
       fastify.log.error(err)
-      throw httpErrors.NotAcceptable()
+      throw createError(406)
     }
   })
 
@@ -30,7 +30,7 @@ module.exports = async (fastify) => {
     {},
     async (req, reply) => {
       try {
-        if (!req.user.isProjectAdmin) return createError(401)
+        requireProjectAdmin(req.user)
         const notificationId = req.params.notificationId
 
         const project = req.data.project
@@ -42,13 +42,13 @@ module.exports = async (fastify) => {
         reply.redirect('/project-management')
       } catch (err) {
         fastify.log.error(err)
-        throw httpErrors.NotAcceptable()
+        throw createError(406)
       }
-    }
+    },
   )
 }
 
-function handleFormValues(data) {
+function handleFormValues (data) {
   return Object.entries(data)
     .flatMap(([key, value]) => ({ key, value }))
     .reduce((acc, item) => Object.assign(acc, { [item.key]: item.value }), {})
