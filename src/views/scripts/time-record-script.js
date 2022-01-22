@@ -1,21 +1,21 @@
 /* globals $, fetch */
 
-function parseTime(time) {
+function parseTime (time) {
   const hh = Number(time.slice(0, 2))
   const mm = Number(time.slice(2))
 
   return hh * 60 + mm
 }
 
-function calculateTime(time1, time2) {
+function calculateTime (time1, time2) {
   return parseTime(time2) - parseTime(time1)
 }
 
-function calculateTimeWorked(
+function calculateTimeWorked (
   startTime,
   stopTime,
   startLunch = '0000',
-  stopLunch = '0000'
+  stopLunch = '0000',
 ) {
   const work = calculateTime(startTime, stopTime)
   const lunch = calculateTime(startLunch, stopLunch)
@@ -30,7 +30,7 @@ function calculateTimeWorked(
   return [hours, minutes]
 }
 
-function createNewAgent(template, { index, name = '', position = '' }) {
+function createNewAgent (template, { index, name = '', position = '' }) {
   const agentsList = $('.js-agents')
   const agents = $('.js-agent')
 
@@ -45,7 +45,7 @@ function createNewAgent(template, { index, name = '', position = '' }) {
   agentsList.append(tmpl)
 }
 
-function bindDeleteRecordButton() {
+function bindDeleteRecordButton () {
   $('.js-delete-record').click((event) => {
     event.preventDefault()
 
@@ -56,7 +56,7 @@ function bindDeleteRecordButton() {
   })
 }
 
-function calculateWorkTime(event) {
+function calculateWorkTime (event) {
   const target = event.target
   const agent = $(target).closest('.js-agent')
   const workStart = $(agent).find('.js-work-start')[0]
@@ -72,7 +72,7 @@ function calculateWorkTime(event) {
       $(lunchStop).val(),
     ].includes('N/C')
   ) {
-    $(agent).find('.js-calculated-time').val(`No Call`)
+    $(agent).find('.js-calculated-time').val('No Call')
     return
   }
 
@@ -97,14 +97,14 @@ function calculateWorkTime(event) {
     workStart.value,
     workStop.value,
     lunchStart.value,
-    lunchStop.value
+    lunchStop.value,
   )
 
   const time = `${hours}h ${minutes.toString().padStart(2, '0')}m`
   $(agent).find('.js-calculated-time').val(time)
 }
 
-function bindNoCallButton() {
+function bindNoCallButton () {
   $('.js-no-call').click((event) => {
     event.preventDefault()
 

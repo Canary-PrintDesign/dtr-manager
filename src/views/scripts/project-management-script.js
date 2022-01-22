@@ -1,5 +1,6 @@
+/* globals $ Quill */
 $(document).ready(() => {
-  var quill = new Quill('#editor', {
+  const quill = new Quill('#editor', {
     theme: 'bubble', // Specify theme in configuration,
   })
 

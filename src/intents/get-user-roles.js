@@ -1,4 +1,4 @@
-module.exports = function getUserRoles({ userRole }) {
+module.exports = function getUserRoles ({ userRole }) {
   const roles = []
 
   switch (userRole) {
