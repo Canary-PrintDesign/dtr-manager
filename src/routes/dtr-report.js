@@ -1,12 +1,13 @@
-const httpErrors = require('http-errors')
+const createError = require('http-errors')
 const groupBy = require('lodash.groupby')
 const format = require('date-fns/format')
 const TimeReport = require('../components/time-report.js')
 const RecordNote = require('../components/record-note.js')
+const { requireCrew } = require('../lib/helper-auth.js')
 
 module.exports = async (fastify) => {
   fastify.get('/dtr/report', {}, async (req, reply) => {
-    if (!req.user.isCrew) return httpErrors.NotAuthorized()
+    requireCrew(req.user)
 
     try {
       const project = req.data.project
@@ -18,7 +19,7 @@ module.exports = async (fastify) => {
         .then((res) => res.filter((note) => note.date))
         .then((res) => res.filter((note) => note.note !== ''))
         .then((res) =>
-          res.map((note) => ({ ...note, date: formatDate(note.date) }))
+          res.map((note) => ({ ...note, date: formatDate(note.date) })),
         )
 
       const timeReportByDate = await TimeReport.findAll({
@@ -26,7 +27,7 @@ module.exports = async (fastify) => {
         department,
       })
         .then((res) =>
-          res.map((report) => ({ ...report, date: formatDate(report.date) }))
+          res.map((report) => ({ ...report, date: formatDate(report.date) })),
         )
         .then((res) => groupBy(res, 'date'))
         .then((res) => attachNotes(res, recordNotes))
@@ -34,11 +35,11 @@ module.exports = async (fastify) => {
       const filteredDates = Object.keys(timeReportByDate)
 
       const departments = Object.values(timeReportByDate).flatMap((report) =>
-        Object.keys(report.departments)
+        Object.keys(report.departments),
       )
 
       const filteredDepartments = [...new Set(departments)].sort(
-        (a, b) => a < b
+        (a, b) => a < b,
       )
 
       return reply.view('report', {
@@ -51,17 +52,17 @@ module.exports = async (fastify) => {
       })
     } catch (err) {
       fastify.log.error(err)
-      throw httpErrors.NotAcceptable()
+      throw createError.NotAcceptable()
     }
   })
 }
 
-function formatDate(date, style = 'yyyy-MM-dd') {
+function formatDate (date, style = 'yyyy-MM-dd') {
   return format(date, style)
 }
 
 // Here be mutation demons
-function attachNotes(timeRecordGroups, recordNotes) {
+function attachNotes (timeRecordGroups, recordNotes) {
   Object.keys(timeRecordGroups).forEach((date) => {
     const entries = timeRecordGroups[`${date}`]
     const departments = groupBy(entries, 'department')

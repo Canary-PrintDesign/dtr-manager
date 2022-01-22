@@ -1,9 +1,17 @@
+const template = 'home'
+const title = 'Welcome'
+
 module.exports = async (fastify) => {
   fastify.get('/', async (req, reply) => {
-    return reply.view('home', {
-      title: 'Welcome',
-      project: req.data.project,
-      user: req.user,
+    const {
+      data: { project },
+      user,
+    } = req
+
+    return reply.view(template, {
+      title,
+      project,
+      user,
     })
   })
 }

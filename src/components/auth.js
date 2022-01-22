@@ -1,83 +1,80 @@
-const S = require('fluent-json-schema')
+const { randomUUID } = require('node:crypto')
+const { btoa } = require('node:buffer')
 const { Model } = require('../lib/database.js')
-const { randomUUID } = require('crypto')
+const { OBJECT, STRING, NUMBER, UUID, OPTIONAL_UUID, BOOLEAN_FALSE } = require('../lib/helper-schema.js')
 
-const schema = S.object()
-  .prop('id', S.number())
-  .prop('token', S.string())
+const schema = OBJECT
+  .prop('id', NUMBER)
+  .prop('token', STRING)
   .required()
-  .prop('role', S.string().format(S.FORMATS.UUID))
+  .prop('role', UUID)
   .required()
-  .prop('isActive', S.boolean().default(false))
-  .prop('project', S.anyOf([S.null(), S.string().format(S.FORMATS.UUID)]))
-  .prop('department', S.anyOf([S.null(), S.string().format(S.FORMATS.UUID)]))
+  .prop('isActive', BOOLEAN_FALSE)
+  .prop('project', OPTIONAL_UUID)
+  .prop('department', OPTIONAL_UUID)
 
-class Token extends Model {
-  static get tableName() {
-    return 'tokens'
-  }
+module.exports = class Token extends Model {
+  static tableName = 'tokens'
 
-  static get jsonSchema() {
+  static get jsonSchema () {
     return schema.valueOf()
   }
-}
 
-exports.save = save
-async function save(authProps) {
-  try {
-    return await Token.query().insert({ ...authProps })
-  } catch (err) {
-    throw new Error(err)
+  static async save (authProps) {
+    return Token.query().insert({ ...authProps })
   }
-}
 
-exports.fetch = fetch
-async function fetch(token) {
-  return await Token.query().where({ token })
-}
+  static async fetch (token) {
+    return Token.query().where({ token })
+  }
 
-exports.findAll = findAll
-async function findAll({ project, roles } = {}) {
-  return await Token.query()
-    .select('tokens.*', 'roles.role as role')
-    .where((builder) => {
-      if (project) builder.where({ project })
-      if (roles) builder.whereIn('roles.role', roles)
-    })
-    .join('roles as roles', 'roles.id', 'tokens.role')
-}
+  static async findAll ({
+    project,
+    roles,
+  } = {}) {
+    return Token.query()
+      .select('tokens.*', 'roles.role as role')
+      .where((builder) => {
+        if (project) builder.where({ project })
+        if (roles) builder.whereIn('roles.role', roles)
+      })
+      .join('roles as roles', 'roles.id', 'tokens.role')
+  }
 
-exports.departmentRoleToken = departmentRoleToken
-async function departmentRoleToken({ project, roles }) {
-  return await Token.query()
-    .select(
-      'tokens.token',
-      'roles.role',
-      'departments.name as department_name',
-      'departments.id as department_id'
-    )
-    .leftJoin('roles', 'roles.id', 'tokens.role')
-    .leftJoin('departments', 'departments.id', 'tokens.department')
-    .whereIn('roles.role', roles)
-    .where('tokens.project', project)
-    .orderBy('departments.name', 'ASC')
-    .orderBy('roles.role', 'ASC')
-}
+  static async departmentRoleToken ({
+    project,
+    roles,
+  }) {
+    return Token.query()
+      .select(
+        'tokens.token',
+        'roles.role',
+        'departments.name as department_name',
+        'departments.id as department_id',
+      )
+      .leftJoin('roles', 'roles.id', 'tokens.role')
+      .leftJoin('departments', 'departments.id', 'tokens.department')
+      .whereIn('roles.role', roles)
+      .where('tokens.project', project)
+      .orderBy('departments.name', 'ASC')
+      .orderBy('roles.role', 'ASC')
+  }
 
-exports.createToken = createToken
-async function createToken({ project, department, role }) {
-  return await exports.save({
+  static async createToken ({
     project,
     department,
     role,
-    token: generateToken(),
-    isActive: true,
-  })
+  }) {
+    return await Token.save({
+      project,
+      department,
+      role,
+      token: generateToken(),
+      isActive: true,
+    })
+  }
 }
 
-function generateToken() {
-  const uuid = randomUUID()
-  const encoded = btoa(uuid)
-
-  return encoded.substring(0, 6)
+function generateToken () {
+  return btoa(randomUUID()).substring(0, 6)
 }

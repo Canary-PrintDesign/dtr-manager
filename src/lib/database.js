@@ -12,23 +12,23 @@ const knex = Knex({
 Model.knex(knex)
 
 class BaseModel extends Model {
-  static get modelPaths() {
+  static get modelPaths () {
     return [Path.join(__dirname, '..', 'components')]
   }
 
-  async $beforeInsert(queryContext) {
+  async $beforeInsert (queryContext) {
     await super.$beforeInsert(queryContext)
 
     this.id = randomUUID()
   }
 
-  async $beforeUpdate(queryContext) {
+  async $beforeUpdate (queryContext) {
     await super.$beforeInsert(queryContext)
 
     this.updatedAt = null
   }
 
-  static get pickJsonSchemaProperties() {
+  static get pickJsonSchemaProperties () {
     return true
   }
 }

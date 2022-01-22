@@ -12,16 +12,21 @@ With Node installed, install software dependencies
 npm install
 ```
 
-Prepare your private development configuration
+Prepare your private development configuration, add the following
+fields to a .env file in the root of the project. This file will not
+be version controlled. Additional configuration can be found in /env.js
 
 ```
-cp .env.example .env
+DB_PORT=5432
+DB_NAME=myapp
+DB_PASSWORD=supersecret
+DB_USER=myuser
 ```
 
-Allow `direnv` to detect and load your `.env` configuration for the directory
+Generate a secret key that will be used to secure sessions.
 
 ```
-direnv allow
+npx fastify-secure-session > secret-key
 ```
 
 Start the docker containers using docker-compose

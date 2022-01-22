@@ -1,13 +1,12 @@
 #!/usr/bin/env node
-
 const buildServer = require('./index.js')
 
 const { HTTP_HOST, HTTP_PORT, HTTP_MAX_CONNECTION_TIME_SECS } = process.env
 
 const config = {
-  appName: 'Test',
+  appName: 'DTR Manager',
   logger: {
-    level: 'debug',
+    level: 'info',
   },
   connectionTimeout: HTTP_MAX_CONNECTION_TIME_SECS,
   ignoreTrailingSlash: true,
