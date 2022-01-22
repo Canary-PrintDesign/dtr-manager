@@ -35,7 +35,7 @@ module.exports = fp(async (fastify) => {
   })
 })
 
-function formatNotificationToFlash({ id, type, body }) {
+function formatNotificationToFlash ({ id, type, body }) {
   body = body.replace(/\n/gm, '<br />')
 
   return {

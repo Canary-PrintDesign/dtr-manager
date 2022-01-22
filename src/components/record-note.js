@@ -1,57 +1,39 @@
-const S = require('fluent-json-schema')
+const { OBJECT, STRING, DATE, UUID } = require('../lib/helper-schema.js')
 const { Model } = require('../lib/database.js')
 
-const schema = S.object()
-  .prop('id', S.string().format(S.FORMATS.UUID))
-  .prop('project', S.string().format(S.FORMATS.UUID))
-  .prop('department', S.string().format(S.FORMATS.UUID))
-  .prop('note', S.string())
-  .prop('date', S.string().format(S.FORMATS.DATE))
+const schema = OBJECT
+  .prop('id', UUID)
+  .prop('project', UUID)
+  .prop('department', UUID)
+  .prop('note', STRING)
+  .prop('date', DATE)
 
-class RecordNote extends Model {
-  static get tableName() {
-    return 'recordNotes'
-  }
+module.exports = class RecordNote extends Model {
+  static tableName = 'recordNotes'
 
-  static get jsonSchema() {
+  static get jsonSchema () {
     return schema.valueOf()
   }
-}
 
-exports.findAll = findAll
-async function findAll({ project, department, date }) {
-  try {
-    return await RecordNote.query().where((builder) => {
-      if (department) builder.where({ department })
-      if (project) builder.where({ project })
-      if (date) builder.where({ date })
+  static async findAll ({ project, department, date }) {
+    return RecordNote.query().where({
+      ...(department && { department }),
+      ...(project && { project }),
+      ...(date && { date }),
     })
-  } catch (err) {
-    throw new Error(err)
   }
-}
 
-exports.findWith = findWith
-async function findWith({ id, project, department, date }) {
-  try {
-    return await RecordNote.query()
-      .where((builder) => {
-        if (id) builder.where({ id })
-        if (department) builder.where({ department })
-        if (date) builder.where({ date })
-        if (project) builder.where({ project })
+  static async findWith ({ id, project, department, date }) {
+    return RecordNote.query()
+      .where({
+        ...(id && { id }),
+        ...(department && { department }),
+        ...(date && { date }),
+        ...(project && { project }),
       })
-      .limit(1)
-  } catch (err) {
-    throw new Error(err)
   }
-}
 
-exports.save = save
-async function save(recordNoteProps = {}) {
-  try {
-    return await RecordNote.query().insert({ ...recordNoteProps })
-  } catch (err) {
-    throw new Error(err)
+  static async save (recordNoteProps = {}) {
+    return RecordNote.query().insert(recordNoteProps)
   }
 }

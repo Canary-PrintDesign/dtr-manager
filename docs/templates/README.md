@@ -24,14 +24,6 @@
 
 /docs/readme-documentation.md
 
-## Architecture Decision Records
-
-/docs/readme-adr.md
-
-### Current ADRs
-
-/docs/architecture_decision_records/*
-
 # Contributing
 
 /docs/readme-contributing.md
