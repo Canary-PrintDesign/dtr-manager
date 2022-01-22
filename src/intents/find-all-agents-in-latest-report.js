@@ -1,6 +1,6 @@
 const TimeRecord = require('../components/time-record.js')
 
-module.exports = async function findAllAgentsInLatestReport({
+module.exports = async function findAllAgentsInLatestReport ({
   project,
   department,
 }) {
