@@ -44,6 +44,19 @@ function createNewAgent (template, { index, name = '', position = '' }) {
 
   agentsList.append(tmpl)
 
+  const workStart = $('.js-prefilled-work-start').val()
+  const workStop = $('.js-prefilled-work-stop').val()
+  const lunchStart = $('.js-prefilled-lunch-start').val()
+  const lunchStop = $('.js-prefilled-lunch-stop').val()
+
+  const target = $('.js-agent')[i]
+  if (workStart) $(target).find('.js-work-start').val(workStart)
+  if (workStop) $(target).find('.js-work-stop').val(workStop)
+  if (lunchStart) $(target).find('.js-lunch-start').val(lunchStart)
+  if (lunchStop) $(target).find('.js-lunch-stop').val(lunchStop)
+
+  calculateWorkTime({ target })
+
   return tmpl
 }
 
@@ -181,6 +194,57 @@ function renumberOrderables () {
   })
 }
 
+function prefillTimes (e) {
+  e.preventDefault()
+
+  const workStart = $('.js-prefilled-work-start').val()
+  const workStop = $('.js-prefilled-work-stop').val()
+  const lunchStart = $('.js-prefilled-lunch-start').val()
+  const lunchStop = $('.js-prefilled-lunch-stop').val()
+
+  const altered = new Set()
+
+  if (workStart) {
+    $('.js-work-start').each(function () {
+      if ($(this).val() === '') {
+        $(this).val(workStart)
+        altered.add($(this).closest('.js-agent')[0])
+      }
+    })
+  }
+
+  if (workStop) {
+    $('.js-work-stop').each(function () {
+      if ($(this).val() === '') {
+        $(this).val(workStop)
+        altered.add($(this).closest('.js-agent')[0])
+      }
+    })
+  }
+
+  if (lunchStart) {
+    $('.js-lunch-start').each(function () {
+      if ($(this).val() === '') {
+        $(this).val(lunchStart)
+        altered.add($(this).closest('.js-agent')[0])
+      }
+    })
+  }
+
+  if (lunchStop) {
+    $('.js-lunch-stop').each(function () {
+      if ($(this).val() === '') {
+        $(this).val(lunchStop)
+        altered.add($(this).closest('.js-agent')[0])
+      }
+    })
+  }
+
+  altered.forEach((target) => {
+    calculateWorkTime({ target })
+  })
+}
+
 $(document).ready(() => {
   const template = $('.js-agent-template')
 
@@ -216,4 +280,15 @@ $(document).ready(() => {
 
   bindDeleteRecordButton()
   bindNoCallButton()
+
+  $('.js-prefill-times').click(prefillTimes)
+
+  $('.js-clear-timesheet').click(function (e) {
+    e.preventDefault()
+
+    const result = confirm('Remove all entries?')
+    if (result) {
+      $('.js-agent').remove()
+    }
+  })
 })
