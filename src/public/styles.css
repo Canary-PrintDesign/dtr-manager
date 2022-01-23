@@ -93,3 +93,34 @@ html {
  .PrintHide, .footer, .header, nav.d-flex, .alert { display: none !important; }
  body {font-size:.7rem;}
 }
+
+.js-orderable-handle {
+  width: 32px;
+  display: none !important;
+}
+
+@media screen and (min-width: 1081px) {
+  .js-orderable-handle {
+    display: flex !important;
+  }
+}
+
+.js-orderable-active {
+  opacity: 0.5;
+}
+
+.js-orderable-over {
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+}
+
+.js-orderable-over * {
+  pointer-events: none;
+}
+
+.js-orderable .form-floating > .form-control, .js-orderable .form-floating > .form-select {
+  height: inherit;
+}
+
+.js-orderable .form-floating {
+  height: 100%;
+}

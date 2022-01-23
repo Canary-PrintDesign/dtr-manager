@@ -10,6 +10,7 @@ exports.findAll = async function findAll ({ project, date, department }) {
       'timeRecords.workStop as workStop',
       'timeRecords.lunchStart as lunchStart',
       'timeRecords.lunchStop as lunchStop',
+      'timeRecords.order as order',
       'agents.name as name',
       'agents.position as position',
     )
@@ -28,10 +29,12 @@ exports.findAll = async function findAll ({ project, date, department }) {
       'timeRecords.workStop',
       'timeRecords.lunchStart',
       'timeRecords.lunchStop',
+      'timeRecords.order',
       'agents.name',
       'agents.position',
     )
     .orderBy('timeRecords.date', 'DESC')
     .orderBy('departments.name', 'ASC')
+    .orderBy('timeRecords.order', 'ASC')
     .orderBy('agents.name', 'ASC')
 }
