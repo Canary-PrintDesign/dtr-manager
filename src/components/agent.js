@@ -10,7 +10,7 @@ const schema = OBJECT
   .prop('createdAt', DATE_TIME)
   .prop('updatedAt', DATE_TIME)
 
-exports.Agent = class Agent extends Model {
+module.exports = class Agent extends Model {
   static tableName = 'agents'
 
   static get jsonSchema () {
@@ -35,6 +35,16 @@ exports.Agent = class Agent extends Model {
         ...(position && { position }),
         ...(project && { project }),
         ...(department && { department }),
+      })
+    })
+  }
+
+  static async findWith ({ name, department, project }) {
+    return Agent.query().where((builder) => {
+      builder.where({
+        ...(name && { name }),
+        ...(department && { department }),
+        ...(project && { project }),
       })
     })
   }

@@ -1,6 +1,6 @@
-const TimeRecord = require('../components/time-record.js')
 const Department = require('../components/department.js')
 const { requireCrew } = require('../lib/helper-auth.js')
+const getAgentsInLatestReport = require('../intents/find-all-agents-in-latest-report.js')
 
 async function getDepartmentsForSelect (project) {
   const departments = await Department.findAll({ project })
@@ -33,7 +33,7 @@ module.exports = async (fastify) => {
       isAdmin || isProjectAdmin ? await getDepartmentsForSelect(project.id) : []
 
     if (!entries.length) {
-      const agents = await TimeRecord.getAgentsInLatestReport({
+      const agents = await getAgentsInLatestReport({
         project: project.id,
         department,
       })

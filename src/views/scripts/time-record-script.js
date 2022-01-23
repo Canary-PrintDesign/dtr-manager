@@ -43,6 +43,8 @@ function createNewAgent (template, { index, name = '', position = '' }) {
     .replace(/{{entryPosition}}/g, position)
 
   agentsList.append(tmpl)
+
+  return tmpl
 }
 
 function bindDeleteRecordButton () {
@@ -120,6 +122,65 @@ function bindNoCallButton () {
   })
 }
 
+let dragSrcElement
+function bindOrderDragEvents () {
+  $('.js-orderable').each(function () {
+    $(this).on('dragstart', handleDragStart)
+    $(this).on('dragend', handleDragEnd)
+    $(this).on('dragover', handleDragOver)
+    $(this).on('dragenter', handleDragEnter)
+    $(this).on('dragleave', handleDragLeave)
+    $(this).on('drop', handleDrop)
+  })
+}
+
+function handleDragStart (e) {
+  dragSrcElement = $(e.target)
+  $(e.target).addClass('js-orderable-active')
+
+  e.originalEvent.dataTransfer.effectAllowed = 'move'
+  e.originalEvent.dataTransfer.setData('text/html', $(e.target).html())
+}
+
+function handleDragEnd (e) {
+  $('.js-orderable').each(function () {
+    $(this).removeClass('js-orderable-active')
+    $(this).removeClass('js-orderable-over')
+  })
+
+  renumberOrderables()
+}
+
+function handleDragOver (e) {
+  e.preventDefault()
+
+  e.originalEvent.dataTransfer.dropEffect = 'move'
+
+  return false
+}
+
+function handleDragEnter (e) {
+  $(e.target).closest('.js-orderable').addClass('js-orderable-over')
+}
+
+function handleDragLeave (e) {
+  $(e.target).removeClass('js-orderable-over')
+}
+
+function handleDrop (e) {
+  e.stopPropagation()
+
+  $(dragSrcElement).insertAfter($(e.target).closest('.js-orderable'))
+
+  return false
+}
+
+function renumberOrderables () {
+  $('.js-orderable').each(function (i) {
+    $(this).find('.js-orderable-order').val(i)
+  })
+}
+
 $(document).ready(() => {
   const template = $('.js-agent-template')
 
@@ -129,6 +190,7 @@ $(document).ready(() => {
 
     bindDeleteRecordButton()
     bindNoCallButton()
+    bindOrderDragEvents()
   })
 
   $('.js-department-select').change(async (event) => {
@@ -144,6 +206,7 @@ $(document).ready(() => {
 
     bindDeleteRecordButton()
     bindNoCallButton()
+    bindOrderDragEvents()
   })
 
   $(document).on('change', '.js-work-start', calculateWorkTime)

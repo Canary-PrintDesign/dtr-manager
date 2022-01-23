@@ -72,6 +72,7 @@ async function createTimeRecords ({ date, entries, department, project }) {
       department,
       project,
       agent: agent.id,
+      order: parseInt(entry.order),
     })
 
     records.push({ ...storedTimeRecord, agent })

@@ -23,10 +23,12 @@ module.exports = async (fastify) => {
 
     const [department] = await GetDepartment({ department: departmentId, project })
 
+    const orderedEntries = entries.sort((a, b) => a.order - b.order)
+
     const sessionData = {
       department,
       date,
-      entries,
+      entries: orderedEntries,
       notes,
       project,
     }
