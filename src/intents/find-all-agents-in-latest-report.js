@@ -4,7 +4,9 @@ module.exports = async function findAllAgentsInLatestReport ({
   project,
   department,
 }) {
-  const [{ date }] = await getLatestReportDate({ project: project.id, department })
+  const rawDate = await getLatestReportDate({ project: project.id, department })
+  if (!rawDate.length) return
+  const [{ date }] = rawDate
 
   const agents = await getAgentsInReport({
     project: project.id,
