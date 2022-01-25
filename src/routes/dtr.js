@@ -36,7 +36,7 @@ module.exports = async (fastify) => {
       const agents = await getAgentsInLatestReport({
         project: project.id,
         department,
-      })
+      }) || []
 
       if (isCrew && !isAdmin) {
         for (const agent of agents) {

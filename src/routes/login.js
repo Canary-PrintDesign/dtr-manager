@@ -12,7 +12,7 @@ module.exports = async (fastify) => {
       }
 
       const project = req.data.project
-      const { id: departmentId } = await GetDepartment({ department, project })
+      const [{ id: departmentId }] = await GetDepartment({ department, project })
       const [role, roles] = await GetRole({ id: Role })
 
       req.session.set('user', {
