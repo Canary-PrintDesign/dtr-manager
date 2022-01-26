@@ -124,3 +124,7 @@ html {
 .js-orderable .form-floating {
   height: 100%;
 }
+
+.form-control {
+  height: 100%;
+}
