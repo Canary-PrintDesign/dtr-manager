@@ -61,21 +61,25 @@ block content
       .d-flex.justify-content-center.align-items-center.flex-grow-1.bg-light
         div Prefill Times
       .flex-grow-1
+        label.px-lg-1.px-xl-3 Work Start
         .form-floating.m-2.m-md-0
           input.px-lg-1.px-xl-3.border-0.form-control.js-prefilled-work-start(formnovalidate, pattern="([0-4][0-9][0-5][0-9]|[nN]\/[cC])", placeholder="0700")
-          label.px-lg-1.px-xl-3 Work Start
+
       .flex-grow-1
+        label.px-lg-1.px-xl-3 Lunch Start
         .form-floating.m-2.m-md-0
           input.px-lg-1.px-xl-3.border-0.form-control.js-prefilled-lunch-start(formnovalidate, pattern="([0-4][0-9][0-5][0-9]|[nN]\/[cC])", placeholder="1300")
-          label.px-lg-1.px-xl-3 Lunch Start
+
       .flex-grow-1
+        label.px-lg-1.px-xl-3 Lunch Stop
         .form-floating.m-2.m-md-0
           input.px-lg-1.px-xl-3.border-0.form-control.js-prefilled-lunch-stop(formnovalidate, pattern="([0-4][0-9][0-5][0-9]|[nN]\/[cC])", placeholder="1400")
-          label.px-lg-1.px-xl-3 Lunch Stop
+
       .flex-grow-1
+        label.px-lg-1.px-xl-3 Work End
         .form-floating.m-2.m-md-0
           input.px-lg-1.px-xl-3.border-0.form-control.js-prefilled-work-stop(formnovalidate, pattern="([0-4][0-9][0-5][0-9]|[nN]\/[cC])", placeholder="2100")
-          label.px-lg-1.px-xl-3 Work End
+
       .flex-grow-1.d-flex.justify-content-end
         button.btn.btn-primary.js-prefill-times(formnovalidate data-bs-toggle="tooltip" data-bs-placement="top" title="Update times")
           span Fill empty times
