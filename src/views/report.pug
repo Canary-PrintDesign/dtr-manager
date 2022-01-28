@@ -54,7 +54,7 @@ block content
                           td
                             span= departmentName
                       td= entry.name
-                      td= entry.position
+                      td= (entry.recordPosition || entry.agentPosition)
                       td= entry.workStart
                       td= `${entry.lunchStart} - ${entry.lunchStop}`
                       td= entry.workStop

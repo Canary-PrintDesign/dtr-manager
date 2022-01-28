@@ -12,6 +12,7 @@ const schema = OBJECT
   .prop('lunchStart', STRING)
   .prop('lunchStop', STRING)
   .prop('order', NUMBER).required()
+  .prop('position', STRING).required()
 
 module.exports = class TimeRecord extends Model {
   static tableName = 'time_records'

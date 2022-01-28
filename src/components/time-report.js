@@ -11,8 +11,9 @@ exports.findAll = async function findAll ({ project, date, department }) {
       'timeRecords.lunchStart as lunchStart',
       'timeRecords.lunchStop as lunchStop',
       'timeRecords.order as order',
+      'timeRecords.position as recordPosition',
       'agents.name as name',
-      'agents.position as position',
+      'agents.position as agentPosition',
     )
     .leftJoin('departments', 'departments.id', 'timeRecords.department')
     .leftJoin('agents', 'agents.id', 'timeRecords.agent')
@@ -30,6 +31,7 @@ exports.findAll = async function findAll ({ project, date, department }) {
       'timeRecords.lunchStart',
       'timeRecords.lunchStop',
       'timeRecords.order',
+      'timeRecords.position',
       'agents.name',
       'agents.position',
     )

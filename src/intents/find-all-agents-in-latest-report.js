@@ -18,7 +18,7 @@ module.exports = async function findAllAgentsInLatestReport ({
     .filter((agent) => agent._agent)
     .map((agent) => ({
       name: agent._agent.name,
-      position: agent._agent.position,
+      position: (agent.position || agent._agent.position),
       department: agent._agent.department,
       order: agent.order,
     }))
@@ -37,7 +37,7 @@ async function getLatestReportDate ({ project, department }) {
 
 async function getAgentsInReport ({ project, department, date }) {
   return TimeRecord.query()
-    .select('timeRecords.order')
+    .select(['timeRecords.order', 'timeRecords.position'])
     .distinct(['timeRecords.agent'])
     .withGraphJoined('_agent')
     .where(async (builder) => {
